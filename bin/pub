@@ -3,9 +3,10 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use pub\command;
+use pub\Command;
 use Symfony\Component\Console\Application;
 
 $application = new Application('pub', '@package_version@');
-$application->add(new  pub\command\HelloCommand());
+$application->add(new pub\Command\HelloCommand());
+$application->add(new pub\Command\ValidateComposerCommand());
 $application->run();

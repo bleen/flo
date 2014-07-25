@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "56365b049958c5c022fc4332ea1de19d",
+    "hash": "1df79b81d9a41574940d10ad7b5b875d",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -363,6 +363,86 @@
             "time": "2014-03-05 15:03:52"
         },
         {
+            "name": "mango-group/symfony",
+            "version": "2.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/mango-group/symfony.git",
+                "reference": "b55a43813e8fbcf4facd19ce1da0cd7acc67ce9b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/mango-group/symfony/zipball/b55a43813e8fbcf4facd19ce1da0cd7acc67ce9b",
+                "reference": "b55a43813e8fbcf4facd19ce1da0cd7acc67ce9b",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "replace": {
+                "symfony/browser-kit": ">=2.0",
+                "symfony/class-loader": ">=2.0",
+                "symfony/config": ">=2.0",
+                "symfony/console": ">=2.0",
+                "symfony/css-selector": ">=2.0",
+                "symfony/dependency-injection": ">=2.0",
+                "symfony/doctrine-abstract-bundle": ">=2.0",
+                "symfony/doctrine-bridge": ">=2.0",
+                "symfony/doctrine-bundle": ">=2.0",
+                "symfony/dom-crawler": ">=2.0",
+                "symfony/event-dispatcher": ">=2.0",
+                "symfony/finder": ">=2.0",
+                "symfony/form": ">=2.0",
+                "symfony/framework-bundle": ">=2.0",
+                "symfony/http-foundation": ">=2.0",
+                "symfony/http-kernel": ">=2.0",
+                "symfony/locale": ">=2.0",
+                "symfony/monolog-bridge": ">=2.0",
+                "symfony/monolog-bundle": ">=2.0",
+                "symfony/process": ">=2.0",
+                "symfony/routing": ">=2.0",
+                "symfony/security": ">=2.0",
+                "symfony/security-bundle": ">=2.0",
+                "symfony/serializer": ">=2.0",
+                "symfony/swiftmailer-bundle": ">=2.0",
+                "symfony/templating": ">=2.0",
+                "symfony/translation": ">=2.0",
+                "symfony/twig-bridge": ">=2.0",
+                "symfony/twig-bundle": ">=2.0",
+                "symfony/validator": ">=2.0",
+                "symfony/web-profiler-bundle": ">=2.0",
+                "symfony/yaml": ">=2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Symfony": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com",
+                    "homepage": "http://fabien.potencier.org",
+                    "role": "Lead Developer"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "The Symfony PHP framework",
+            "homepage": "http://symfony.com",
+            "keywords": [
+                "framework"
+            ],
+            "time": "2011-11-16 19:35:49"
+        },
+        {
             "name": "seld/jsonlint",
             "version": "1.2.0",
             "source": {
@@ -409,40 +489,32 @@
             "time": "2014-07-20 17:36:11"
         },
         {
-            "name": "symfony/console",
-            "version": "v2.5.2",
-            "target-dir": "Symfony/Component/Console",
+            "name": "symfony/filesystem",
+            "version": "dev-master",
+            "target-dir": "Symfony/Component/Filesystem",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/Console.git",
-                "reference": "386fa63407805959bd2c5fe540294721ad4224c8"
+                "url": "https://github.com/symfony/Filesystem.git",
+                "reference": "0eb05b75932460ef615b926caac9f6086cc022f5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/386fa63407805959bd2c5fe540294721ad4224c8",
-                "reference": "386fa63407805959bd2c5fe540294721ad4224c8",
+                "url": "https://api.github.com/repos/symfony/Filesystem/zipball/0eb05b75932460ef615b926caac9f6086cc022f5",
+                "reference": "0eb05b75932460ef615b926caac9f6086cc022f5",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
-            "require-dev": {
-                "psr/log": "~1.0",
-                "symfony/event-dispatcher": "~2.1"
-            },
-            "suggest": {
-                "psr/log": "For using the console logger",
-                "symfony/event-dispatcher": ""
-            },
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.5-dev"
+                    "dev-master": "2.6-dev"
                 }
             },
             "autoload": {
                 "psr-0": {
-                    "Symfony\\Component\\Console\\": ""
+                    "Symfony\\Component\\Filesystem\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -461,9 +533,9 @@
                     "homepage": "http://symfony.com/contributors"
                 }
             ],
-            "description": "Symfony Console Component",
+            "description": "Symfony Filesystem Component",
             "homepage": "http://symfony.com",
-            "time": "2014-07-15 14:15:12"
+            "time": "2014-07-09 14:44:54"
         }
     ],
     "packages-dev": [
@@ -473,9 +545,9 @@
 
     ],
     "minimum-stability": "stable",
-    "stability-flags": [
-
-    ],
+    "stability-flags": {
+        "symfony/filesystem": 20
+    },
     "platform": [
 
     ],
