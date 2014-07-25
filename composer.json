@@ -1,6 +1,6 @@
 {
   "name": "nbcuots/pub",
-  "description": "CLI app for Publisher7 continues delivery system",
+  "description": "CLI app for Publisher7",
   "license": "MIT",
   "require": {
     "guzzlehttp/guzzle": "4.*",
