@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f0a3af703be12fb993b0fc3e9f7dd1cf",
+    "hash": "f1b4d4cf48449a6f2ce7bdcbf4fd2c6a",
     "packages": [
         {
             "name": "guzzlehttp/guzzle",
@@ -295,48 +295,6 @@
             "time": "2014-05-27 05:29:25"
         },
         {
-            "name": "illuminate/config",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/illuminate/config.git",
-                "reference": "06d3cf80d6ffd89aded464409dbc7381104d5e83"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/config/zipball/06d3cf80d6ffd89aded464409dbc7381104d5e83",
-                "reference": "06d3cf80d6ffd89aded464409dbc7381104d5e83",
-                "shasum": ""
-            },
-            "require": {
-                "illuminate/filesystem": "4.3.*",
-                "illuminate/support": "4.3.*",
-                "php": ">=5.4.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "4.3-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Illuminate\\Config\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Taylor Otwell",
-                    "email": "taylorotwell@gmail.com"
-                }
-            ],
-            "time": "2014-07-19 18:57:54"
-        },
-        {
             "name": "illuminate/filesystem",
             "version": "dev-master",
             "source": {
@@ -384,12 +342,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "2e803f93ce7d49daeb22ac13403249313357b53d"
+                "reference": "691071dd96df8d9ee38231a35f98efaf8e027e0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/2e803f93ce7d49daeb22ac13403249313357b53d",
-                "reference": "2e803f93ce7d49daeb22ac13403249313357b53d",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/691071dd96df8d9ee38231a35f98efaf8e027e0a",
+                "reference": "691071dd96df8d9ee38231a35f98efaf8e027e0a",
                 "shasum": ""
             },
             "require": {
@@ -423,7 +381,7 @@
                     "email": "taylorotwell@gmail.com"
                 }
             ],
-            "time": "2014-07-31 02:51:10"
+            "time": "2014-08-01 04:15:58"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -674,12 +632,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/teqneers/PHP-Stream-Wrapper-for-Git.git",
-                "reference": "7b5a4fb18d47d49c5c3097fbc32aaeb4949c21bb"
+                "reference": "ce9791dfb4f5eb49b03c02b3906f7ba0791dbc2a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/teqneers/PHP-Stream-Wrapper-for-Git/zipball/7b5a4fb18d47d49c5c3097fbc32aaeb4949c21bb",
-                "reference": "7b5a4fb18d47d49c5c3097fbc32aaeb4949c21bb",
+                "url": "https://api.github.com/repos/teqneers/PHP-Stream-Wrapper-for-Git/zipball/ce9791dfb4f5eb49b03c02b3906f7ba0791dbc2a",
+                "reference": "ce9791dfb4f5eb49b03c02b3906f7ba0791dbc2a",
                 "shasum": ""
             },
             "require": {
@@ -716,7 +674,7 @@
                 "stream-wrapper",
                 "streamwrapper"
             ],
-            "time": "2014-05-13 19:41:44"
+            "time": "2014-08-01 10:44:45"
         }
     ],
     "packages-dev": [],
@@ -725,9 +683,8 @@
     "stability-flags": {
         "symfony/filesystem": 20,
         "symfony/process": 20,
-        "illuminate/config": 20,
-        "illuminate/filesystem": 20,
         "illuminate/support": 20,
+        "illuminate/filesystem": 20,
         "teqneers/php-stream-wrapper-for-git": 20
     },
     "platform": [],
