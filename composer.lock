@@ -3,8 +3,64 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "176907ce3e638bbd9287d55ae830a79c",
+    "hash": "593f5a0f1b3482e7686502f371a20de7",
     "packages": [
+        {
+            "name": "cpliakas/git-wrapper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cpliakas/git-wrapper.git",
+                "reference": "0768ff2cf618bf2a32aa9b20bc511c30bb3aa01c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cpliakas/git-wrapper/zipball/0768ff2cf618bf2a32aa9b20bc511c30bb3aa01c",
+                "reference": "0768ff2cf618bf2a32aa9b20bc511c30bb3aa01c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0",
+                "symfony/event-dispatcher": ">=2.3",
+                "symfony/process": ">=2.3"
+            },
+            "require-dev": {
+                "pdepend/pdepend": "~1.0",
+                "phploc/phploc": "~2.0",
+                "phpmd/phpmd": "~1.0",
+                "phpunit/phpunit": "~3.0",
+                "psr/log": "~1.0",
+                "satooshi/php-coveralls": "*",
+                "sebastian/phpcpd": "~2.0",
+                "symfony/filesystem": "~2.0"
+            },
+            "suggest": {
+                "monolog/monolog": "Enables logging of executed git commands"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "GitWrapper": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Chris Pliakas",
+                    "email": "opensource@chrispliakas.com",
+                    "role": "Project lead"
+                }
+            ],
+            "description": "A PHP wrapper around the Git command line utility.",
+            "homepage": "https://github.com/cpliakas/git-wrapper",
+            "keywords": [
+                "git"
+            ],
+            "time": "2014-07-11 11:48:10"
+        },
         {
             "name": "guzzlehttp/guzzle",
             "version": "4.1.4",
@@ -538,21 +594,14 @@
             "time": "2014-07-09 14:44:54"
         }
     ],
-    "packages-dev": [
-
-    ],
-    "aliases": [
-
-    ],
+    "packages-dev": [],
+    "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "symfony/filesystem": 20,
-        "symfony/process": 20
+        "symfony/process": 20,
+        "cpliakas/git-wrapper": 20
     },
-    "platform": [
-
-    ],
-    "platform-dev": [
-
-    ]
+    "platform": [],
+    "platform-dev": []
 }
