@@ -7,6 +7,9 @@ use pub\Command;
 use Symfony\Component\Console\Application;
 
 $application = new Application('pub', '@package_version@');
+$application->add(new pub\Command\ConfigGetCommand());
+$application->add(new pub\Command\ConfigSetCommand());
+$application->add(new pub\Command\ConfigDelCommand());
 $application->add(new pub\Command\GitInitCommand());
 $application->add(new pub\Command\ValidateComposerCommand());
 $application->run();
