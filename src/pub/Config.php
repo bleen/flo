@@ -25,7 +25,7 @@ class Config {
    *
    * @return bool
    */
-  public function exist() {
+  public function exists() {
     $retval = FALSE;
     $fs = new Filesystem();
 
@@ -44,7 +44,7 @@ class Config {
     $fs = new Filesystem();
     $yaml = new Yaml\Parser();
 
-    if ($this->exist()) {
+    if (!$this->exists()) {
       return FALSE;
     }
 

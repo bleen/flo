@@ -9,8 +9,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml;
 use Symfony\Component\Yaml\Dumper;
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Config\FileLocator;
-use pub\PHPGit\Repository;
 
 
 class ConfigSetCommand extends Command {
