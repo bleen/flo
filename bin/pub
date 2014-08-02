@@ -12,6 +12,7 @@ $application->add(new pub\Command\ConfigSetCommand());
 $application->add(new pub\Command\ConfigDelCommand());
 $application->add(new pub\Command\PullRequest\CertifyCommand());
 $application->add(new pub\Command\PullRequest\RejectCommand());
+$application->add(new pub\Command\PullRequest\PostPoneCommand());
 $application->add(new pub\Command\GitInitCommand());
 $application->add(new pub\Command\ValidateComposerCommand());
 $application->run();
