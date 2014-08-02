@@ -14,6 +14,9 @@ use Illuminate\Filesystem\Filesystem;
  */
 class ProjectConfig {
 
+  // TODO: Figure out how to make this work with symfony2 finder depth.
+  // based on my testing there's a bug I need to track down in the Finder component.
+  // for now it's easier ot just hard-code it.
   public $project_config_file = 'project-config.yml';
   public $settings = NULL;
 
