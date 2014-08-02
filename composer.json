@@ -22,7 +22,9 @@
     "symfony/yaml": "~2.6",
     "illuminate/support": "4.3.*@dev",
     "illuminate/filesystem": "4.3.*@dev",
-    "teqneers/php-stream-wrapper-for-git": "dev-master"
+    "teqneers/php-stream-wrapper-for-git": "dev-master",
+    "knplabs/github-api": "~1.2"
+
   },
   "bin": [
     "pub"
