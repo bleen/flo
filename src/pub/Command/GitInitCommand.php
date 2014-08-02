@@ -6,14 +6,11 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml;
-use Illuminate\Config;
 use Illuminate\Filesystem\Filesystem;
 use pub\PHPGit\Repository;
 
 
 class GitInitCommand extends Command {
-  const GIT_REMOTE_LIST = "git remote -v | grep fetch | awk '{print $1 \"|\" $2 \";\"}'";
-
 
   protected function configure() {
     $this->setName('git-init')

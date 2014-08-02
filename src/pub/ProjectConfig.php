@@ -34,6 +34,12 @@ class ProjectConfig {
   }
 
 
+  /**
+   * Load the Project config yaml into memory.
+   *
+   * @return mixed
+   * @throws \Exception
+   */
   public function load() {
     $fs = new Filesystem();
     $yaml = new Yaml\Parser();

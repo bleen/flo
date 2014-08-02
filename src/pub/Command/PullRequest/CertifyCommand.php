@@ -9,12 +9,14 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml;
-use Illuminate\Filesystem\Filesystem;
 use Github;
 
 
 class CertifyCommand extends Command {
 
+  /**
+   * {@inheritdoc}
+   */
   protected function configure() {
     $this->setName('pr-certify')
       ->setDescription('Certify a specific pull-request.')

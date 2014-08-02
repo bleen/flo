@@ -17,6 +17,10 @@ use Symfony\Component\Filesystem\Filesystem;
 
 
 class ValidateComposerCommand extends Command {
+
+  /**
+   * {@inheritdoc}
+   */
   protected function configure() {
     $this
       ->setName('composer-validate')
@@ -29,6 +33,9 @@ class ValidateComposerCommand extends Command {
 
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $fs = new Filesystem();
     $composer_file = $input->getArgument('file');

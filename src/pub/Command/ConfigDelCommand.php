@@ -12,6 +12,9 @@ use Illuminate\Filesystem\Filesystem;
 
 class ConfigDelCommand extends Command {
 
+  /**
+   * {@inheritdoc}
+   */
   protected function configure() {
     $this->setName('config-del')
       ->setDescription('Delete configurations key for pub command')
@@ -22,6 +25,9 @@ class ConfigDelCommand extends Command {
       );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $fs = new Filesystem();
     $yaml = new Yaml\Parser();

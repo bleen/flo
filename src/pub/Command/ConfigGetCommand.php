@@ -11,6 +11,9 @@ use Illuminate\Filesystem\Filesystem;
 
 class ConfigGetCommand extends Command {
 
+  /**
+   * {@inheritdoc}
+   */
   protected function configure() {
     $this->setName('config-get')
       ->setDescription('Get configurations for pub command')

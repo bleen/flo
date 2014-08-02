@@ -13,6 +13,9 @@ use Illuminate\Filesystem\Filesystem;
 
 class ConfigSetCommand extends Command {
 
+  /**
+   * {@inheritdoc}
+   */
   protected function configure() {
     $this->setName('config-set')
       ->setDescription('Set configurations for pub command')
@@ -28,6 +31,9 @@ class ConfigSetCommand extends Command {
       );
   }
 
+  /**
+   * {@inheritdoc}
+   */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $fs = new Filesystem();
     $yaml = new Yaml\Parser();
