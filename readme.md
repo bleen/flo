@@ -35,6 +35,8 @@ Available commands:
   help                Displays help for a command
   list                Lists commands
   pr-certify          Certify a specific pull-request.
+  pr-integration      Pull all valid PRs into the acquia integration branch.
+  pr-postpone         Postpone a specific pull-request.
   pr-reject           Reject a specific pull-request.
 
 ```
