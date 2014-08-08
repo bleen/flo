@@ -13,6 +13,7 @@ use Github;
 
 
 class RejectCommand extends Command {
+  const REJECT_LABEL = 'ci:rejected';
 
   /**
    * {@inheritdoc}
@@ -61,7 +62,15 @@ class RejectCommand extends Command {
     $github->authenticate($pub_config['github-oauth-token'], NULL, Github\Client::AUTH_URL_TOKEN);
 
     $project_config->load();
-    $labels = $github->api('issue')->labels()->add($project_config->settings['organization'] , $project_config->settings['repository'], $pr_number, 'ci:rejected');
+
+    // We act on Issues instead of Pull-Request directly since it is simpler.
+    $labels = $github->api('issue')->labels()->add(
+      $project_config->settings['organization'],
+      $project_config->settings['repository'],
+      $pr_number,
+      self::REJECT_LABEL
+    );
+
     if (count($labels) >= 1) {
       $pr_url = "https://github.com/{$project_config->settings['organization']}/{$project_config->settings['repository']}/pull/{$pr_number}";
       $output->writeln("<info>Pull Request: $pr_url has been rejected.</info>");
