@@ -7,6 +7,7 @@ A php CLI application for managing publisher projects
 ```php
 composer install
 ```
+Add bin/pub to your path
 
 ##List of commands
 ```bash
