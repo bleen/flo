@@ -79,7 +79,7 @@ class IntegrationCommand extends Command {
       'direction' => 'asc',
     )));
 
-    $process = new Process('git branch -f integration && git checkout integration');
+    $process = new Process('git checkout -B integration');
     $process->run();
     if (!$process->isSuccessful()) {
       throw new \RuntimeException($process->getErrorOutput());
