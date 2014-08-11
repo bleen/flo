@@ -32,6 +32,12 @@ class ProjectConfig {
     if ($fs->exists($this->project_config_file)) {
       $retval = TRUE;
     }
+    else {
+      $this->project_config_file = '../' . $this->project_config_file;
+      if ($fs->exists($this->project_config_file)) {
+        $retval = TRUE;
+      }
+    }
 
     return $retval;
   }
