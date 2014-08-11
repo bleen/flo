@@ -102,8 +102,8 @@ class IntegrationCommand extends Command {
       }
 
       // Now try to apply the patch or else mark it as failure.
-      $url = $pr['pull_request']['patch_url'];
-      $command = "hub am {$url}";
+      $url = $pr['pull_request']['html_url'];
+      $command = "hub merge {$url}";
       $process = new Process($command);
       $process->run();
       if (!$process->isSuccessful()) {
@@ -115,7 +115,7 @@ class IntegrationCommand extends Command {
           $pr['number'],
           self::ERROR_LABEL
         );
-        $process = new Process('git am --abort');
+        $process = new Process('git merge --abort');
         $process->run();
       }
       else {
