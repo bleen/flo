@@ -2,6 +2,7 @@
 
 namespace pub\Command;
 
+
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,6 +21,7 @@ class GitInitCommand extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $fs = new Filesystem();
     $yaml = new Yaml\Parser();
+    $project_config = new ProjectConfig();
     $profile_file = 'project-config.yml';
     $pub_config_file = getenv("HOME") . '/.config/pub';
 
