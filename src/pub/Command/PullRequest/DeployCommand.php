@@ -8,6 +8,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml;
 use Github;
@@ -25,6 +26,12 @@ class DeployCommand extends Command {
         'pull-request',
         InputArgument::REQUIRED,
         'The pull-request number to be deployed.'
+      )
+      ->addOption(
+        'env',
+        'e',
+        InputOption::VALUE_REQUIRED,
+        'If set we will tag the release on GitHub using their Deployment API.'
       );
   }
 
@@ -60,6 +67,7 @@ class DeployCommand extends Command {
     $github = new Github\Client();
     $config = new Config();
     $project_config = new ProjectConfig();
+    $client = new Github\Client();
 
     $pr_number = $input->getArgument('pull-request');
     if (!is_numeric($pr_number)) {
@@ -97,6 +105,14 @@ class DeployCommand extends Command {
       throw new \Exception("You must run pr-deploy from the git root.");
     }
 
+
+    // If they have an env set then we also tag it on github.
+    if ($input->getOption('env')) {
+      $environment = $input->getOption('env');
+      // Curl GITHUB with the Start of the Job.
+    }
+
+
     // Lets rsync this workspace now.
     $path = 'p7-' . $pr_number . '.pr.publisher7.com';
     $command = "rsync -aq --delete --exclude='.git/*' . {$pub_config['pr-directories']}{$path}";
@@ -104,6 +120,12 @@ class DeployCommand extends Command {
     $process->run();
     if (!$process->isSuccessful()) {
       throw new \RuntimeException($process->getErrorOutput());
+    }
+
+    // If they have an env set then we also tag it on github.
+    if ($input->getOption('env')) {
+      $environment = $input->getOption('env');
+      // Curl GITHUB With the End of the job.
     }
   }
 }
