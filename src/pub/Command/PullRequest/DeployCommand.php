@@ -28,6 +28,12 @@ class DeployCommand extends Command {
         'The pull-request number to be deployed.'
       )
       ->addOption(
+        'ref',
+        'r',
+        InputOption::VALUE_REQUIRED,
+        'The commit to deploy on GitHub using their Deployment API.'
+      )
+      ->addOption(
         'env',
         'e',
         InputOption::VALUE_REQUIRED,
@@ -126,24 +132,32 @@ class DeployCommand extends Command {
     }
 
     // If they have an env set then we also tag it on github.
-    if ($input->getOption('env')) {
-      // COMMENT ALL THIS OUT, THIS ONLY WORKS ON MY LOCAL BECAUSE OF MY GITHUB CLIENT FORK OVER AT https://github.com/ericduran/php-github-api
-      // TODO: Get composer to pull from my fork.
+    if (!empty($input->getOption('env')) && !empty($input->getOption('ref'))) {
+      $ref = $input->getOption('ref');
+      $environment = $input->getOption('env');
+      $github->authenticate($pub_config['github-oauth-token'], NULL, Github\Client::AUTH_URL_TOKEN);
 
-//      $environment = $input->getOption('env');
-//      $github->authenticate($pub_config['github-oauth-token'], NULL, Github\Client::AUTH_URL_TOKEN);
-//
-//      $deployments = $github->api('deployment')->create($project_config->settings['organization'] , $project_config->settings['repository'],
-//        array('ref' => '407ed3d', 'environment' => 'test', 'description' => 'Started Test Deployment', 'auto_merge' => 'false'));
-//
-//      $deployments = $github->api('deployment')->update($project_config->settings['organization'] , $project_config->settings['repository'], 44097,
-//        array('state' => 'success', 'target_url' => 'http://p7-6.pr.publisher7.com/', 'description' => 'Completed Test Deployment'));
-//      $deployments = $github->api('deployment')->all($project_config->settings['organization'] , $project_config->settings['repository']);
-      // The URL is different depending on what happens:
-      //  ex: Succes: Site URL
-      //  ex: error: Jenkins JOB URL
-      //  ex: pending: Jenkins JOB URL
-      //  ex: failure: Jenkins JOB URL
+      $deployment = $github->api('deployment')->create(
+        $project_config->settings['organization'],
+        $project_config->settings['repository'],
+        array(
+          'ref' => $ref,
+          'environment' => $environment,
+          'description' => 'pub:pr-deploy',
+          'auto_merge' => FALSE
+        )
+      );
+
+      $github->api('deployment')->update(
+        $project_config->settings['organization'],
+        $project_config->settings['repository'],
+        $deployment['id'],
+        array(
+          'state' => 'success',
+          'target_url' => $url,
+          'description' => 'Completed Test Deployment'
+        )
+      );
     }
 
     $output->writeln("<info>Pull Request: $pr_number has been deployed to {$url}.</info>");
