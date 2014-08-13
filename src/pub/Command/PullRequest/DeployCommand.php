@@ -67,7 +67,6 @@ class DeployCommand extends Command {
     $github = new Github\Client();
     $config = new Config();
     $project_config = new ProjectConfig();
-    $client = new Github\Client();
 
     $pr_number = $input->getArgument('pull-request');
     if (!is_numeric($pr_number)) {
@@ -83,9 +82,16 @@ class DeployCommand extends Command {
       throw new \Exception("You must have a github-oauth-token set up. Ex. pub config-set github-oauth-token MY_TOKEN_IS_THIS.");
     }
 
-    $pub_config = $config->load();
     if (!isset($pub_config['pr-directories'])) {
       throw new \Exception("You must have a pr-directories set up. Ex. pub config-set pr-directories /var/www/html/ .");
+    }
+
+    $project_config->load();
+    if (!isset($project_config->settings['pull_request']['prefix'])) {
+      throw new \Exception("You must have a pull_request:pr_prefix set up in your project-config.yml. Ex. pr_prefix: p7");
+    }
+    if (!isset($project_config->settings['pull_request']['domain'])) {
+      throw new \Exception("You must have a pull_request:domain set up in your project-config.yml. Ex. domain: pr.publisher7.com");
     }
 
     // We always run from the top git directory.
@@ -105,16 +111,13 @@ class DeployCommand extends Command {
       throw new \Exception("You must run pr-deploy from the git root.");
     }
 
-
-    // If they have an env set then we also tag it on github.
-    if ($input->getOption('env')) {
-      $environment = $input->getOption('env');
-      // Curl GITHUB with the Start of the Job.
+    if ($git_root->getOutput() !== $current_dir->getOutput()) {
+      throw new \Exception("You must run pr-deploy from the git root.");
     }
 
-
     // Lets rsync this workspace now.
-    $path = 'p7-' . $pr_number . '.pr.publisher7.com';
+    $path = "{$project_config->settings['pull_request']['prefix']}-{$pr_number}.{$project_config->settings['pull_request']['domain']}";
+    $url = "http://{$path}";
     $command = "rsync -aq --delete --exclude='.git/*' . {$pub_config['pr-directories']}{$path}";
     $process = new Process($command);
     $process->run();
@@ -124,8 +127,25 @@ class DeployCommand extends Command {
 
     // If they have an env set then we also tag it on github.
     if ($input->getOption('env')) {
-      $environment = $input->getOption('env');
-      // Curl GITHUB With the End of the job.
+      // COMMENT ALL THIS OUT, THIS ONLY WORKS ON MY LOCAL BECAUSE OF MY GITHUB CLIENT FORK OVER AT https://github.com/ericduran/php-github-api
+      // TODO: Get composer to pull from my fork.
+
+//      $environment = $input->getOption('env');
+//      $github->authenticate($pub_config['github-oauth-token'], NULL, Github\Client::AUTH_URL_TOKEN);
+//
+//      $deployments = $github->api('deployment')->create($project_config->settings['organization'] , $project_config->settings['repository'],
+//        array('ref' => '407ed3d', 'environment' => 'test', 'description' => 'Started Test Deployment', 'auto_merge' => 'false'));
+//
+//      $deployments = $github->api('deployment')->update($project_config->settings['organization'] , $project_config->settings['repository'], 44097,
+//        array('state' => 'success', 'target_url' => 'http://p7-6.pr.publisher7.com/', 'description' => 'Completed Test Deployment'));
+//      $deployments = $github->api('deployment')->all($project_config->settings['organization'] , $project_config->settings['repository']);
+      // The URL is different depending on what happens:
+      //  ex: Succes: Site URL
+      //  ex: error: Jenkins JOB URL
+      //  ex: pending: Jenkins JOB URL
+      //  ex: failure: Jenkins JOB URL
     }
+
+    $output->writeln("<info>Pull Request: $pr_number has been deployed to {$url}.</info>");
   }
 }
