@@ -549,12 +549,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ericduran/php-github-api.git",
-                "reference": "854de77f8894f56ba14e91fb03fba6a826e3189a"
+                "reference": "786f07d488c9634c75f35942b96989a29bee501a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ericduran/php-github-api/zipball/854de77f8894f56ba14e91fb03fba6a826e3189a",
-                "reference": "854de77f8894f56ba14e91fb03fba6a826e3189a",
+                "url": "https://api.github.com/repos/ericduran/php-github-api/zipball/786f07d488c9634c75f35942b96989a29bee501a",
+                "reference": "786f07d488c9634c75f35942b96989a29bee501a",
                 "shasum": ""
             },
             "require": {
@@ -602,9 +602,9 @@
                 "github"
             ],
             "support": {
-                "source": "https://github.com/ericduran/php-github-api/tree/deployment-api"
+                "source": "https://github.com/ericduran/php-github-api/tree/deploymentapi"
             },
-            "time": "2014-08-13 06:15:59"
+            "time": "2014-08-13 23:14:35"
         },
         {
             "name": "mango-group/symfony",
