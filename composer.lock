@@ -3,20 +3,20 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "1afe9df17519b1fb706e7fea8abd7156",
+    "hash": "f917a5b02e78603bf7110f5a3e89baef",
     "packages": [
         {
             "name": "guzzle/guzzle",
-            "version": "v3.9.1",
+            "version": "v3.9.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle3.git",
-                "reference": "92d9934f2fca1da15178c91239576ae26e505e60"
+                "reference": "54991459675c1a2924122afbb0e5609ade581155"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/92d9934f2fca1da15178c91239576ae26e505e60",
-                "reference": "92d9934f2fca1da15178c91239576ae26e505e60",
+                "url": "https://api.github.com/repos/guzzle/guzzle3/zipball/54991459675c1a2924122afbb0e5609ade581155",
+                "reference": "54991459675c1a2924122afbb0e5609ade581155",
                 "shasum": ""
             },
             "require": {
@@ -60,7 +60,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.8-dev"
+                    "dev-master": "3.9-dev"
                 }
             },
             "autoload": {
@@ -95,20 +95,20 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-05-07 17:04:22"
+            "time": "2014-08-11 04:32:36"
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "4.1.4",
+            "version": "4.1.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "5ae164dae6e65784286a698800190bc094407f7c"
+                "reference": "448f2c2076cf0fb756230611491c4f7ecb735a29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/5ae164dae6e65784286a698800190bc094407f7c",
-                "reference": "5ae164dae6e65784286a698800190bc094407f7c",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/448f2c2076cf0fb756230611491c4f7ecb735a29",
+                "reference": "448f2c2076cf0fb756230611491c4f7ecb735a29",
                 "shasum": ""
             },
             "require": {
@@ -127,7 +127,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.1.x-dev"
+                    "dev-master": "4.1-dev"
                 }
             },
             "autoload": {
@@ -160,20 +160,20 @@
                 "rest",
                 "web service"
             ],
-            "time": "2014-07-23 00:52:39"
+            "time": "2014-08-08 01:30:43"
         },
         {
             "name": "guzzlehttp/streams",
-            "version": "1.4.0",
+            "version": "1.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/streams.git",
-                "reference": "3b761a328e5ed6ed519e960aded95d7acbe77894"
+                "reference": "fb0d1ee29987c2bdc59867bffaade6fc88c2675f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/streams/zipball/3b761a328e5ed6ed519e960aded95d7acbe77894",
-                "reference": "3b761a328e5ed6ed519e960aded95d7acbe77894",
+                "url": "https://api.github.com/repos/guzzle/streams/zipball/fb0d1ee29987c2bdc59867bffaade6fc88c2675f",
+                "reference": "fb0d1ee29987c2bdc59867bffaade6fc88c2675f",
                 "shasum": ""
             },
             "require": {
@@ -185,7 +185,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.4.x-dev"
+                    "dev-master": "1.5-dev"
                 }
             },
             "autoload": {
@@ -213,7 +213,7 @@
                 "Guzzle",
                 "stream"
             ],
-            "time": "2014-07-19 18:43:42"
+            "time": "2014-08-10 23:57:01"
         },
         {
             "name": "herrera-io/json",
@@ -392,12 +392,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/filesystem.git",
-                "reference": "e5057314ce35e646ef71c8304f30b6d240cded7b"
+                "reference": "6b77a63f0925623bbb1ba8b2fdff440c8665fe81"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/filesystem/zipball/e5057314ce35e646ef71c8304f30b6d240cded7b",
-                "reference": "e5057314ce35e646ef71c8304f30b6d240cded7b",
+                "url": "https://api.github.com/repos/illuminate/filesystem/zipball/6b77a63f0925623bbb1ba8b2fdff440c8665fe81",
+                "reference": "6b77a63f0925623bbb1ba8b2fdff440c8665fe81",
                 "shasum": ""
             },
             "require": {
@@ -426,7 +426,7 @@
                     "email": "taylorotwell@gmail.com"
                 }
             ],
-            "time": "2014-07-25 19:20:08"
+            "time": "2014-08-11 14:20:08"
         },
         {
             "name": "illuminate/support",
@@ -434,12 +434,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "691071dd96df8d9ee38231a35f98efaf8e027e0a"
+                "reference": "6fe2f4fd2250f9e5b490368734368a5189a17d74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/illuminate/support/zipball/691071dd96df8d9ee38231a35f98efaf8e027e0a",
-                "reference": "691071dd96df8d9ee38231a35f98efaf8e027e0a",
+                "url": "https://api.github.com/repos/illuminate/support/zipball/6fe2f4fd2250f9e5b490368734368a5189a17d74",
+                "reference": "6fe2f4fd2250f9e5b490368734368a5189a17d74",
                 "shasum": ""
             },
             "require": {
@@ -473,7 +473,7 @@
                     "email": "taylorotwell@gmail.com"
                 }
             ],
-            "time": "2014-08-01 04:15:58"
+            "time": "2014-08-04 01:40:13"
         },
         {
             "name": "justinrainbow/json-schema",
@@ -545,16 +545,16 @@
         },
         {
             "name": "knplabs/github-api",
-            "version": "1.2.7",
+            "version": "dev-deploymentapi",
             "source": {
                 "type": "git",
-                "url": "https://github.com/KnpLabs/php-github-api.git",
-                "reference": "39dc9b4be0378c57279aa693f597cda5deb97c8f"
+                "url": "https://github.com/ericduran/php-github-api.git",
+                "reference": "854de77f8894f56ba14e91fb03fba6a826e3189a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/php-github-api/zipball/39dc9b4be0378c57279aa693f597cda5deb97c8f",
-                "reference": "39dc9b4be0378c57279aa693f597cda5deb97c8f",
+                "url": "https://api.github.com/repos/ericduran/php-github-api/zipball/854de77f8894f56ba14e91fb03fba6a826e3189a",
+                "reference": "854de77f8894f56ba14e91fb03fba6a826e3189a",
                 "shasum": ""
             },
             "require": {
@@ -579,19 +579,18 @@
                     "Github\\": "lib/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "authors": [
                 {
+                    "name": "KnpLabs Team",
+                    "homepage": "http://knplabs.com"
+                },
+                {
                     "name": "Thibault Duplessis",
                     "email": "thibault.duplessis@gmail.com",
                     "homepage": "http://ornicar.github.com"
-                },
-                {
-                    "name": "KnpLabs Team",
-                    "homepage": "http://knplabs.com"
                 }
             ],
             "description": "GitHub API v3 client",
@@ -602,7 +601,10 @@
                 "gist",
                 "github"
             ],
-            "time": "2014-07-31 23:03:14"
+            "support": {
+                "source": "https://github.com/ericduran/php-github-api/tree/deployment-api"
+            },
+            "time": "2014-08-13 06:15:59"
         },
         {
             "name": "mango-group/symfony",
@@ -838,7 +840,8 @@
         "symfony/process": 20,
         "illuminate/support": 20,
         "illuminate/filesystem": 20,
-        "teqneers/php-stream-wrapper-for-git": 20
+        "teqneers/php-stream-wrapper-for-git": 20,
+        "knplabs/github-api": 20
     },
     "platform": [],
     "platform-dev": []
