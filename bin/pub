@@ -10,6 +10,7 @@ $application = new Application('pub', '@package_version@');
 $application->add(new pub\Command\ConfigGetCommand());
 $application->add(new pub\Command\ConfigSetCommand());
 $application->add(new pub\Command\ConfigDelCommand());
+$application->add(new pub\Command\NewRelicDeployCommand());
 $application->add(new pub\Command\PullRequest\IntegrationCommand());
 $application->add(new pub\Command\PullRequest\DeployCommand());
 $application->add(new pub\Command\PullRequest\CertifyCommand());
