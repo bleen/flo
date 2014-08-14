@@ -28,6 +28,7 @@ Options:
   --no-interaction -n Do not ask any interactive question.
 
 Available commands:
+  acquia-init         Set up Acquia Cloud hooks for API Calls.
   composer-validate   Validate a projects composer file for publisher & pub
   config-del          Delete configurations key for pub command
   config-get          Get configurations for pub command
@@ -35,9 +36,10 @@ Available commands:
   git-init            Initialized proper git remotes NBCUOTS & Acquia
   help                Displays help for a command
   list                Lists commands
+  new-relic           Deploy a tag to new-relic.
   pr-certify          Certify a specific pull-request.
+  pr-deploy           Deploy a specific pull-request to a solo environment.
   pr-integration      Pull all valid PRs into the acquia integration branch.
   pr-postpone         Postpone a specific pull-request.
   pr-reject           Reject a specific pull-request.
-
 ```
