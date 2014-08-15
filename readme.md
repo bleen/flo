@@ -39,6 +39,7 @@ Available commands:
   new-relic           Deploy a tag to new-relic.
   pr-certify          Certify a specific pull-request.
   pr-deploy           Deploy a specific pull-request to a solo environment.
+  pr-ignore           Ignore a specific pull-request.
   pr-integration      Pull all valid PRs into the acquia integration branch.
   pr-postpone         Postpone a specific pull-request.
   pr-reject           Reject a specific pull-request.
