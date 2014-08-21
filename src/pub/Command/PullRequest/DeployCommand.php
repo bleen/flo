@@ -4,6 +4,7 @@ namespace pub\Command\PullRequest;
 
 use pub\Config;
 use pub\ProjectConfig;
+use pub\Drupal;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputArgument;
@@ -130,6 +131,9 @@ class DeployCommand extends Command {
     if (!$process->isSuccessful()) {
       throw new \RuntimeException($process->getErrorOutput());
     }
+
+    // Lets generate the settings.local.php file.
+    Drupal\DrupalSettings::generateSettings($pr_number);
 
     // If they have an env set then we also tag it on github.
     if (!empty($input->getOption('env')) && !empty($input->getOption('ref'))) {

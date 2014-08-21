@@ -10,7 +10,7 @@ namespace pub\Drupal;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use pub\ProjectConfig;
-
+use pub\Config;
 
 class DrupalSettings {
 
@@ -24,30 +24,32 @@ class DrupalSettings {
    *
    * @throws \Exception
    */
-  public function generateSettings($pr_number) {
-    // $config = new Config();
+  static public function generateSettings($pr_number) {
+    $config = new Config();
+    $pub_config = $config->load();
     $project_config = new ProjectConfig();
+    $project_config->load();
     $fs = new Filesystem();
 
-    $short_name = 'site_PR_' . $pr_number;
-    $file_name = $pr_number . '-settings.inc';
+    $path = $project_config->settings['pull_request']['prefix'] . '-' . $pr_number . $project_config->settings['pull_request']['domain'];
+    $url = "http://{$path}";
+    $local_site_path = $pub_config['pr-directories'] . $path;
 
-    // TODO: Make this path come from a local config setting.
-    $path = '/var/www/site-php/' . $project_config['shortname'] . '/' . $file_name;
+    //TODO: Fix PR environment for EVERYONE!
+    $local_settings_php = $local_site_path . '/docroot/sites/install/settings.local.php';
 
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
     }
-
     $output = "
 <?php
 
-  \$base_url = 'http://{$pr_number}.pr.publisher7.com';
+  \$base_url = '{$url}';
 
   \$databases['default'] = array ('default' =>
     array (
-      'database' => 'pr_{$short_name}',
-      'username' => '',
+      'database' => '{$project_config->settings['pull_request']['prefix']}_{$pr_number}',
+      'username' => 'root',
       'password' => '',
       'host' => '127.0.0.1',
       'port' => '',
@@ -57,10 +59,10 @@ class DrupalSettings {
   );
 
   // Set the program name for syslog.module.
-  \$conf['syslog_identity'] = 'pr-{$short_name}';
+  \$conf['syslog_identity'] = '{$project_config->settings['pull_request']['prefix']}_{$pr_number}';
 
   // Set up memcache settings.
-  \$conf['memcache_key_prefix'] = '{$short_name}_';
+  \$conf['memcache_key_prefix'] = '{$project_config->settings['pull_request']['prefix']}_{$pr_number}_';
   \$conf['memcache_servers'] = array(
     '127.0.0.1:11211' => 'default'',
   );
@@ -69,7 +71,7 @@ class DrupalSettings {
   \$conf['imagemagick_convert'] = '/usr/bin/convert';";
 
     try {
-      $fs->dumpFile($path, $output);
+      $fs->dumpFile($local_settings_php, $output);
     }
     catch (IOExceptionInterface $e) {
       echo "An error occurred while creating settings.inc file at " . $e->getPath();
