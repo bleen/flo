@@ -64,7 +64,7 @@ class DrupalSettings {
   // Set up memcache settings.
   \$conf['memcache_key_prefix'] = '{$project_config->settings['pull_request']['prefix']}_{$pr_number}_';
   \$conf['memcache_servers'] = array(
-    '127.0.0.1:11211' => 'default'',
+    '127.0.0.1:11211' => 'default',
   );
 
   // Imagemagick path to convert binary setting.
