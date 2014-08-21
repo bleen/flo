@@ -31,7 +31,7 @@ class DrupalSettings {
     $project_config->load();
     $fs = new Filesystem();
 
-    $path = $project_config->settings['pull_request']['prefix'] . '-' . $pr_number . $project_config->settings['pull_request']['domain'];
+    $path = $project_config->settings['pull_request']['prefix'] . '-' . $pr_number . '.' . $project_config->settings['pull_request']['domain'];
     $url = "http://{$path}";
     $local_site_path = $pub_config['pr-directories'] . $path;
 
