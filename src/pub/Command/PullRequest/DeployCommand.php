@@ -29,6 +29,12 @@ class DeployCommand extends Command {
         'The pull-request number to be deployed.'
       )
       ->addOption(
+        'database',
+        'd',
+        InputOption::VALUE_NONE,
+        'If set we will also create the release Database.'
+      )
+      ->addOption(
         'ref',
         'r',
         InputOption::VALUE_REQUIRED,
@@ -134,6 +140,15 @@ class DeployCommand extends Command {
 
     // Lets generate the settings.local.php file.
     Drupal\DrupalSettings::generateSettings($pr_number);
+
+
+    if (!empty($input->getOption('database'))) {
+      $process = new Process("cd {$pub_config['pr-directories']}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
+      $process->run();
+      if (!$process->isSuccessful()) {
+        throw new \RuntimeException($process->getErrorOutput());
+      }
+    }
 
     // If they have an env set then we also tag it on github.
     if (!empty($input->getOption('env')) && !empty($input->getOption('ref'))) {
