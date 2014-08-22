@@ -146,7 +146,6 @@ class DeployCommand extends Command {
       $process = new Process("cd {$pub_config['pr-directories']}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
       // The installation process has a 7 minute timeout anything greater gets cutoff.
       $process->setTimeout(60 * 60 * 7);
-      $process->setIdleTimeout(60 * 60 * 7);
       $process->run();
       if (!$process->isSuccessful()) {
         throw new \RuntimeException($process->getErrorOutput());
