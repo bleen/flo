@@ -41,8 +41,7 @@ class DrupalSettings {
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
     }
-    $output = "
-<?php
+    $output = "<?php
 
   \$base_url = '{$url}';
 
