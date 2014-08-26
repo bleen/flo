@@ -21,7 +21,10 @@ class IntegrationCommand extends Command {
     'ci:ignored',
     'ci:postpone',
     'ci:postponed',
+    'ci:rejected',
+    'ci:rejected:code-review',
     'ci:rejected:qa',
+    'ci:rejected:unittest'
   );
 
   /**
