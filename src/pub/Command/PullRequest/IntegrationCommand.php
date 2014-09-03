@@ -17,14 +17,9 @@ class IntegrationCommand extends Command {
   const ERROR_LABEL = 'ci:error';
   public $invalid_labels = array(
     'ci:error',
-    'ci:ignore',
     'ci:ignored',
-    'ci:postpone',
     'ci:postponed',
     'ci:rejected',
-    'ci:rejected:code-review',
-    'ci:rejected:qa',
-    'ci:rejected:unittest'
   );
 
   /**
