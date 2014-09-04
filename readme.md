@@ -9,6 +9,10 @@ composer install
 ```
 Add bin/pub to your path
 
+##requirements
+* >= PHP 5.5
+* [Hub](https://github.com/github/hub)
+
 ##List of commands
 ```bash
 >pub
