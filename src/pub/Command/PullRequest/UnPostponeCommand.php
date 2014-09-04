@@ -27,7 +27,7 @@ class UnPostPoneCommand extends Command {
         'The pull-request number to be unpostpone.'
       );
   }
-
+ 
   /**
    * Process pr-unpostpone job.
    *
