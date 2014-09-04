@@ -17,6 +17,7 @@ $application->add(new pub\Command\PullRequest\DeployCommand());
 $application->add(new pub\Command\PullRequest\CertifyCommand());
 $application->add(new pub\Command\PullRequest\IgnoreCommand());
 $application->add(new pub\Command\PullRequest\RejectCommand());
+$application->add(new pub\Command\PullRequest\UnRejectCommand());
 $application->add(new pub\Command\PullRequest\PostPoneCommand());
 $application->add(new pub\Command\PullRequest\UnPostPoneCommand());
 $application->add(new pub\Command\AcquiaCloudHooksCommand());
