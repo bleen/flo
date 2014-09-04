@@ -42,7 +42,7 @@ class ConfigSetCommand extends Command {
 
     if (!$fs->exists($pub_config_file)) {
       $fs->put($pub_config_file, "---");
-      $output->writeln("<info>No pub config file exist.</error>");
+      $output->writeln("<error>No pub config file exist.</error>");
     }
 
     $pub_config = $yaml->parse($fs->get($pub_config_file));
