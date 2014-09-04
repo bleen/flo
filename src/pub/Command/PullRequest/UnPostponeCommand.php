@@ -24,7 +24,7 @@ class UnPostPoneCommand extends Command {
       ->addArgument(
         'pull-request',
         InputArgument::REQUIRED,
-        'The pull-request number to be certified.'
+        'The pull-request number to be unpostpone.'
       );
   }
 

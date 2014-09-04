@@ -12,19 +12,20 @@ use Symfony\Component\Yaml;
 use Github;
 
 
-class RejectCommand extends Command {
-  const REJECT_LABEL = 'ci:rejected';
+class UnRejectCommand extends Command {
+  const GITHUB_LABEL = 'ci:rejected';
+
 
   /**
    * {@inheritdoc}
    */
   protected function configure() {
-    $this->setName('pr-reject')
-      ->setDescription('Reject a specific pull-request.')
+    $this->setName('pr-unreject')
+      ->setDescription('Un-Reject a specific pull-request.')
       ->addArgument(
         'pull-request',
         InputArgument::REQUIRED,
-        'The pull-request number to be rejected.'
+        'The pull-request number to be un-rejected.'
       );
   }
 
@@ -64,16 +65,14 @@ class RejectCommand extends Command {
     $project_config->load();
 
     // We act on Issues instead of Pull-Request directly since it is simpler.
-    $labels = $github->api('issue')->labels()->add(
+    $labels = $github->api('issue')->labels()->remove(
       $project_config->settings['organization'],
       $project_config->settings['repository'],
       $pr_number,
-      self::REJECT_LABEL
+      self::GITHUB_LABEL
     );
 
-    if (count($labels) >= 1) {
-      $pr_url = "https://github.com/{$project_config->settings['organization']}/{$project_config->settings['repository']}/pull/{$pr_number}";
-      $output->writeln("<info>Pull Request: $pr_url has been rejected.</info>");
-    }
+    $pr_url = "https://github.com/{$project_config->settings['organization']}/{$project_config->settings['repository']}/pull/{$pr_number}";
+    $output->writeln("<info>Pull Request: $pr_url has been un-rejected.</info>");
   }
 }
