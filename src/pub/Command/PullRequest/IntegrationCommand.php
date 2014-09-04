@@ -128,7 +128,6 @@ class IntegrationCommand extends Command {
       $process = new Process('git push acquia integration --force');
       $process->run();
       if (!$process->isSuccessful()) {
-        // If you do not have hub we do nothing.
         throw new \RuntimeException($process->getErrorOutput());
       }
       $output->writeln("<info>Successfully Pushed integration branch to Acquia.</info>");
