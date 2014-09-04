@@ -11,10 +11,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml;
 use Github;
 
-
 class UnPostPoneCommand extends Command {
   const GITHUB_LABEL = 'ci:postponed';
-
+  
   /**
    * {@inheritdoc}
    */
