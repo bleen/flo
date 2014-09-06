@@ -69,7 +69,7 @@ class NewReleaseCommand extends Command {
 
     // Update version.php.
     $this->updateVersionFile($version_filename, $version_number);
-    $output->writeln("<info>Successfully updated the version.php file and set the PUBLISHER_VERSION to " . $version_number . ".</info>");
+    $output->writeln("<info>Successfully updated the version.php file and set the PUBLISHER_VERSION to {$version_number}</info>");
 
     // Commit the updated version.php.
     $process = new Process('git add ' . $version_filename . ' && git commit -m "Preparing for new tag: ' . $version_number . '"');
