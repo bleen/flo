@@ -2,14 +2,13 @@
 
 namespace pub\Command;
 
-use pub\ProjectConfig;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
-use Illuminate\Filesystem\Filesystem;
+use vierbergenlars\SemVer\version;
 
 
 class NewReleaseCommand extends Command {
@@ -49,12 +48,23 @@ class NewReleaseCommand extends Command {
       throw new \RuntimeException($process->getErrorOutput());
     }
 
-    // @TODO: Figure out how to make this work without hardocding the path to version.php.
+    // @TODO: Figure out how to make this work without hard-coding the path to version.php.
     $version_filename = 'docroot/version.php';
     require_once $version_filename;
 
+    // Determine the new version number.
+    $increment = $input->getArgument('increment');
+    try {
+      // This will succeed when a specific version number is provided, otherwise
+      // an exception will be thrown and the "catch" is used.
+      $version = new version($increment);
+      $version_number = $version->getVersion();
+    } catch(\Exception $e) {
+      $current_version = new version(PUBLISHER_VERSION);
+      $version_number = $current_version->inc($increment);
+    }
+
     // Update version.php.
-    $version_number = $this->getNewVersionNumber($input, PUBLISHER_VERSION);
     $this->updateVersionFile($version_filename, $version_number);
     $output->writeln("<info>Successfully updated the version.php file and set the PUBLISHER_VERSION to " . $version_number . ".</info>");
 
@@ -84,49 +94,6 @@ class NewReleaseCommand extends Command {
   }
 
   /**
-   * Given the user input and the current version number, return the new version
-   * number.
-   *
-   * @param InputInterface $input
-   * @param string $current_version_number
-   *   If the user input is major, minor or patch, the current version number
-   *   will be incremented.
-   *
-   * @return string
-   *   Returns a semantic version string.
-   */
-  protected function getNewVersionNumber(InputInterface $input, $current_version_number) {
-    $increment = $input->getArgument('increment');
-
-    $pattern = '/^(\d+)\.?(\d+)\.?(\d+)$/';
-    if (preg_match($pattern, $increment)) {
-      return $increment;
-    }
-    else {
-      if (!preg_match($pattern, $current_version_number, $matches)) {
-        throw new \Exception("The current version number in version.php (" . version_number_current . ") does not follow semantic versioning standards. Hence, you must specify an exact version number to use this command.");
-      }
-
-      switch ($increment) {
-        case 'major':
-          $matches[1]++;
-          break;
-        case 'minor':
-          $matches[2]++;
-          break;
-        case 'patch':
-          $matches[3]++;
-          break;
-        default:
-          throw new \Exception("The argument must be either major, minor or patch or it must be a string that follows semantic version standards.");
-      }
-      unset($matches[0]);
-      return implode('.', $matches);
-    }
-
-  }
-
-  /**
    * Overwrite the PUBLISHER_VERSION constant with its new value.
    *
    * @param string $version_file
@@ -140,10 +107,10 @@ class NewReleaseCommand extends Command {
       throw new \Exception("The version.php file could not be found. Are you running the command from the root of the repository?");
     }
     if (!is_writable($version_file)) {
-      throw new \Exception("The version.php file is not writable."); 
+      throw new \Exception("The version.php file is not writable.");
     }
     if (!$handle = fopen($version_file, 'w')) {
-      throw new \Exception("The version.php file could not be opened for writing."); 
+      throw new \Exception("The version.php file could not be opened for writing.");
     }
     $success = fwrite($handle, "<?php define('PUBLISHER_VERSION', '$version_number');");
     if (!$success) {
