@@ -5,7 +5,6 @@ namespace pub\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Illuminate\Filesystem\Filesystem;
@@ -22,12 +21,6 @@ class NewReleaseCommand extends Command {
         'increment',
         InputArgument::REQUIRED,
         'major|minor|patch|x.y.z'
-      )
-      ->addOption(
-        'push',
-        'p',
-        InputOption::VALUE_NONE,
-        'If set we will push the new tag to github.'
       );
     }
 
@@ -87,14 +80,5 @@ class NewReleaseCommand extends Command {
       throw new \RuntimeException($process->getErrorOutput());
     }
 
-    // Push the release to github if the --push flag is set.
-    if ($input->getOption('push')) {
-      $process = new Process('git push acquia ' . $version_number);
-      $process->run();
-      if (!$process->isSuccessful()) {
-        throw new \RuntimeException($process->getErrorOutput());
-      }
-      $output->writeln("<info>Successfully Pushed the " . $version_number . " tag.</info>");
-    }
   }
 }
