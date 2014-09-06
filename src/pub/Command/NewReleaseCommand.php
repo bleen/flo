@@ -50,6 +50,9 @@ class NewReleaseCommand extends Command {
 
     // @TODO: Figure out how to make this work without hard-coding the path to version.php.
     $version_filename = 'docroot/version.php';
+    if (!file_exists($version_filename)) {
+      throw new \Exception("The version.php file could not be found.");
+    }
     require_once $version_filename;
 
     // Determine the new version number.
