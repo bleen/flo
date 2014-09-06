@@ -8,6 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
+use Illuminate\Filesystem\Filesystem;
 use vierbergenlars\SemVer\version;
 
 
@@ -68,7 +69,8 @@ class NewReleaseCommand extends Command {
     }
 
     // Update version.php.
-    $this->updateVersionFile($version_filename, $version_number);
+    $fs = new Filesystem();
+    $fs->put($version_filename, "<?php define('PUBLISHER_VERSION', '$version_number');");
     $output->writeln("<info>Successfully updated the version.php file and set the PUBLISHER_VERSION to {$version_number}</info>");
 
     // Commit the updated version.php.
@@ -94,31 +96,5 @@ class NewReleaseCommand extends Command {
       }
       $output->writeln("<info>Successfully Pushed the " . $version_number . " tag.</info>");
     }
-  }
-
-  /**
-   * Overwrite the PUBLISHER_VERSION constant with its new value.
-   *
-   * @param string $version_file
-   *   A relative path to the file defining the PUBLISHER_VERSION constant
-   *   includeing the file name.
-   * @param string $version_number
-   *   The version number to use when setting PUBLISHER_VERSION.
-   */
-  protected function updateVersionFile($version_file, $version_number) {
-    if (!file_exists($version_file)) {
-      throw new \Exception("The version.php file could not be found. Are you running the command from the root of the repository?");
-    }
-    if (!is_writable($version_file)) {
-      throw new \Exception("The version.php file is not writable.");
-    }
-    if (!$handle = fopen($version_file, 'w')) {
-      throw new \Exception("The version.php file could not be opened for writing.");
-    }
-    $success = fwrite($handle, "<?php define('PUBLISHER_VERSION', '$version_number');");
-    if (!$success) {
-      throw new \Exception("Failed to write to version.php.");
-    }
-    fclose($handle);
   }
 }
