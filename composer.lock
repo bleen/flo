@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "f917a5b02e78603bf7110f5a3e89baef",
+    "hash": "0683cd406265c44eeeff8327cdef372d",
     "packages": [
         {
             "name": "guzzle/guzzle",
@@ -392,12 +392,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/filesystem.git",
-                "reference": "6b77a63f0925623bbb1ba8b2fdff440c8665fe81"
+                "reference": "cd8324e3f54fde968d19d91cea4ee6a289c6eba2"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/illuminate/filesystem/zipball/6b77a63f0925623bbb1ba8b2fdff440c8665fe81",
-                "reference": "6b77a63f0925623bbb1ba8b2fdff440c8665fe81",
+                "reference": "cd8324e3f54fde968d19d91cea4ee6a289c6eba2",
                 "shasum": ""
             },
             "require": {
@@ -434,12 +434,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/illuminate/support.git",
-                "reference": "6fe2f4fd2250f9e5b490368734368a5189a17d74"
+                "reference": "156d469b497dd07932cd2424a65b5993add8836d"
             },
             "dist": {
                 "type": "zip",
                 "url": "https://api.github.com/repos/illuminate/support/zipball/6fe2f4fd2250f9e5b490368734368a5189a17d74",
-                "reference": "6fe2f4fd2250f9e5b490368734368a5189a17d74",
+                "reference": "156d469b497dd07932cd2424a65b5993add8836d",
                 "shasum": ""
             },
             "require": {
@@ -830,10 +830,66 @@
                 "streamwrapper"
             ],
             "time": "2014-08-01 10:44:45"
+        },
+        {
+            "name": "vierbergenlars/php-semver",
+            "version": "3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/vierbergenlars/php-semver.git",
+                "reference": "4dc35f3804f3b127ad557b8b2255c03204dec951"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/vierbergenlars/php-semver/zipball/4dc35f3804f3b127ad557b8b2255c03204dec951",
+                "reference": "4dc35f3804f3b127ad557b8b2255c03204dec951",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "simpletest/simpletest": "1.1.*"
+            },
+            "bin": [
+                "bin/semver",
+                "bin/update-versions"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "vierbergenlars\\SemVer\\": "src/",
+                    "vierbergenlars\\LibJs\\": "src/"
+                },
+                "classmap": [
+                    "src/vierbergenlars/SemVer/internal.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Lars Vierbergen",
+                    "email": "vierbergenlars@gmail.com"
+                }
+            ],
+            "description": "The Semantic Versioner for PHP",
+            "keywords": [
+                "semantic",
+                "semver",
+                "versioning"
+            ],
+            "time": "2013-12-21 17:10:13"
         }
     ],
-    "packages-dev": [],
-    "aliases": [],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
         "symfony/filesystem": 20,
@@ -843,6 +899,10 @@
         "teqneers/php-stream-wrapper-for-git": 20,
         "knplabs/github-api": 20
     },
-    "platform": [],
-    "platform-dev": []
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
 }
