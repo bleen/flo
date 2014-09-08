@@ -41,7 +41,7 @@ Available commands:
   help                Displays help for a command
   list                Lists commands
   new-relic           Deploy a tag to new-relic.
-  new-release         Tag a new release and optionally push it to github.
+  new-release         Tag a new release.
   pr-certify          Certify a specific pull-request.
   pr-deploy           Deploy a specific pull-request to a solo environment.
   pr-ignore           Ignore a specific pull-request.
