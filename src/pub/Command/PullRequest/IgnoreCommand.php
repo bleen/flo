@@ -19,6 +19,7 @@ use Github;
  * @package pub\Command\PullRequest
  */
 class IgnoreCommand extends Command {
+  const GITHUB_LABEL = 'ci:ignored';
 
   /**
    * {@inheritdoc}
@@ -58,7 +59,7 @@ class IgnoreCommand extends Command {
     $github->authenticate($pub_config['github-oauth-token'], NULL, Github\Client::AUTH_URL_TOKEN);
 
     $project_config->load();
-    $labels = $github->api('issue')->labels()->add($project_config->settings['organization'] , $project_config->settings['repository'], $pr_number, 'ci:ignored');
+    $labels = $github->api('issue')->labels()->add($project_config->settings['organization'] , $project_config->settings['repository'], $pr_number, self::GITHUB_LABEL);
     if (count($labels) >= 1) {
       $pr_url = "https://github.com/{$project_config->settings['organization']}/{$project_config->settings['repository']}/pull/{$pr_number}";
       $output->writeln("<info>Pull Request: $pr_url has been ignored.</info>");
