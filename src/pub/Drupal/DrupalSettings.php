@@ -36,7 +36,7 @@ class DrupalSettings {
     $local_site_path = $pub_config['pr-directories'] . $path;
 
     //TODO: Fix PR environment for EVERYONE!
-    $local_settings_php = $local_site_path . '/docroot/sites/install/settings.local.php';
+    $local_settings_php = $local_site_path . '/docroot/sites/default/settings.local.php';
 
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
