@@ -29,7 +29,6 @@ class NewReleaseCommand extends Command {
    *
    * - Update the version.php file
    * - Commit the change and tag it
-   * - If the --push option is used, push the change to Acquia
    *
    * This command assumes you are running it from the root of the repository.
    * Additionally, this command makes changes to the master branch.
@@ -63,7 +62,7 @@ class NewReleaseCommand extends Command {
 
     // Update version.php.
     $fs = new Filesystem();
-    $fs->put($version_filename, "<?php define('PUBLISHER_VERSION', '$version_number');");
+    $fs->put($version_filename, "<?php define('PUBLISHER_VERSION', '$version_number');\n");
     $output->writeln("<info>Successfully updated the version.php file and set the PUBLISHER_VERSION to {$version_number}</info>");
 
     // Commit the updated version.php.
