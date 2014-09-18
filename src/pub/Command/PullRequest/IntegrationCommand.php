@@ -33,6 +33,18 @@ class IntegrationCommand extends Command {
         'p',
         InputOption::VALUE_NONE,
         'If set we will also force push the integration branch to Acquia.'
+      )
+      ->addOption(
+        'am',
+        'a',
+        InputOption::VALUE_NONE,
+        'Use am instead of merge. Useful if you don\'t have access to other developer\'s repos.'
+      )
+      ->addOption(
+        'no-label',
+        'l',
+        InputOption::VALUE_NONE,
+        'Do not label the PR in case of error.'
       );
   }
 
@@ -102,18 +114,28 @@ class IntegrationCommand extends Command {
 
       // Now try to apply the patch or else mark it as failure.
       $url = $pr['pull_request']['html_url'];
-      $command = "hub merge {$url}";
+      if ($input->getOption('am')) {
+        $command = "hub am --3way {$url}";
+      }
+      else {
+        $command = "hub merge {$url}";
+      }
+      $output->writeln("\n" . $command);
       $process = new Process($command);
       $process->run();
       if (!$process->isSuccessful()) {
         // We reset the failed AM & we marked the PR as ci:error.
         $output->writeln("<error>Failed to applied PR# {$pr['number']}: {$url}.</error>");
-        $labels = $github->api('issue')->labels()->add(
-          $project_config->settings['organization'],
-          $project_config->settings['repository'],
-          $pr['number'],
-          self::ERROR_LABEL
-        );
+        $output->writeln($process->getOutput());
+        if (!$input->getOption('no-label')) {
+          $labels = $github->api('issue')->labels()->add(
+            $project_config->settings['organization'],
+            $project_config->settings['repository'],
+            $pr['number'],
+            self::ERROR_LABEL
+          );
+        }
+
         $process = new Process('git merge --abort');
         $process->run();
       }
