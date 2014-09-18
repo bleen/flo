@@ -41,8 +41,15 @@ class NewReleaseCommand extends Command {
       throw new \RuntimeException($process->getErrorOutput());
     }
 
-    // @TODO: Figure out how to make this work without hard-coding the path to version.php.
-    $version_filename = 'docroot/version.php';
+    // Determine project path.
+    $process = new Process('git rev-parse --show-toplevel');
+    $process->run();
+    if (!$process->isSuccessful()) {
+      throw new \RuntimeException($process->getErrorOutput());
+    }
+    $project_path = trim($process->getOutput());
+
+    $version_filename = $project_path . '/docroot/version.php';
     if (!file_exists($version_filename)) {
       throw new \Exception("The version.php file could not be found.");
     }
