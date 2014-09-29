@@ -45,6 +45,12 @@ class DeployCommand extends Command {
         'e',
         InputOption::VALUE_REQUIRED,
         'If set we will tag the release on GitHub using their Deployment API.'
+      )
+      ->addOption(
+        'site-dir',
+        'sd',
+        InputOption::VALUE_REQUIRED,
+        'The site-dir that is being deployed.'
       );
   }
 
@@ -81,6 +87,7 @@ class DeployCommand extends Command {
     $config = new Config();
     $project_config = new ProjectConfig();
 
+    $site_dir = $input->getOption('site-dir');
     $pr_number = $input->getArgument('pull-request');
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
@@ -139,11 +146,19 @@ class DeployCommand extends Command {
     }
 
     // Lets generate the settings.local.php file.
-    Drupal\DrupalSettings::generateSettings($pr_number);
+    Drupal\DrupalSettings::generateSettings($pr_number, $site_dir);
 
 
     if (!empty($input->getOption('database'))) {
-      $process = new Process("cd {$pub_config['pr-directories']}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
+      // Support multi-sites
+      if (!empty($site_dir)) {
+        print_r("{$pub_config['pr-directories']}{$path}/docroot/sites/{$site_dir}");
+        $process = new Process("cd {$pub_config['pr-directories']}{$path}/docroot/sites/{$site_dir} && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
+      }
+      else {
+        $process = new Process("cd {$pub_config['pr-directories']}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
+      }
+
       // The installation process has a 7 minute timeout anything greater gets cutoff.
       $process->setTimeout(60 * 60 * 7);
       $process->run();

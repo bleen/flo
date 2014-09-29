@@ -12,19 +12,25 @@ use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use pub\ProjectConfig;
 use pub\Config;
 
+/**
+ * Class DrupalSettings
+ * @package pub\Drupal
+ */
 class DrupalSettings {
 
   const EXPORT_PATH = '/var/www/site-php/subscription/{{PR-123}}.settings.php';
 
   /**
-   * Generate Settings PHP for a specific PR.
+   * Generate Settings PHP for a specific PR
    *
-   * @param int $pr_number
+   * @param $pr_number
+   *   Pull Request Number used to build the settings.php file.
+   * @param bool $site_dir
    *   Pull Request Number used to build the settings.php file.
    *
    * @throws \Exception
    */
-  static public function generateSettings($pr_number) {
+  static public function generateSettings($pr_number, $site_dir = FALSE) {
     $config = new Config();
     $pub_config = $config->load();
     $project_config = new ProjectConfig();
@@ -36,7 +42,12 @@ class DrupalSettings {
     $local_site_path = $pub_config['pr-directories'] . $path;
 
     //TODO: Fix PR environment for EVERYONE!
-    $local_settings_php = $local_site_path . '/docroot/sites/default/settings.local.php';
+    if ($site_dir !== FALSE) {
+      $local_settings_php = $local_site_path . "/docroot/sites/{$site_dir}/settings.local.php";
+    }
+    else {
+      $local_settings_php = $local_site_path . '/docroot/sites/default/settings.local.php';
+    }
 
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
