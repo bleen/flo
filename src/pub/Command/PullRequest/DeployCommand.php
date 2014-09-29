@@ -152,7 +152,6 @@ class DeployCommand extends Command {
     if (!empty($input->getOption('database'))) {
       // Support multi-sites
       if (!empty($site_dir)) {
-        print_r("{$pub_config['pr-directories']}{$path}/docroot/sites/{$site_dir}");
         $process = new Process("cd {$pub_config['pr-directories']}{$path}/docroot/sites/{$site_dir} && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
       }
       else {
