@@ -41,13 +41,8 @@ class DrupalSettings {
     $url = "http://{$path}";
     $local_site_path = $pub_config['pr-directories'] . $path;
 
-    //TODO: Fix PR environment for EVERYONE!
-    if (empty($site_dir)) {
-      $local_settings_php = $local_site_path . "/docroot/sites/{$site_dir}/settings.local.php";
-    }
-    else {
-      $local_settings_php = $local_site_path . '/docroot/sites/default/settings.local.php';
-    }
+    // TODO: Fix PR environment for EVERYONE!
+    $local_settings_php = $local_site_path . '/docroot/sites/default/settings.local.php';
 
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
