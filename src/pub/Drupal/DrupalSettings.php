@@ -42,7 +42,7 @@ class DrupalSettings {
     $local_site_path = $pub_config['pr-directories'] . $path;
 
     //TODO: Fix PR environment for EVERYONE!
-    if ($site_dir !== FALSE) {
+    if (empty($site_dir)) {
       $local_settings_php = $local_site_path . "/docroot/sites/{$site_dir}/settings.local.php";
     }
     else {
