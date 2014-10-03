@@ -138,7 +138,7 @@ class DeployCommand extends Command {
     // Lets rsync this workspace now.
     $path = "{$project_config->settings['pull_request']['prefix']}-{$pr_number}.{$project_config->settings['pull_request']['domain']}";
     $url = "http://{$path}";
-    $command = "rsync -aqp --delete --exclude='.git/*' . {$pub_config['pr-directories']}{$path}";
+    $command = "rsync -qrltoD --delete --exclude='.git/*' . {$pub_config['pr-directories']}{$path}";
     $process = new Process($command);
     $process->run();
     if (!$process->isSuccessful()) {
