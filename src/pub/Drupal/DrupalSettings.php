@@ -21,16 +21,16 @@ class DrupalSettings {
   const EXPORT_PATH = '/var/www/site-php/subscription/{{PR-123}}.settings.php';
 
   /**
-   * Generate Settings PHP for a specific PR
+   * Generate Settings PHP for a specific PR.
    *
-   * @param $pr_number
+   * @param int $pr_number
    *   Pull Request Number used to build the settings.php file.
-   * @param bool $site_dir
-   *   Pull Request Number used to build the settings.php file.
+   * @param string $site_dir
+   *   Optional site directory to place settings.local.php in.
    *
    * @throws \Exception
    */
-  static public function generateSettings($pr_number, $site_dir = FALSE) {
+  static public function generateSettings($pr_number, $site_dir = 'default') {
     $config = new Config();
     $pub_config = $config->load();
     $project_config = new ProjectConfig();
@@ -41,8 +41,7 @@ class DrupalSettings {
     $url = "http://{$path}";
     $local_site_path = $pub_config['pr-directories'] . $path;
 
-    // TODO: Fix PR environment for EVERYONE!
-    $local_settings_php = $local_site_path . '/docroot/sites/default/settings.local.php';
+    $local_settings_php = $local_site_path . "/docroot/sites/{$site_dir}/settings.local.php";
 
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
