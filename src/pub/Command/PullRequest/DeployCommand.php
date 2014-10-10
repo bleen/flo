@@ -151,11 +151,11 @@ class DeployCommand extends Command {
 
     // Lets generate the settings.local.php file.
     if (empty($site_dir)) {
-      $site_dir = 'default';
+      Drupal\DrupalSettings::generateSettings($pr_number);
     }
-
-    Drupal\DrupalSettings::generateSettings($pr_number, $site_dir);
-
+    else {
+      Drupal\DrupalSettings::generateSettings($pr_number, $site_dir);
+    }
 
     if (!empty($input->getOption('database'))) {
       // Support multi-sites
