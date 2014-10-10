@@ -144,10 +144,6 @@ class DeployCommand extends Command {
     if (!$process->isSuccessful()) {
       throw new \RuntimeException($process->getErrorOutput());
     }
-    
-    if (empty($site_dir)) {
-      $site_dir = 'default';
-    }
 
     // Lets generate the settings.local.php file.
     if (empty($site_dir)) {
