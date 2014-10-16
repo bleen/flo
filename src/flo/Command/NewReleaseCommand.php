@@ -26,6 +26,8 @@ class NewReleaseCommand extends Command {
   /**
    * Process the New Release command.
    *
+   * {@inheritDoc}
+   *
    * - Update the version.php file
    * - Commit the change and tag it
    *
@@ -33,6 +35,18 @@ class NewReleaseCommand extends Command {
    * Additionally, this command makes changes to the master branch.
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
+    // Get the version information from the project config.
+    $project_config = new ProjectConfig();
+    $project_config->load();
+    if (!isset($project_config->settings['vars']['version_file'])) {
+      throw new \Exception("You must have a vars:version_file set up in your project-config.yml. Ex. version_file: ./version.php");
+    }
+    if (!isset($project_config->settings['vars']['version_constant'])) {
+      throw new \Exception("You must have a vars:version_constant set up in your project-config.yml. Ex. version_constant: MY_PROJECT_VERSION");
+    }
+    $version_file = $project_config->settings['vars']['version_file'];
+    $version_constant = $project_config->settings['vars']['version_constant'];
+
     // Checkout the master branch.
     $process = new Process('git checkout ' . self::MASTER_BRANCH);
     $process->run();
@@ -40,39 +54,31 @@ class NewReleaseCommand extends Command {
       throw new \RuntimeException($process->getErrorOutput());
     }
 
-    // Determine project path.
-    $process = new Process('git rev-parse --show-toplevel');
-    $process->run();
-    if (!$process->isSuccessful()) {
-      throw new \RuntimeException($process->getErrorOutput());
-    }
-    $project_path = trim($process->getOutput());
-
-    $version_filename = $project_path . '/docroot/version.php';
-    if (!file_exists($version_filename)) {
-      throw new \Exception("The version.php file could not be found.");
-    }
-    require_once $version_filename;
-
     // Determine the new version number.
     $increment = $input->getArgument('increment');
     try {
-      // This will succeed when a specific version number is provided, otherwise
-      // an exception will be thrown and the "catch" is used.
+      // This will succeed when a specific version number is provided (as
+      // opposed to "major" or "minor" or "patch"), otherwise an exception will
+      // be thrown and the "catch" is used.
       $version = new version($increment);
       $version_number = $version->getVersion();
     } catch(\Exception $e) {
-      $current_version = new version(PUBLISHER_VERSION);
+      // Get the current version from the version file if it exists. Otherwise
+      // we're starting from scratch.
+      if (file_exists($version_file)) {
+        include_once $version_file;
+      }
+      $current_version = defined($version_constant) ? new version(constant($version_constant)) : new version('0.0.0');
       $version_number = $current_version->inc($increment);
     }
 
-    // Update version.php.
+    // Update version file.
     $fs = new Filesystem();
-    $fs->put($version_filename, "<?php define('PUBLISHER_VERSION', '$version_number');\n");
-    $output->writeln("<info>Successfully updated the version.php file and set the PUBLISHER_VERSION to {$version_number}</info>");
+    $fs->put($version_file, "<?php define('$version_constant', '$version_number');\n");
+    $output->writeln("<info>Successfully updated the $version_file file and set the $version_constant to {$version_number}</info>");
 
-    // Commit the updated version.php.
-    $process = new Process('git add ' . $version_filename . ' && git commit -m "Preparing for new tag: ' . $version_number . '"');
+    // Commit the updated version file.
+    $process = new Process('git add ' . $version_file . ' && git commit -m "Preparing for new tag: ' . $version_number . '"');
     $process->run();
     if (!$process->isSuccessful()) {
       throw new \RuntimeException($process->getErrorOutput());
