@@ -90,6 +90,21 @@ class IntegrationCommand extends Command {
       'direction' => 'asc',
     )));
 
+    // Get current branch or commit.
+    $current_head = '';
+    $process = new Process('symbolic-ref --short HEAD');
+    $process->run();
+    if ($process->isSuccessful()) {
+      $current_head = trim($process->getOutput());
+    }
+    else {
+      $process = new Process('git rev-parse HEAD');
+      $process->run();
+      if ($process->isSuccessful()) {
+        $current_head = trim($process->getOutput());
+      }
+    }
+
     $process = new Process('git checkout -B integration');
     $process->run();
     if (!$process->isSuccessful()) {
@@ -153,6 +168,12 @@ class IntegrationCommand extends Command {
         throw new \RuntimeException($process->getErrorOutput());
       }
       $output->writeln("<info>Successfully Pushed integration branch to Acquia.</info>");
+    }
+
+    // Return to the branch the user was previously on, if they were on one.
+    if (!empty($current_head)) {
+      $process = new Process("git checkout {$current_head}");
+      $process->run();
     }
   }
 }
