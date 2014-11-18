@@ -2,6 +2,7 @@
 
 namespace pub;
 
+use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml;
 use Illuminate\Filesystem\Filesystem;
 
@@ -26,20 +27,17 @@ class ProjectConfig {
    * @return bool
    */
   public function exists() {
-    $retval = FALSE;
     $fs = new Filesystem();
 
-    if ($fs->exists($this->project_config_file)) {
-      $retval = TRUE;
-    }
-    else {
-      $this->project_config_file = '../' . $this->project_config_file;
-      if ($fs->exists($this->project_config_file)) {
-        $retval = TRUE;
-      }
+    // Determine project path.
+    $process = new Process('git rev-parse --show-toplevel');
+    $process->run();
+    if ($process->isSuccessful()) {
+      $project_path = trim($process->getOutput());
+      $this->project_config_file = $project_path . '/' . $this->project_config_file;
     }
 
-    return $retval;
+    return $fs->exists($this->project_config_file);
   }
 
 
