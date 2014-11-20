@@ -9,8 +9,7 @@ namespace pub\Drupal;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
-use pub\ProjectConfig;
-use pub\Config;
+use pub\Configuration;
 
 /**
  * Class DrupalSettings
@@ -31,15 +30,14 @@ class DrupalSettings {
    * @throws \Exception
    */
   static public function generateSettings($pr_number, $site_dir = 'default') {
-    $config = new Config();
-    $pub_config = $config->load();
-    $project_config = new ProjectConfig();
-    $project_config->load();
+    $configuration = new Configuration();
+    $config = $configuration->getConfig();
+
     $fs = new Filesystem();
 
-    $path = $project_config->settings['pull_request']['prefix'] . '-' . $pr_number . '.' . $project_config->settings['pull_request']['domain'];
+    $path = $config['pull_request']['prefix'] . '-' . $pr_number . '.' . $config['pull_request']['domain'];
     $url = "http://{$path}";
-    $local_site_path = $pub_config['pr-directories'] . $path;
+    $local_site_path = $config['pr-directories'] . $path;
 
     $local_settings_php = $local_site_path . "/docroot/sites/{$site_dir}/settings.local.php";
 
@@ -52,7 +50,7 @@ class DrupalSettings {
 
   \$databases['default'] = array ('default' =>
     array (
-      'database' => '{$project_config->settings['pull_request']['prefix']}_{$pr_number}',
+      'database' => '{$config['pull_request']['prefix']}_{$pr_number}',
       'username' => 'root',
       'password' => '',
       'host' => '127.0.0.1',
@@ -63,10 +61,10 @@ class DrupalSettings {
   );
 
   // Set the program name for syslog.module.
-  \$conf['syslog_identity'] = '{$project_config->settings['pull_request']['prefix']}_{$pr_number}';
+  \$conf['syslog_identity'] = '{$config['pull_request']['prefix']}_{$pr_number}';
 
   // Set up memcache settings.
-  \$conf['memcache_key_prefix'] = '{$project_config->settings['pull_request']['prefix']}_{$pr_number}_';
+  \$conf['memcache_key_prefix'] = '{$config['pull_request']['prefix']}_{$pr_number}_';
   \$conf['memcache_servers'] = array(
     '127.0.0.1:11211' => 'default',
   );

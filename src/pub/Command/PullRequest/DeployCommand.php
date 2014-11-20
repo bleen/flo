@@ -2,16 +2,13 @@
 
 namespace pub\Command\PullRequest;
 
-use pub\Config;
-use pub\ProjectConfig;
 use pub\Drupal;
-use Symfony\Component\Console\Command\Command;
+use pub\Command\Command;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml;
 use Github;
 
 
@@ -83,35 +80,12 @@ class DeployCommand extends Command {
    * @throws \Exception
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $github = new Github\Client();
-    $config = new Config();
-    $project_config = new ProjectConfig();
+    $github = $this->getGithub();
 
     $site_dir = $input->getOption('site-dir');
     $pr_number = $input->getArgument('pull-request');
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
-    }
-
-    if (!$config->exists()) {
-      throw new \Exception("You must set up your pub configs settings for github.");
-    }
-
-    $pub_config = $config->load();
-    if (!isset($pub_config['github-oauth-token'])) {
-      throw new \Exception("You must have a github-oauth-token set up. Ex. pub config-set github-oauth-token MY_TOKEN_IS_THIS.");
-    }
-
-    if (!isset($pub_config['pr-directories'])) {
-      throw new \Exception("You must have a pr-directories set up. Ex. pub config-set pr-directories /var/www/html/ .");
-    }
-
-    $project_config->load();
-    if (!isset($project_config->settings['pull_request']['prefix'])) {
-      throw new \Exception("You must have a pull_request:pr_prefix set up in your project-config.yml. Ex. pr_prefix: p7");
-    }
-    if (!isset($project_config->settings['pull_request']['domain'])) {
-      throw new \Exception("You must have a pull_request:domain set up in your project-config.yml. Ex. domain: pr.publisher7.com");
     }
 
     // We always run from the top git directory.
@@ -136,9 +110,10 @@ class DeployCommand extends Command {
     }
 
     // Lets rsync this workspace now.
-    $path = "{$project_config->settings['pull_request']['prefix']}-{$pr_number}.{$project_config->settings['pull_request']['domain']}";
+    $pull_request = $this->getConfigParameter('pull_request');
+    $path = "{$pull_request['prefix']}-{$pr_number}.{$pull_request['domain']}";
     $url = "http://{$path}";
-    $command = "rsync -qrltoD --delete --exclude='.git/*' . {$pub_config['pr-directories']}{$path}";
+    $command = "rsync -qrltoD --delete --exclude='.git/*' . {$this->getConfigParameter('pr-directories')}{$path}";
     $process = new Process($command);
     $process->run();
     if (!$process->isSuccessful()) {
@@ -156,10 +131,10 @@ class DeployCommand extends Command {
     if (!empty($input->getOption('database'))) {
       // Support multi-sites
       if (!empty($site_dir)) {
-        $process = new Process("cd {$pub_config['pr-directories']}{$path}/docroot/sites/{$site_dir} && drush sql-create --yes");
+        $process = new Process("cd {$this->getConfigParameter('pr-directories')}{$path}/docroot/sites/{$site_dir} && drush sql-create --yes");
       }
       else {
-        $process = new Process("cd {$pub_config['pr-directories']}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
+        $process = new Process("cd {$this->getConfigParameter('pr-directories')}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
       }
 
       // The installation process has a 7 minute timeout anything greater gets cutoff.
@@ -174,11 +149,10 @@ class DeployCommand extends Command {
     if (!empty($input->getOption('env')) && !empty($input->getOption('ref'))) {
       $ref = $input->getOption('ref');
       $environment = $input->getOption('env');
-      $github->authenticate($pub_config['github-oauth-token'], NULL, Github\Client::AUTH_URL_TOKEN);
 
       $deployment = $github->api('deployment')->create(
-        $project_config->settings['organization'],
-        $project_config->settings['repository'],
+        $this->getConfigParameter('organization'),
+        $this->getConfigParameter('repository'),
         array(
           'ref' => $ref,
           'environment' => $environment,
@@ -188,8 +162,8 @@ class DeployCommand extends Command {
       );
 
       $github->api('deployment')->update(
-        $project_config->settings['organization'],
-        $project_config->settings['repository'],
+        $this->getConfigParameter('organization'),
+        $this->getConfigParameter('repository'),
         $deployment['id'],
         array(
           'state' => 'success',
@@ -199,6 +173,6 @@ class DeployCommand extends Command {
       );
     }
 
-    $output->writeln("<info>Pull Request: $pr_number has been deployed to {$url}.</info>");
+    $output->writeln("<info>PR #$pr_number has been deployed to {$url}.</info>");
   }
 }
