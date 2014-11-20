@@ -78,7 +78,7 @@ class Configuration implements ConfigurationInterface {
           ->isRequired()
           ->cannotBeEmpty()
           ->end()
-        ->scalarNode('canonical_repo')
+        ->scalarNode('github_git_uri')
           ->isRequired()
           ->cannotBeEmpty()
           ->end()
