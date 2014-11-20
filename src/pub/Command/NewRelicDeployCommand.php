@@ -2,13 +2,9 @@
 
 namespace pub\Command;
 
-use pub\Config;
-use pub\ProjectConfig;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml;
 use GuzzleHttp;
 
 class NewRelicDeployCommand extends Command {
@@ -40,10 +36,9 @@ class NewRelicDeployCommand extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $guzzle = new GuzzleHttp\Client();
-    $project_config = new ProjectConfig();
+    $new_relic = $this->getConfigParameter('new_relic');
 
     $tag = $input->getArgument('tag');
-    $project_config->load();
     $res = $guzzle->post('https://api.newrelic.com/deployments.xml', [
       'body' => [
         'deployment[app_name]' => 'nbcupublisher7.devi1',
@@ -53,7 +48,7 @@ class NewRelicDeployCommand extends Command {
         'deployment[revision]' => $tag,
       ],
       'headers' => [
-        'x-api-key' => $project_config->settings['new_relic'],
+        'x-api-key' => $new_relic,
       ]
     ]);
 

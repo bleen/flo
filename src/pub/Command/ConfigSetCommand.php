@@ -2,7 +2,6 @@
 
 namespace pub\Command;
 
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -51,7 +50,7 @@ class ConfigSetCommand extends Command {
 
     $pub_config[$config_name] = $config_value;
 
-    $updated_config = $dumper->dump($pub_config);
+    $updated_config = $dumper->dump($pub_config, 1);
 
     $fs->put($pub_config_file, $updated_config);
 

@@ -2,9 +2,7 @@
 
 namespace pub\Command\PullRequest;
 
-use pub\Config;
-use pub\ProjectConfig;
-use Symfony\Component\Console\Command\Command;
+use pub\Command\Command;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -14,12 +12,12 @@ use Github;
 
 
 class IntegrationCommand extends Command {
-  const ERROR_LABEL = 'ci:error';
-  public $invalid_labels = array(
-    'ci:error',
-    'ci:ignored',
-    'ci:postponed',
-    'ci:rejected',
+
+  private $invalid_labels = array(
+    self::GITHUB_LABEL_ERROR,
+    self::GITHUB_LABEL_IGNORED,
+    self::GITHUB_LABEL_POSTPONED,
+    self::GITHUB_LABEL_REJECTED,
   );
 
   /**
@@ -58,33 +56,12 @@ class IntegrationCommand extends Command {
    *  - Deploy integration branch to acquia (DEV set up to track it)
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $github = new Github\Client(
-      new Github\HttpClient\CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache'))
-    );
-    $config = new Config();
-    $project_config = new ProjectConfig();
-
-
-    // Check if hub exists if not throw an error.
-    $process = new Process('hub --version');
-    $process->run();
-    if (!$process->isSuccessful()) {
-      // If you do not have hub we do nothing.
-      throw new \RuntimeException($process->getErrorOutput());
-    }
-
-    $pub_config = $config->load();
-    if (!isset($pub_config['github-oauth-token'])) {
-      throw new \Exception("You must have a github-oauth-token set up. Ex. pub config-set github-oauth-token MY_TOKEN_IS_THIS.");
-    }
-
-    $github->authenticate($pub_config['github-oauth-token'], NULL, Github\Client::AUTH_URL_TOKEN);
-    $project_config->load();
+    $github = $this->getGithub();
 
     // Request all open issues in created order. 1st come 1st serve.
     $paginator  = new Github\ResultPager($github);
     $issues_api = $github->api('issue');
-    $pull_requests = $paginator->fetchAll($issues_api, 'all', array($project_config->settings['organization'], $project_config->settings['repository'], array(
+    $pull_requests = $paginator->fetchAll($issues_api, 'all', array($this->getConfigParameter('organization'), $this->getConfigParameter('repository'), array(
       'state' => 'open',
       'sort' => 'created',
       'direction' => 'asc',
@@ -92,7 +69,7 @@ class IntegrationCommand extends Command {
 
     // Get current branch or commit.
     $current_head = '';
-    $process = new Process('symbolic-ref --short HEAD');
+    $process = new Process('git symbolic-ref --short HEAD');
     $process->run();
     if ($process->isSuccessful()) {
       $current_head = trim($process->getOutput());
@@ -144,10 +121,10 @@ class IntegrationCommand extends Command {
         $output->writeln($process->getOutput());
         if (!$input->getOption('no-label')) {
           $labels = $github->api('issue')->labels()->add(
-            $project_config->settings['organization'],
-            $project_config->settings['repository'],
+            $this->getConfigParameter('organization'),
+            $this->getConfigParameter('repository'),
             $pr['number'],
-            self::ERROR_LABEL
+            self::GITHUB_LABEL_ERROR
           );
         }
 
@@ -155,7 +132,7 @@ class IntegrationCommand extends Command {
         $process->run();
       }
       else {
-        $output->writeln("<info>Successfully applied PR# {$pr['number']}: {$url}.</info>");
+        $output->writeln("<info>Successfully applied PR #{$pr['number']}: {$url}.</info>");
       }
     }
 
