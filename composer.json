@@ -1,5 +1,5 @@
 {
-  "name": "nbcuots/pub",
+  "name": "nbcuots/flo",
   "description": "CLI app for Publisher7",
   "type": "library",
   "license": "MIT",
@@ -11,7 +11,7 @@
     }
   ],
   "support": {
-    "issues": "https://github.com/NBCUOTS/pub/issues"
+    "issues": "https://github.com/NBCUOTS/flo/issues"
   },
   "repositories": [
     {
@@ -33,14 +33,14 @@
     "vierbergenlars/php-semver": "3.0.0"
   },
   "bin": [
-    "pub"
+    "flo"
   ],
   "config": {
     "bin-dir": "bin"
   },
   "autoload": {
     "psr-0": {
-      "pub": "src"
+      "flo": "src"
     }
   }
 }

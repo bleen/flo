@@ -5,15 +5,15 @@
  * Generate Drupal Settings.php for PRs.
  */
 
-namespace pub\Drupal;
+namespace flo\Drupal;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
-use pub\Configuration;
+use flo\Configuration;
 
 /**
  * Class DrupalSettings
- * @package pub\Drupal
+ * @package flo\Drupal
  */
 class DrupalSettings {
 

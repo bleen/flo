@@ -1,6 +1,6 @@
 <?php
 
-namespace pub\Command;
+namespace flo\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +16,7 @@ class ConfigDelCommand extends Command {
    */
   protected function configure() {
     $this->setName('config-del')
-      ->setDescription('Delete configurations key for pub command')
+      ->setDescription('Delete configurations key for flo command')
       ->addArgument(
         'config-name',
         InputArgument::REQUIRED,
@@ -31,20 +31,20 @@ class ConfigDelCommand extends Command {
     $fs = new Filesystem();
     $yaml = new Yaml\Parser();
     $dumper = new Dumper();
-    $pub_config_file = getenv("HOME") . '/.config/pub';
+    $flo_config_file = getenv("HOME") . '/.config/flo';
 
-    if (!$fs->exists($pub_config_file)) {
-      return $output->writeln("<error>No pub config file exist.</error>");
+    if (!$fs->exists($flo_config_file)) {
+      return $output->writeln("<error>No flo config file exist.</error>");
     }
 
-    $pub_config = $yaml->parse($fs->get($pub_config_file));
+    $flo_config = $yaml->parse($fs->get($flo_config_file));
     $config_name = $input->getArgument('config-name');
 
-    if (isset($pub_config[$config_name])) {
+    if (isset($flo_config[$config_name])) {
       // If it exists remove the key and resaved the config file.
-      unset($pub_config[$config_name]);
-      $updated_config = $dumper->dump($pub_config);
-      $fs->put($pub_config_file, $updated_config);
+      unset($flo_config[$config_name]);
+      $updated_config = $dumper->dump($flo_config);
+      $fs->put($flo_config_file, $updated_config);
       $output->writeln("<info>{$config_name} has been deleted.</info>");
     }
     else {

@@ -1,6 +1,6 @@
 <?php
 
-namespace pub;
+namespace flo;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
@@ -11,17 +11,17 @@ use Symfony\Component\Yaml\Yaml;
 
 class Configuration implements ConfigurationInterface {
 
-  private $pub_config_file = '';
+  private $flo_config_file = '';
   private $project_config_file = 'project-config.yml';
   private $config;
 
   function __construct() {
     $fs = new Filesystem();
 
-    $pub_config = array();
-    $this->pub_config_file = getenv("HOME") . '/.config/pub';
-    if ($fs->exists($this->pub_config_file)) {
-      $pub_config = Yaml::parse($fs->get($this->pub_config_file));
+    $flo_config = array();
+    $this->flo_config_file = getenv("HOME") . '/.config/flo';
+    if ($fs->exists($this->flo_config_file)) {
+      $flo_config = Yaml::parse($fs->get($this->flo_config_file));
     }
 
     $project_config = array();
@@ -35,14 +35,14 @@ class Configuration implements ConfigurationInterface {
       $project_config = Yaml::parse($fs->get($this->project_config_file));
     }
     else {
-      throw new \Exception("Must run pub from project directory");
+      throw new \Exception("Must run flo from project directory");
     }
 
     try {
       $processor = new Processor();
       $this->config = $processor->processConfiguration(
         $this,
-        array($pub_config, $project_config)
+        array($flo_config, $project_config)
       );
     }
     catch (\Exception $e) {

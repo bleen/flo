@@ -1,6 +1,6 @@
 <?php
 
-namespace pub\Command;
+namespace flo\Command;
 
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputInterface;

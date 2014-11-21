@@ -1,6 +1,6 @@
 <?php
 
-namespace pub\Command;
+namespace flo\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,7 +17,7 @@ class ConfigSetCommand extends Command {
    */
   protected function configure() {
     $this->setName('config-set')
-      ->setDescription('Set configurations for pub command')
+      ->setDescription('Set configurations for flo command')
       ->addArgument(
         'config-name',
         InputArgument::REQUIRED,
@@ -37,22 +37,22 @@ class ConfigSetCommand extends Command {
     $fs = new Filesystem();
     $yaml = new Yaml\Parser();
     $dumper = new Dumper();
-    $pub_config_file = getenv("HOME") . '/.config/pub';
+    $flo_config_file = getenv("HOME") . '/.config/flo';
 
-    if (!$fs->exists($pub_config_file)) {
-      $fs->put($pub_config_file, "---");
-      $output->writeln("<error>No pub config file exist.</error>");
+    if (!$fs->exists($flo_config_file)) {
+      $fs->put($flo_config_file, "---");
+      $output->writeln("<error>No flo config file exist.</error>");
     }
 
-    $pub_config = $yaml->parse($fs->get($pub_config_file));
+    $flo_config = $yaml->parse($fs->get($flo_config_file));
     $config_name = $input->getArgument('config-name');
     $config_value = $input->getArgument('config-value');
 
-    $pub_config[$config_name] = $config_value;
+    $flo_config[$config_name] = $config_value;
 
-    $updated_config = $dumper->dump($pub_config, 1);
+    $updated_config = $dumper->dump($flo_config, 1);
 
-    $fs->put($pub_config_file, $updated_config);
+    $fs->put($flo_config_file, $updated_config);
 
     $output->writeln("<info>{$config_name}: {$config_value} has been saved.</info>");
   }

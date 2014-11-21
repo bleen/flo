@@ -1,6 +1,6 @@
 <?php
 
-namespace pub\PHPGit;
+namespace flo\PHPGit;
 
 class Repository extends \TQ\Git\Repository\Repository {
 

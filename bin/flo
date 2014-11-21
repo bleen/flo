@@ -3,7 +3,7 @@
 
 require __DIR__ . '/../vendor/autoload.php';
 
-use pub\Console\Application;
+use flo\Console\Application;
 
-$application = new Application('pub', '@package_version@');
+$application = new Application('flo', '@package_version@');
 $application->run();

@@ -1,8 +1,8 @@
 <?php
 
-namespace pub\Command\PullRequest;
+namespace flo\Command\PullRequest;
 
-use pub\Command\Command;
+use flo\Command\Command;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;

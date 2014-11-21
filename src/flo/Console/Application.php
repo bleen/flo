@@ -1,13 +1,12 @@
 <?php
 
-namespace pub\Console;
+namespace flo\Console;
 
-use Symfony\Component\Console\Application as BaseApplication;
 use Symfony\Component\Process\Process;
-use pub\Command;
-use pub\Configuration;
+use flo\Command;
+use flo\Configuration;
 
-class Application extends BaseApplication {
+class Application extends \Symfony\Component\Console\Application {
 
   private $config;
 

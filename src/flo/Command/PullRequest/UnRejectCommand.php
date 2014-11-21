@@ -1,25 +1,25 @@
 <?php
 
-namespace pub\Command\PullRequest;
+namespace flo\Command\PullRequest;
 
-use pub\Command\Command;
+use flo\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
-class IgnoreCommand extends Command {
+class UnRejectCommand extends Command {
 
   /**
    * {@inheritdoc}
    */
   protected function configure() {
-    $this->setName('pr-ignore')
-      ->setDescription('Ignore a specific pull-request.')
+    $this->setName('pr-unreject')
+      ->setDescription('Un-reject a specific pull-request.')
       ->addArgument(
         'pull-request',
         InputArgument::REQUIRED,
-        'The pull-request number to be ignored.'
+        'The pull-request number to be un-rejected.'
       );
   }
 
@@ -28,7 +28,7 @@ class IgnoreCommand extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $pr_number = $input->getArgument('pull-request');
-    $this->addGithubLabel($pr_number, self::GITHUB_LABEL_IGNORED);
-    $output->writeln("<info>PR #$pr_number has been ignored.</info>");
+    $this->removeGithubLabel($pr_number, self::GITHUB_LABEL_REJECTED);
+    $output->writeln("<info>PR #$pr_number has been un-rejected.</info>");
   }
 }

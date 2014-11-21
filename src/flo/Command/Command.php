@@ -1,12 +1,11 @@
 <?php
 
-namespace pub\Command;
+namespace flo\Command;
 
-use Symfony\Component\Console\Command\Command as BaseCommand;
-use pub\PHPGit\Repository;
+use flo\PHPGit\Repository;
 use Github;
 
-class Command extends BaseCommand {
+class Command extends \Symfony\Component\Console\Command\Command {
 
   const GITHUB_LABEL_CERTIFIED = 'ci:certified';
   const GITHUB_LABEL_ERROR = 'ci:error';
