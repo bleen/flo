@@ -4,10 +4,10 @@
  * @file
  *
  * Validate a composer.json file to have all the needed publisher settings.
- * Ex. pub composer-validate composer.json
+ * Ex. flo composer-validate composer.json
  */
 
-namespace pub\Command;
+namespace flo\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -23,7 +23,7 @@ class ValidateComposerCommand extends Command {
   protected function configure() {
     $this
       ->setName('composer-validate')
-      ->setDescription('Validate a projects composer file for publisher & pub')
+      ->setDescription('Validate a projects composer file for publisher & flo')
       ->addArgument(
         'file',
         InputArgument::REQUIRED,
@@ -65,7 +65,7 @@ class ValidateComposerCommand extends Command {
     }
 
     if ($errors > 0) {
-      $output->writeln('Please update your composer.json. Optional: You can run pub composer-fix to fix any issues we found.');
+      $output->writeln('Please update your composer.json. Optional: You can run flo composer-fix to fix any issues we found.');
     }
   }
 }

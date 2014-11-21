@@ -1,9 +1,9 @@
 <?php
 
-namespace pub\Command\PullRequest;
+namespace flo\Command\PullRequest;
 
-use pub\Drupal;
-use pub\Command\Command;
+use flo\Drupal;
+use flo\Command\Command;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -156,7 +156,7 @@ class DeployCommand extends Command {
         array(
           'ref' => $ref,
           'environment' => $environment,
-          'description' => 'pub:pr-deploy',
+          'description' => 'flo:pr-deploy',
           'auto_merge' => FALSE
         )
       );

@@ -15,7 +15,7 @@
     }
   ],
   "git-version": "package_version",
-  "main": "bin/pub",
-  "output": "pub.phar",
+  "main": "bin/flo",
+  "output": "flo.phar",
   "stub": true
 }

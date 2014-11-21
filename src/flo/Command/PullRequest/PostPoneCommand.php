@@ -1,25 +1,25 @@
 <?php
 
-namespace pub\Command\PullRequest;
+namespace flo\Command\PullRequest;
 
-use pub\Command\Command;
+use flo\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
-class UnPostPoneCommand extends Command {
-  
+class PostPoneCommand extends Command {
+
   /**
    * {@inheritdoc}
    */
   protected function configure() {
-    $this->setName('pr-unpostpone')
-      ->setDescription('Un-postpone a specific pull-request.')
+    $this->setName('pr-postpone')
+      ->setDescription('Postpone a specific pull-request.')
       ->addArgument(
         'pull-request',
         InputArgument::REQUIRED,
-        'The pull-request number to be un-postponed.'
+        'The pull-request number to be postponed.'
       );
   }
 
@@ -28,7 +28,7 @@ class UnPostPoneCommand extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $pr_number = $input->getArgument('pull-request');
-    $this->removeGithubLabel($pr_number, self::GITHUB_LABEL_POSTPONED);
-    $output->writeln("<info>PR #$pr_number has been un-postponed.</info>");
+    $this->addGithubLabel($pr_number, self::GITHUB_LABEL_POSTPONED);
+    $output->writeln("<info>PR #$pr_number has been postponed.</info>");
   }
 }

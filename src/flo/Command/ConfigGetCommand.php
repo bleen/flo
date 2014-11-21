@@ -1,6 +1,6 @@
 <?php
 
-namespace pub\Command;
+namespace flo\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +15,7 @@ class ConfigGetCommand extends Command {
    */
   protected function configure() {
     $this->setName('config-get')
-      ->setDescription('Get configurations for pub command')
+      ->setDescription('Get configurations for flo command')
       ->addArgument(
         'config',
         InputArgument::OPTIONAL,
@@ -26,7 +26,7 @@ class ConfigGetCommand extends Command {
   /**
    * Get a specific config or loop all configs.
    *
-   * Ex. ```pub config-get git``` : /usr/local/lib
+   * Ex. ```flo config-get git``` : /usr/local/lib
    *
    * @param InputInterface $input
    * @param OutputInterface $output
@@ -35,25 +35,25 @@ class ConfigGetCommand extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $fs = new Filesystem();
     $yaml = new Yaml\Parser();
-    $pub_config_file = getenv("HOME") . '/.config/pub';
+    $flo_config_file = getenv("HOME") . '/.config/flo';
 
-    if (!$fs->exists($pub_config_file)) {
-      return $output->writeln("<error>No pub config file exist.</error>");
+    if (!$fs->exists($flo_config_file)) {
+      return $output->writeln("<error>No flo config file exist.</error>");
     }
 
-    $pub_config = $yaml->parse($fs->get($pub_config_file));
+    $flo_config = $yaml->parse($fs->get($flo_config_file));
 
     $config_name = $input->getArgument('config');
     if (!empty($config_name)) {
-      if (!isset($pub_config[$config_name])) {
+      if (!isset($flo_config[$config_name])) {
         return $output->writeln("<error>No configuration set for '{$config_name}'.</error>");
       }
 
-      return $output->writeln("<info>{$config_name}: {$pub_config[$config_name]}</info>");
+      return $output->writeln("<info>{$config_name}: {$flo_config[$config_name]}</info>");
     }
     else {
       // Otherwise lets just pretty print all the options.
-      foreach ($pub_config as $key => $value) {
+      foreach ($flo_config as $key => $value) {
         $output->writeln("<info>{$key}: {$value}</info>");
       }
     }

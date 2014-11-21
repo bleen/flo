@@ -1,4 +1,4 @@
-# pub
+# flo
 
 A php CLI application for managing publisher projects
 
@@ -7,7 +7,7 @@ A php CLI application for managing publisher projects
 ```php
 composer install
 ```
-Add bin/pub to your path
+Add bin/flo to your path
 
 ##requirements
 * >= PHP 5.5
@@ -15,9 +15,9 @@ Add bin/pub to your path
 
 ##List of commands
 ```bash
->pub
+>flo
 
-pub version 1.0.0
+flo version 1.0.0
 
 Usage:
   [options] command [arguments]
@@ -33,10 +33,10 @@ Options:
 
 Available commands:
   acquia-init         Set up Acquia Cloud hooks for API Calls.
-  composer-validate   Validate a projects composer file for publisher & pub
-  config-del          Delete configurations key for pub command
-  config-get          Get configurations for pub command
-  config-set          Set configurations for pub command
+  composer-validate   Validate a projects composer file for publisher & flo
+  config-del          Delete configurations key for flo command
+  config-get          Get configurations for flo command
+  config-set          Set configurations for flo command
   git-init            Initialized proper git remotes NBCUOTS & Acquia
   help                Displays help for a command
   list                Lists commands
