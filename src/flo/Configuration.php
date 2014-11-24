@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface {
     $flo_config = array();
     $this->flo_config_file = getenv("HOME") . '/.config/flo';
     if ($fs->exists($this->flo_config_file)) {
-      $flo_config = Yaml::parse($fs->get($this->flo_config_file));
+      $flo_config = Yaml::parse($this->flo_config_file);
     }
 
     $project_config = array();
@@ -32,7 +32,7 @@ class Configuration implements ConfigurationInterface {
       if (!$fs->exists($this->project_config_file)) {
         throw new \Exception("{$this->project_config_file} does not exists");
       }
-      $project_config = Yaml::parse($fs->get($this->project_config_file));
+      $project_config = Yaml::parse($this->project_config_file);
     }
     else {
       throw new \Exception("Must run flo from project directory");

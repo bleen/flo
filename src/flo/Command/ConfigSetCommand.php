@@ -44,7 +44,7 @@ class ConfigSetCommand extends Command {
       $output->writeln("<error>No flo config file exist.</error>");
     }
 
-    $flo_config = $yaml->parse($fs->get($flo_config_file));
+    $flo_config = $yaml->parse($flo_config_file);
     $config_name = $input->getArgument('config-name');
     $config_value = $input->getArgument('config-value');
 
