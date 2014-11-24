@@ -2,8 +2,12 @@
 
 namespace flo\Command;
 
+use flo\Configuration;
 use flo\PHPGit\Repository;
 use Github;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
 
 class Command extends \Symfony\Component\Console\Command\Command {
 
@@ -16,6 +20,19 @@ class Command extends \Symfony\Component\Console\Command\Command {
   private $config;
   private $repository;
   private $github;
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function initialize(InputInterface $input, OutputInterface $output) {
+    try {
+      $configuration = new Configuration();
+      $this->config = $configuration->getConfig();
+    }
+    catch (\Exception $e) {
+      $output->writeln("<error>error: {$e->getMessage()}</error>");
+    }
+  }
 
   /**
    * Get a config parameter.

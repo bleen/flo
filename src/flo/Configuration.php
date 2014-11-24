@@ -4,7 +4,7 @@ namespace flo;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
