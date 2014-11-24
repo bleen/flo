@@ -4,11 +4,8 @@ namespace flo\Console;
 
 use Symfony\Component\Process\Process;
 use flo\Command;
-use flo\Configuration;
 
 class Application extends \Symfony\Component\Console\Application {
-
-  private $config;
 
   /**
    * {@inheritdoc}
@@ -16,9 +13,6 @@ class Application extends \Symfony\Component\Console\Application {
   public function __construct($name = 'UNKNOWN', $version = 'UNKNOWN') {
 
     parent::__construct($name, $version);
-
-    $configuration = new Configuration();
-    $this->config = $configuration->getConfig();
 
     // Check if hub exists if not throw an error.
     $process = new Process('hub --version');
@@ -47,12 +41,5 @@ class Application extends \Symfony\Component\Console\Application {
       new Command\UpdateCommand(),
       new Command\ValidateComposerCommand(),
     ));
-  }
-
-  /**
-   * @return array
-   */
-  public function getConfig() {
-    return $this->config;
   }
 }
