@@ -7,7 +7,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Yaml;
 use Symfony\Component\Yaml\Dumper;
-use Illuminate\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Filesystem;
 
 class ConfigDelCommand extends Command {
 
