@@ -26,8 +26,6 @@
     "symfony/filesystem": "2.6.*@dev",
     "symfony/process": "2.6.*@dev",
     "symfony/yaml": "~2.6",
-    "illuminate/support": "4.3.*@dev",
-    "illuminate/filesystem": "4.3.*@dev",
     "teqneers/php-stream-wrapper-for-git": "dev-master",
     "knplabs/github-api": "dev-deploymentapi",
     "vierbergenlars/php-semver": "3.0.0"
