@@ -22,19 +22,8 @@ class Command extends \Symfony\Component\Console\Command\Command {
   private $github;
 
   /**
-   * Constructor.
-   *
-   * @param string $name The name of the command
-   *
-   * @throws \LogicException When the command name is empty
-   *
-   * @api
+   * {@inheritdoc}
    */
-  public function __construct($name = null) {
-    parent::__construct($name);
-  }
-
-
   protected function initialize(InputInterface $input, OutputInterface $output) {
     try {
       $configuration = new Configuration();
