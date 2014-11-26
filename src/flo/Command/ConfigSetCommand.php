@@ -6,7 +6,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Yaml;
+use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Dumper;
 
 
@@ -42,7 +42,6 @@ class ConfigSetCommand extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $fs = new Filesystem();
-    $yaml = new Yaml\Parser();
     $dumper = new Dumper();
     $flo_config_file = getenv("HOME") . '/.config/flo';
 
@@ -51,7 +50,8 @@ class ConfigSetCommand extends Command {
       $output->writeln("<error>No flo config file exist.</error>");
     }
 
-    $flo_config = $yaml->parse(file_get_contents($flo_config_file));
+    $flo_config = Yaml::parse($flo_config_file);
+
     $config_name = $input->getArgument('config-name');
     $config_value = $input->getArgument('config-value');
     $flo_config[$config_name] = $config_value;
