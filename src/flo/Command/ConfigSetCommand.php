@@ -13,6 +13,13 @@ use Symfony\Component\Yaml\Dumper;
 class ConfigSetCommand extends Command {
 
   /**
+ * {@inheritdoc}
+ */
+  protected function initialize(InputInterface $input, OutputInterface $output) {
+    // Do not initialized config for flo config-set.
+  }
+
+  /**
    * {@inheritdoc}
    */
   protected function configure() {
@@ -40,19 +47,18 @@ class ConfigSetCommand extends Command {
     $flo_config_file = getenv("HOME") . '/.config/flo';
 
     if (!$fs->exists($flo_config_file)) {
-      $fs->put($flo_config_file, "---");
+      $fs->dumpFile($flo_config_file, "---");
       $output->writeln("<error>No flo config file exist.</error>");
     }
 
-    $flo_config = $yaml->parse($flo_config_file);
+    $flo_config = $yaml->parse(file_get_contents($flo_config_file));
     $config_name = $input->getArgument('config-name');
     $config_value = $input->getArgument('config-value');
-
     $flo_config[$config_name] = $config_value;
 
     $updated_config = $dumper->dump($flo_config, 1);
 
-    $fs->put($flo_config_file, $updated_config);
+    $fs->dumpFile($flo_config_file, $updated_config);
 
     $output->writeln("<info>{$config_name}: {$config_value} has been saved.</info>");
   }

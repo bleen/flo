@@ -25,13 +25,8 @@ class Command extends \Symfony\Component\Console\Command\Command {
    * {@inheritdoc}
    */
   protected function initialize(InputInterface $input, OutputInterface $output) {
-    try {
-      $configuration = new Configuration();
-      $this->config = $configuration->getConfig();
-    }
-    catch (\Exception $e) {
-      $output->writeln("<error>error: {$e->getMessage()}</error>");
-    }
+    $configuration = new Configuration();
+    $this->config = $configuration->getConfig();
   }
 
   /**
@@ -58,9 +53,6 @@ class Command extends \Symfony\Component\Console\Command\Command {
    * @return array
    */
   public function getConfig() {
-    if (null === $this->config) {
-      $this->config = $this->getApplication()->getConfig();
-    }
     return $this->config;
   }
 

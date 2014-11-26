@@ -14,6 +14,13 @@ class ConfigDelCommand extends Command {
   /**
    * {@inheritdoc}
    */
+  protected function initialize(InputInterface $input, OutputInterface $output) {
+    // Do not initialized config for flo config-del.
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function configure() {
     $this->setName('config-del')
       ->setDescription('Delete configurations key for flo command')
@@ -37,14 +44,14 @@ class ConfigDelCommand extends Command {
       return $output->writeln("<error>No flo config file exist.</error>");
     }
 
-    $flo_config = $yaml->parse($flo_config_file);
+    $flo_config = $yaml->parse(file_get_contents($flo_config_file));
     $config_name = $input->getArgument('config-name');
 
     if (isset($flo_config[$config_name])) {
       // If it exists remove the key and resaved the config file.
       unset($flo_config[$config_name]);
       $updated_config = $dumper->dump($flo_config);
-      $fs->put($flo_config_file, $updated_config);
+      $fs->dumpFile($flo_config_file, $updated_config);
       $output->writeln("<info>{$config_name} has been deleted.</info>");
     }
     else {

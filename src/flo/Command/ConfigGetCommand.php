@@ -13,6 +13,13 @@ class ConfigGetCommand extends Command {
   /**
    * {@inheritdoc}
    */
+  protected function initialize(InputInterface $input, OutputInterface $output) {
+    // Do not initialized config for flo config-get.
+  }
+
+  /**
+   * {@inheritdoc}
+   */
   protected function configure() {
     $this->setName('config-get')
       ->setDescription('Get configurations for flo command')
@@ -41,7 +48,7 @@ class ConfigGetCommand extends Command {
       return $output->writeln("<error>No flo config file exist.</error>");
     }
 
-    $flo_config = $yaml->parse($flo_config_file);
+    $flo_config = $yaml->parse(file_get_contents($flo_config_file));
 
     $config_name = $input->getArgument('config');
     if (!empty($config_name)) {
