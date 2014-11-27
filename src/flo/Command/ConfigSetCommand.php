@@ -43,7 +43,8 @@ class ConfigSetCommand extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $fs = new Filesystem();
     $dumper = new Dumper();
-    $flo_config_file = getenv("HOME") . '/.config/flo';
+    $home_directory = $this->getHome();
+    $flo_config_file = $home_directory . '/.config/flo';
 
     if (!$fs->exists($flo_config_file)) {
       $fs->dumpFile($flo_config_file, "---");
