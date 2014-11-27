@@ -5,7 +5,6 @@ namespace flo\Test\Command;
 
 use flo\Console\Application;
 use flo\Command;
-use org\bovigo\vfs\vfsStreamWrapper;
 use Symfony\Component\Console\Tester\CommandTester;
 use org\bovigo\vfs\vfsStream;
 use org\bovigo\vfs\vfsStreamDirectory;
@@ -31,8 +30,6 @@ class ConfigGetCommandTest extends \PHPUnit_Framework_TestCase {
    */
   public function testExecuteNoConfig() {
     $application = new Application();
-    $application->add(new Command\ConfigGetCommand());
-
     $command = $application->find('config-get');
     $commandTester = new CommandTester($command);
     $commandTester->execute(array('command' => $command->getName()));
