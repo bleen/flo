@@ -5,7 +5,7 @@ namespace flo\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Yaml;
+use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Filesystem\Filesystem;
 
 class ConfigGetCommand extends Command {
@@ -41,14 +41,13 @@ class ConfigGetCommand extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $fs = new Filesystem();
-    $yaml = new Yaml\Parser();
     $flo_config_file = getenv("HOME") . '/.config/flo';
 
     if (!$fs->exists($flo_config_file)) {
       return $output->writeln("<error>No flo config file exist.</error>");
     }
 
-    $flo_config = $yaml->parse(file_get_contents($flo_config_file));
+    $flo_config = Yaml::parse($flo_config_file);
 
     $config_name = $input->getArgument('config');
     if (!empty($config_name)) {
