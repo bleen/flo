@@ -11,7 +11,7 @@
   bootstrap="tests/bootstrap.php">
 <testsuites>
   <testsuite name="Pub Test Suite">
-    <directory>./tests/pub/</directory>
+    <directory>./tests/flo/</directory>
   </testsuite>
 </testsuites>
 </phpunit>
