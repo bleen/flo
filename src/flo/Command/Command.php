@@ -130,4 +130,24 @@ class Command extends \Symfony\Component\Console\Command\Command {
       $label
     );
   }
+
+  /**
+   * Helper function to get HOME environment variable.
+   *
+   * getenv() and $_ENV tend to act diffectly when fetching "HOME"
+   * this lets us extract this out so we can easily overwrite it.
+   * This is especially usefull when doing unitTest and we want to
+   * "fake" our home path to a virtual directory.
+   *
+   */
+  protected function getHome() {
+    if (!empty($_ENV['HOME'])) {
+      $home_directory = $_ENV['HOME'];
+    }
+    else {
+      $home_directory = getenv("HOME");
+    }
+
+    return $home_directory;
+  }
 }
