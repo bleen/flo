@@ -7,7 +7,15 @@ A php CLI application for managing publisher projects
 ```php
 composer install
 ```
-Add bin/flo to your path
+
+Then add bin/flo to your path.
+
+
+##testing
+
+```php
+./vendor/bin/phpunit
+```
 
 ##requirements
 * >= PHP 5.5
