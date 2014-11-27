@@ -37,7 +37,8 @@ class ConfigDelCommand extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $fs = new Filesystem();
     $dumper = new Dumper();
-    $flo_config_file = getenv("HOME") . '/.config/flo';
+    $home_directory = $this->getHome();
+    $flo_config_file = $home_directory . '/.config/flo';
 
     if (!$fs->exists($flo_config_file)) {
       return $output->writeln("<error>No flo config file exist.</error>");
@@ -49,7 +50,7 @@ class ConfigDelCommand extends Command {
     if (isset($flo_config[$config_name])) {
       // If it exists remove the key and resaved the config file.
       unset($flo_config[$config_name]);
-      $updated_config = $dumper->dump($flo_config);
+      $updated_config = $dumper->dump($flo_config, 1);
       $fs->dumpFile($flo_config_file, $updated_config);
       $output->writeln("<info>{$config_name} has been deleted.</info>");
     }
