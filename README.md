@@ -17,6 +17,12 @@ Then add bin/flo to your path.
 ./vendor/bin/phpunit
 ```
 
+```bash
+# With coverage report
+./vendor/bin/phpunit --coverage-html=results/clover-html
+# open results/clover-html/index.html for html report.
+```
+
 ##requirements
 * >= PHP 5.5
 * [Hub](https://github.com/github/hub)
