@@ -13,12 +13,13 @@ Then add bin/flo to your path.
 
 ##testing
 
-```php
+```sh
 ./vendor/bin/phpunit
-```
 
-```bash
-# With coverage report
+# optional if you want to see the converage report inline.
+./vendor/bin/phpunit --coverage-text
+
+# If you want to see an html file of the converage report
 ./vendor/bin/phpunit --coverage-html=results/clover-html
 # open results/clover-html/index.html for html report.
 ```
