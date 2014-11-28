@@ -1,4 +1,5 @@
 vendor
+results
 .idea
 bin
 !bin/flo
