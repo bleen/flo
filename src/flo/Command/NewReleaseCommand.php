@@ -36,16 +36,21 @@ class NewReleaseCommand extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     // Get the version information from the project config.
-    $project_config = new ProjectConfig();
-    $project_config->load();
-    if (!isset($project_config->settings['vars']['version_file'])) {
+    $config_vars = $this->getConfigParameter('vars');
+
+    if (array_key_exists('version_file', $config_vars)) {
+      $version_file = $config_vars['version_file'];
+    }
+    else {
       throw new \Exception("You must have a vars:version_file set up in your project-config.yml. Ex. version_file: ./version.php");
     }
-    if (!isset($project_config->settings['vars']['version_constant'])) {
+
+    if (array_key_exists('version_constant', $config_vars)) {
+      $version_constant = $config_vars['version_constant'];
+    }
+    else {
       throw new \Exception("You must have a vars:version_constant set up in your project-config.yml. Ex. version_constant: MY_PROJECT_VERSION");
     }
-    $version_file = $project_config->settings['vars']['version_file'];
-    $version_constant = $project_config->settings['vars']['version_constant'];
 
     // Checkout the master branch.
     $process = new Process('git checkout ' . self::MASTER_BRANCH);
