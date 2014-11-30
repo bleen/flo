@@ -1,4 +1,5 @@
-# flo
+# ![](logo.png)
+
 
 A php CLI application for managing publisher projects
 
