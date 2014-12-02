@@ -54,7 +54,7 @@ class DeployCommand extends Command {
   /**
    * Process pr-deploy job.
    *
-   * - Takes the current working Environment and rsync it to where they belong (config: pr-directories).
+   * - Takes the current working Environment and rsync it to where they belong (config: pr_directories).
    * - Post a deployment job to github deployment API.
    *
    * GH API: POST /repos/:owner/:repp/deployments
@@ -113,7 +113,8 @@ class DeployCommand extends Command {
     $pull_request = $this->getConfigParameter('pull_request');
     $path = "{$pull_request['prefix']}-{$pr_number}.{$pull_request['domain']}";
     $url = "http://{$path}";
-    $command = "rsync -qrltoD --delete --exclude='.git/*' . {$this->getConfigParameter('pr-directories')}{$path}";
+    $pr_directories = $this->getConfigParameter('pr_directories');
+    $command = "rsync -qrltoD --delete --exclude='.git/*' . {$pr_directories}{$path}";
     $process = new Process($command);
     $process->run();
     if (!$process->isSuccessful()) {
@@ -131,10 +132,10 @@ class DeployCommand extends Command {
     if (!empty($input->getOption('database'))) {
       // Support multi-sites
       if (!empty($site_dir)) {
-        $process = new Process("cd {$this->getConfigParameter('pr-directories')}{$path}/docroot/sites/{$site_dir} && drush sql-create --yes");
+        $process = new Process("cd {$pr_directories}{$path}/docroot/sites/{$site_dir} && drush sql-create --yes");
       }
       else {
-        $process = new Process("cd {$this->getConfigParameter('pr-directories')}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
+        $process = new Process("cd {$pr_directories}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
       }
 
       // The installation process has a 7 minute timeout anything greater gets cutoff.
