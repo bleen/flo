@@ -32,6 +32,7 @@ class Application extends \Symfony\Component\Console\Application {
       new Command\NewRelicDeployCommand(),
       new Command\PullRequest\CertifyCommand(),
       new Command\PullRequest\DeployCommand(),
+      new Command\PullRequest\DestroyCommand(),
       new Command\PullRequest\IgnoreCommand(),
       new Command\PullRequest\IntegrationCommand(),
       new Command\PullRequest\PostPoneCommand(),
