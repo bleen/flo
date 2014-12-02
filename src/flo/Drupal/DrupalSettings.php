@@ -37,7 +37,7 @@ class DrupalSettings {
 
     $path = $config['pull_request']['prefix'] . '-' . $pr_number . '.' . $config['pull_request']['domain'];
     $url = "http://{$path}";
-    $local_site_path = $config['pr-directories'] . $path;
+    $local_site_path = $config['pr_directories'] . $path;
 
     $local_settings_php = $local_site_path . "/docroot/sites/{$site_dir}/settings.local.php";
 
