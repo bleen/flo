@@ -6,7 +6,7 @@ use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Filesystem\Filesystem;
+use flo\SymfonyOverwrite\Filesystem;
 use vierbergenlars\SemVer\version;
 
 
@@ -79,7 +79,7 @@ class NewReleaseCommand extends Command {
 
     // Update version file.
     $fs = new Filesystem();
-    $fs->put($version_file, "<?php define('$version_constant', '$version_number');\n");
+    $fs->dumpFile($version_file, "<?php define('$version_constant', '$version_number');\n");
     $output->writeln("<info>Successfully updated the $version_file file and set the $version_constant to {$version_number}</info>");
 
     // Commit the updated version file.
