@@ -47,7 +47,14 @@ class DeployCommand extends Command {
         'site-dir',
         'sd',
         InputOption::VALUE_REQUIRED,
-        'The site-dir that is being deployed.'
+        'The site-dir that is being deployed.',
+        'default'
+      )
+      ->addOption(
+        'database-name',
+        'D',
+        InputOption::VALUE_REQUIRED,
+        'The database name.'
       );
   }
 
@@ -122,11 +129,13 @@ class DeployCommand extends Command {
     }
 
     // Lets generate the settings.local.php file.
-    if (empty($site_dir)) {
-      Drupal\DrupalSettings::generateSettings($pr_number);
+    $database_name = $input->getOption('database-name');
+
+    if (empty($database_name)) {
+      Drupal\DrupalSettings::generateSettings($pr_number, $site_dir);
     }
     else {
-      Drupal\DrupalSettings::generateSettings($pr_number, $site_dir);
+      Drupal\DrupalSettings::generateSettings($pr_number, $site_dir, $database_name);
     }
 
     if (!empty($input->getOption('database'))) {

@@ -26,10 +26,12 @@ class DrupalSettings {
    *   Pull Request Number used to build the settings.php file.
    * @param string $site_dir
    *   Optional site directory to place settings.local.php in.
+   * @param string $database
+   *   Optional database name.
    *
    * @throws \Exception
    */
-  static public function generateSettings($pr_number, $site_dir = 'default') {
+  static public function generateSettings($pr_number, $site_dir = 'default', $database = NULL) {
     $configuration = new Configuration();
     $config = $configuration->getConfig();
 
@@ -44,13 +46,16 @@ class DrupalSettings {
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
     }
+
+    $database_name = $database ? $database : $config['pull_request']['prefix'] . "_" . $pr_number;
+
     $output = "<?php
 
   \$base_url = '{$url}';
 
   \$databases['default'] = array ('default' =>
     array (
-      'database' => '{$config['pull_request']['prefix']}_{$pr_number}',
+      'database' => '{$database_name}',
       'username' => 'root',
       'password' => '',
       'host' => '127.0.0.1',
