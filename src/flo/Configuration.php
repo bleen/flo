@@ -96,6 +96,16 @@ class Configuration implements ConfigurationInterface {
               ->end()
           ->end()
         ->end()
+        ->arrayNode('vars')
+          ->children()
+            ->scalarNode('version_file')
+              ->defaultValue('version.php')
+              ->end()
+            ->scalarNode('version_constant')
+              ->defaultValue('PUBLISHER_VERSION')
+              ->end()
+          ->end()
+        ->end()
       ->end()
     ;
     return $treeBuilder;
