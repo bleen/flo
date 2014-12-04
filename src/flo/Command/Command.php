@@ -46,6 +46,9 @@ class Command extends \Symfony\Component\Console\Command\Command {
     if (array_key_exists($name, $config)) {
       $value = $config[$name];
     }
+    else {
+      throw new \Exception("The config variable '$name' is not set. Run `flo config-set $name some-value` to set this value.", 1);
+    }
     return $value;
   }
 
