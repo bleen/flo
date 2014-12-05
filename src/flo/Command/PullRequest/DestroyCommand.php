@@ -15,25 +15,34 @@ use Github;
 
 class DestroyCommand extends Command {
 
-  const DEFAULT_SITE_DIR = 'default';
+  /**
+   * The number of closed PR's to check if they need destroying.
+   */
+  const CLOSED_PR_DESTROY_LIMIT = 50;
 
   /**
    * {@inheritdoc}
    */
   protected function configure() {
     $this->setName('pr-destroy')
-      ->setDescription('Destroy a specific pull-request environment.')
+      ->setDescription('Destroy pull-request environment(s), removing its web root and database.')
       ->addArgument(
         'pull-request',
-        InputArgument::REQUIRED,
+        InputArgument::OPTIONAL,
         'The pull-request number to be destroyed.'
       )
       ->addOption(
         'site-dir',
         'sd',
         InputOption::VALUE_REQUIRED,
-        'The site-dir that is being deployed.',
+        'The site-dir that is being destroyed.',
         self::DEFAULT_SITE_DIR
+      )
+      ->addOption(
+        'closed',
+        'c',
+        InputOption::VALUE_NONE,
+        'Destroy all closed pull-requests.'
       );
   }
 
@@ -42,30 +51,62 @@ class DestroyCommand extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
 
-    $pr_number = $input->getArgument('pull-request');
-    if (!is_numeric($pr_number)) {
-      throw new \Exception("PR must be a number.");
-    }
+    $destroy_prs = array();
 
-    $site_dir = $input->getOption('site-dir');
+    $fs = new Filesystem();
+    $github = $this->getGithub();
 
     $pull_request = $this->getConfigParameter('pull_request');
     $pr_directories = $this->getConfigParameter('pr_directories');
-    $pr_path = rtrim($pr_directories, '/') . "/{$pull_request['prefix']}-{$pr_number}.{$pull_request['domain']}";
 
-    // @TODO set/get database name in central place, and use in DrupalSettings.
-    $database = $pull_request['prefix'] . '_' . $pr_number;
-    $process = new Process("drush sqlq 'DROP database {$database}'", $pr_path . "/docroot/sites/" . $site_dir);
-    $process->run();
+    $site_dir = $input->getOption('site-dir');
 
-    $output->writeln("<info>Dropped database: {$database}</info>");
+    // Get last CLOSED_PR_DESTROY_LIMIT number of closed pull-requests.
+    if ($input->getOption('closed')) {
+      $prs = $github->api('pr')->all(
+        $this->getConfigParameter('organization'),
+        $this->getConfigParameter('repository'),
+        array(
+          'state' => 'closed',
+          'per_page' => self::CLOSED_PR_DESTROY_LIMIT,
+        )
+      );
+      // Add any that exist to $destroy_prs.
+      foreach ($prs as $pr) {
+        $destroy_prs[] = $pr['number'];
+      }
+    }
+    else {
+      $pr_number = $input->getArgument('pull-request');
+      if (!is_numeric($pr_number)) {
+        throw new \Exception("PR must be a number.");
+      }
+      $destroy_prs[] = $pr_number;
+    }
 
-    $fs = new Filesystem();
-    $fs->remove($pr_path);
+    foreach ($destroy_prs as $destroy_pr) {
 
-    $output->writeln("<info>Removed PR installation: {$pr_path}</info>");
+      // @TODO get this path from a central place.
+      $pr_path = rtrim($pr_directories, '/') . "/{$pull_request['prefix']}-{$destroy_pr}.{$pull_request['domain']}";
 
-    // @TODO destroy memcache bins.
+      if ($fs->exists($pr_path)) {
+        // Drop the database.
+        // @TODO set/get database name in central place, and use in DrupalSettings.
+        $database = $pull_request['prefix'] . '_' . $destroy_pr;
+        $process = new Process("drush sqlq 'DROP database {$database}'", $pr_path . "/docroot/sites/" . $site_dir);
+        $process->run();
+
+        // Remove the PR's web root.
+        $fs->remove($pr_path);
+
+        // @TODO destroy memcache bins.
+
+        $output->writeln("<info>Successfully destroyed PR #{$destroy_pr}</info>");
+      }
+      else {
+        $output->writeln("<info>No need to destroy PR #{$destroy_pr}</info>");
+      }
+    }
 
   }
 }
