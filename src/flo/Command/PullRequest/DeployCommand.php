@@ -48,7 +48,7 @@ class DeployCommand extends Command {
         'sd',
         InputOption::VALUE_REQUIRED,
         'The site-dir that is being deployed.',
-        'default'
+        self::DEFAULT_SITE_DIR
       )
       ->addOption(
         'database-name',

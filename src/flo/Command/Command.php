@@ -17,6 +17,8 @@ class Command extends \Symfony\Component\Console\Command\Command {
   const GITHUB_LABEL_POSTPONED = 'ci:postponed';
   const GITHUB_LABEL_REJECTED = 'ci:rejected';
 
+  const DEFAULT_SITE_DIR = 'default';
+
   private $config;
   private $repository;
   private $github;
