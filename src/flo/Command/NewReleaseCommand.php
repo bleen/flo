@@ -64,7 +64,7 @@ class NewReleaseCommand extends Command {
       // Get the current version from the version file if it exists. Otherwise
       // we're starting from scratch.
       if (file_exists($version_file)) {
-        include_once $version_file;
+        include $version_file;
       }
       $current_version = defined($version_constant) ? new version(constant($version_constant)) : new version('0.0.0');
       $version_number = $current_version->inc($increment);
