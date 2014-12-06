@@ -52,13 +52,6 @@ class NewReleaseCommand extends Command {
       throw new \Exception("You must have a vars:version_constant set up in your project-config.yml. Ex. version_constant: MY_PROJECT_VERSION");
     }
 
-    // Checkout the master branch.
-    $process = new Process('git checkout ' . self::MASTER_BRANCH);
-    $process->run();
-    if (!$process->isSuccessful()) {
-      throw new \RuntimeException($process->getErrorOutput());
-    }
-
     // Determine the new version number.
     $increment = $input->getArgument('increment');
     try {
