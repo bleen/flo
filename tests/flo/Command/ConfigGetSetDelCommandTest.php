@@ -17,7 +17,7 @@ class ConfigGetSetDelCommandTest extends \PHPUnit_Framework_TestCase {
   private $root;
 
   /**
-   * set up test environmemt filesystem.
+   * set up test environment filesystem.
    */
   public function setUp() {
     $this->root = vfsStream::setup('home');
