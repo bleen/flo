@@ -9,13 +9,12 @@ use Symfony\Component\Console\Output\OutputInterface;
 use flo\SymfonyOverwrite\Filesystem;
 use vierbergenlars\SemVer\version;
 
-
 class NewReleaseCommand extends Command {
   const MASTER_BRANCH = 'master';
 
   protected function configure() {
     $this->setName('new-release')
-      ->setDescription('Creates a new version of publisher and tags the release.')
+      ->setDescription('Updates a version file (e.g. version.php), commits that change and tags the commit for release.')
       ->addArgument(
         'increment',
         InputArgument::REQUIRED,
