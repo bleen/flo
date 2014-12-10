@@ -9,7 +9,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use flo\SymfonyOverwrite\Filesystem;
 use vierbergenlars\SemVer\version;
 
-
 class NewReleaseCommand extends Command {
   const MASTER_BRANCH = 'master';
 
