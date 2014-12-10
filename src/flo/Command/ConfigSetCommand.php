@@ -47,7 +47,7 @@ class ConfigSetCommand extends Command {
     $flo_config_file = $home_directory . '/.config/flo';
 
     if (!$fs->exists($flo_config_file)) {
-      $fs->dumpFile($flo_config_file, "---");
+      $fs->dumpFile($flo_config_file, "");
       $output->writeln("<error>No flo config file exist.</error>");
     }
 
