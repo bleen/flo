@@ -15,7 +15,6 @@ class IntegrationCommand extends Command {
 
   private $invalid_labels = array(
     self::GITHUB_LABEL_ERROR,
-    self::GITHUB_LABEL_IGNORED,
     self::GITHUB_LABEL_POSTPONED,
     self::GITHUB_LABEL_REJECTED,
   );
