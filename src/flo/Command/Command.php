@@ -13,7 +13,6 @@ class Command extends \Symfony\Component\Console\Command\Command {
 
   const GITHUB_LABEL_CERTIFIED = 'ci:certified';
   const GITHUB_LABEL_ERROR = 'ci:error';
-  const GITHUB_LABEL_IGNORED = 'ci:ignored';
   const GITHUB_LABEL_POSTPONED = 'ci:postponed';
   const GITHUB_LABEL_REJECTED = 'ci:rejected';
 
