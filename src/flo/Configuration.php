@@ -15,7 +15,10 @@ class Configuration implements ConfigurationInterface {
   private $project_config_file = 'project-config.yml';
   private $config;
 
-  function __construct() {
+  /**
+   * {@inheritdoc}
+   */
+  public function __construct() {
     $fs = new Filesystem();
 
     $flo_config = array();
@@ -57,11 +60,17 @@ class Configuration implements ConfigurationInterface {
     return $this->config;
   }
 
+  /**
+   * {@inheritdoc}
+   */
   public function getConfigTreeBuilder() {
-    $treeBuilder = new TreeBuilder();
-    $rootNode = $treeBuilder->root('project');
-    $rootNode
+    $tree_builder = new TreeBuilder();
+    $root_node = $tree_builder->root('project');
+    $root_node
       ->children()
+        ->scalarNode('git')
+          ->defaultValue('/usr/bin/git')
+          ->end()
         ->scalarNode('github_oauth_token')
           ->cannotBeEmpty()
           ->end()
@@ -106,8 +115,7 @@ class Configuration implements ConfigurationInterface {
               ->end()
           ->end()
         ->end()
-      ->end()
-    ;
-    return $treeBuilder;
+      ->end();
+    return $tree_builder;
   }
 }

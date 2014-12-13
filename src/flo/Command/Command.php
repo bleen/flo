@@ -35,22 +35,18 @@ class Command extends \Symfony\Component\Console\Command\Command {
    *
    * @param $name
    *   The parameter name
-   * @param $default
-   *   The default value, if parameter not set
    *
    * @return mixed|null
    *   The parameter value
    */
-  public function getConfigParameter($name, $default = NULL) {
-    $value = $default;
+  public function getConfigParameter($name) {
     $config = $this->getConfig();
     if (array_key_exists($name, $config)) {
-      $value = $config[$name];
+      return $config[$name];
     }
     else {
       throw new \Exception("The config variable '$name' is not set. Run `flo config-set $name some-value` to set this value.", 1);
     }
-    return $value;
   }
 
   /**
@@ -78,7 +74,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
    */
   public function getRepository() {
     if (null === $this->repository) {
-      $this->repository = Repository::open(getcwd(), $this->getConfigParameter('git', '/usr/bin/git'));
+      $this->repository = Repository::open(getcwd(), $this->getConfigParameter('git'));
     }
     return $this->repository;
   }
