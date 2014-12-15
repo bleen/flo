@@ -71,7 +71,7 @@ class DestroyCommand extends Command {
       if (!empty($deployed_prs)) {
         $github = $this->getGithub();
         $open_prs = array();
-        $paginator  = new Github\ResultPager($github);
+        $paginator = new Github\ResultPager($github);
         $prs = $paginator->fetchAll(
           $github->api('pr'),
           'all',
@@ -90,6 +90,9 @@ class DestroyCommand extends Command {
     }
     else {
       $pr_number = $input->getArgument('pull-request');
+      if (!is_numeric($pr_number)) {
+        throw new \Exception("PR must be a number.");
+      }
       $destroy_prs[] = $pr_number;
     }
 
@@ -98,10 +101,6 @@ class DestroyCommand extends Command {
       $site_dir = $input->getOption('site-dir');
 
       foreach ($destroy_prs as $destroy_pr) {
-
-        if (!is_numeric($destroy_pr)) {
-          throw new \Exception("PR must be a number.");
-        }
 
         // @TODO get this path from a central place.
         $pr_path = rtrim($pr_directories, '/') . "/{$pull_request['prefix']}-{$destroy_pr}.{$pull_request['domain']}";
