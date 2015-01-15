@@ -55,6 +55,12 @@ class DeployCommand extends Command {
         'D',
         InputOption::VALUE_REQUIRED,
         'The database name.'
+      )
+      ->addOption(
+        'sync',
+        null,
+        InputOption::VALUE_NONE,
+        'If set we will sync the database, otherwise we will do `drush psi`.'
       );
   }
 
@@ -122,6 +128,9 @@ class DeployCommand extends Command {
     $url = "http://{$path}";
     $pr_directories = $this->getConfigParameter('pr_directories');
     $command = "rsync -qrltoD --delete --exclude='.git/*' . {$pr_directories}{$path}";
+    if (OutputInterface::VERBOSITY_NORMAL <= $output->getVerbosity()) {
+      $output->writeln("<info>verbose: Syncing current directory into pr env.</info>");
+    }
     $process = new Process($command);
     $process->run();
     if (!$process->isSuccessful()) {
@@ -131,6 +140,9 @@ class DeployCommand extends Command {
     // Lets generate the settings.local.php file.
     $database_name = $input->getOption('database-name');
 
+    if (OutputInterface::VERBOSITY_NORMAL <= $output->getVerbosity()) {
+      $output->writeln("<info>verbose: Generating settings.local.php.</info>");
+    }
     if (empty($database_name)) {
       Drupal\DrupalSettings::generateSettings($pr_number, $site_dir);
     }
@@ -138,9 +150,12 @@ class DeployCommand extends Command {
       Drupal\DrupalSettings::generateSettings($pr_number, $site_dir, $database_name);
     }
 
+    if (OutputInterface::VERBOSITY_NORMAL <= $output->getVerbosity()) {
+      $output->writeln("<info>verbose: Creating / syncing database.</info>");
+    }
     if (!empty($input->getOption('database'))) {
       // Support multi-sites
-      if (!empty($site_dir)) {
+      if ($input->getOption('sync')) {
         $process = new Process("cd {$pr_directories}{$path}/docroot/sites/{$site_dir} && drush sql-create --yes");
       }
       else {
