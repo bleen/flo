@@ -4,6 +4,7 @@ namespace flo\Command\PullRequest;
 
 use flo\Drupal;
 use flo\Command\Command;
+use Symfony\Component\Form\Exception\InvalidConfigurationException;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -153,21 +154,26 @@ class DeployCommand extends Command {
     if (OutputInterface::VERBOSITY_NORMAL <= $output->getVerbosity()) {
       $output->writeln("<info>verbose: Creating / syncing database.</info>");
     }
-    if (!empty($input->getOption('database'))) {
-      // Support multi-sites
-      if ($input->getOption('sync')) {
-        $process = new Process("cd {$pr_directories}{$path}/docroot/sites/{$site_dir} && drush sql-create --yes");
-      }
-      else {
-        $process = new Process("cd {$pr_directories}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
-      }
 
-      // The installation process has a 7 minute timeout anything greater gets cutoff.
-      $process->setTimeout(60 * 60 * 7);
-      $process->run();
-      if (!$process->isSuccessful()) {
-        throw new \RuntimeException($process->getErrorOutput());
+    // Support multi-sites
+    if ($input->getOption('sync')) {
+      if (!isset($pull_request['sync_alias'])) {
+        throw new InvalidConfigurationException("pull-request:sync_alias require for --sync option");
       }
+      $source = $pull_request['sync_alias'];
+      // For now the target is always self
+      $target = 'self';
+      $process = new Process("cd {$pr_directories}{$path}/docroot/sites/{$site_dir} && drush sql-create --yes && drush sql-sync @{$source} @{$target} --yes");
+    }
+    else {
+      $process = new Process("cd {$pr_directories}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
+    }
+
+    // The installation process has a 7 minute timeout anything greater gets cutoff.
+    $process->setTimeout(60 * 60 * 7);
+    $process->run();
+    if (!$process->isSuccessful()) {
+      throw new \RuntimeException($process->getErrorOutput());
     }
 
     // If they have an env set then we also tag it on github.
