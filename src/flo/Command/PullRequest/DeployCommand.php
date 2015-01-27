@@ -157,7 +157,7 @@ class DeployCommand extends Command {
 
     // Support multi-sites
     if ($input->getOption('sync')) {
-      if (!isset($pull_request['sync_alias'])) {
+      if (empty($pull_request['sync_alias'])) {
         throw new InvalidConfigurationException("pull-request:sync_alias require for --sync option");
       }
       $source = $pull_request['sync_alias'];
