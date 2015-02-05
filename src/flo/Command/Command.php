@@ -15,6 +15,10 @@ class Command extends \Symfony\Component\Console\Command\Command {
   const GITHUB_LABEL_ERROR = 'ci:error';
   const GITHUB_LABEL_POSTPONED = 'ci:postponed';
   const GITHUB_LABEL_REJECTED = 'ci:rejected';
+  const GITHUB_PULL_REQUEST_ID = 'ghprbPullId';
+  const GITHUB_PULL_REQUEST_COMMIT = 'ghprbActualCommit';
+  const GITHUB_PULL_REQUEST_TARGET_BRANCH = 'ghprbTargetBranch';
+
 
   const DEFAULT_SITE_DIR = 'default';
 
