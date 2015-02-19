@@ -38,7 +38,7 @@ class Configuration implements ConfigurationInterface {
       $project_config = Yaml::parse($this->project_config_file);
     }
     else {
-      throw new \Exception("Must run flo from project directory");
+      throw new \Exception("Must run flo from within a flo project directory");
     }
 
     try {
