@@ -29,6 +29,9 @@ class PhpCodeStyleChecker extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $phpcs = './vendor/bin/phpcs --standard=./vendor/drupal/coder/coder_sniffer/Drupal --extensions=module,php,inc,install --ignore=$(*.features.*,*.context.inc,*.*_default.inc,*.default_permission_sets.inc,*.default_mps_tags.inc,*.field_group.inc,*.strongarm.inc,*.quicktabs.inc,*.tpl.php)';
     $targetBranch = getenv(self::GITHUB_PULL_REQUEST_TARGET_BRANCH);
+    $targetRef = getenv(self::GITHUB_PULL_REQUEST_COMMIT);
+    $targetURL = getenv(self::JENKINS_BUILD_URL);
+    $github = $this->getGithub();
 
     if (empty($targetBranch)) {
         // Default to master if there is no target branch.
@@ -49,10 +52,21 @@ class PhpCodeStyleChecker extends Command {
     $process->run();
 
     if (!$process->isSuccessful()) {
-        $output->writeln("<error>There is a coding style error</error>");
-        // TODO: Add github Parser here.
+      $output->writeln("<error>There is a coding style error</error>");
+      if (!empty($targetRef) && !empty($targetURL)) {
+        $github->api('repo')->statuses()->create(
+          $this->getConfigParameter('organization'),
+          $this->getConfigParameter('repository'),
+          $targetRef,
+          array(
+            'state' => 'failure',
+            'target_url' => $targetURL,
+            'description' => 'Flo: PHP Coding Style failure.',
+          )
+        );
+      }
     }
 
     $output->writeln($process->getOutput());
-    }
+  }
 }
