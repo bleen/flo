@@ -31,6 +31,7 @@ class Application extends \Symfony\Component\Console\Application {
       new Command\NewReleaseCommand(),
       new Command\NewRelicDeployCommand(),
       new Command\PhpSyntaxChecker(),
+      new Command\PhpCodeStyleChecker(),
       new Command\PullRequest\CertifyCommand(),
       new Command\PullRequest\DeployCommand(),
       new Command\PullRequest\DestroyCommand(),
