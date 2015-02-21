@@ -18,6 +18,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
   const GITHUB_PULL_REQUEST_ID = 'ghprbPullId';
   const GITHUB_PULL_REQUEST_COMMIT = 'ghprbActualCommit';
   const GITHUB_PULL_REQUEST_TARGET_BRANCH = 'ghprbTargetBranch';
+  const JENKINS_BUILD_URL = 'BUILD_URL';
 
 
   const DEFAULT_SITE_DIR = 'default';
