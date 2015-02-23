@@ -55,6 +55,7 @@ class PhpSyntaxChecker extends Command {
     if (!$process->isSuccessful()) {
       $output->writeln("<error>There is a syntax error</error>");
       if (!empty($targetRef) && !empty($targetURL)) {
+        $output->writeln("<info>Posting to Github Status API.</info>");
         $github->api('repo')->statuses()->create(
           $this->getConfigParameter('organization'),
           $this->getConfigParameter('repository'),
@@ -63,6 +64,7 @@ class PhpSyntaxChecker extends Command {
             'state' => 'failure',
             'target_url' => $targetURL,
             'description' => 'Flo: PHP syntax failure.',
+            'context' => "flo/phpsyntax",
           )
         );
       }
