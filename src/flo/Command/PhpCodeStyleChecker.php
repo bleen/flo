@@ -27,7 +27,7 @@ class PhpCodeStyleChecker extends Command {
    * If no branch is passed in the environment variable
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $phpcs = './vendor/bin/phpcs --standard=./vendor/drupal/coder/coder_sniffer/Drupal --extensions=module,php,inc,install --ignore=$(*.features.*,*.context.inc,*.*_default.inc,*.default_permission_sets.inc,*.default_mps_tags.inc,*.field_group.inc,*.strongarm.inc,*.quicktabs.inc,*.tpl.php)';
+    $phpcs = './vendor/bin/phpcs --standard=./vendor/drupal/coder/coder_sniffer/Drupal --extensions=module,php,inc,install --ignore="*.features.*,*.context.inc,*.*_default.inc,*.default_permission_sets.inc,*.default_mps_tags.inc,*.field_group.inc,*.strongarm.inc,*.quicktabs.inc,*.tpl.php"';
     $targetBranch = getenv(self::GITHUB_PULL_REQUEST_TARGET_BRANCH);
     $targetRef = getenv(self::GITHUB_PULL_REQUEST_COMMIT);
     $targetURL = getenv(self::JENKINS_BUILD_URL);
@@ -48,7 +48,11 @@ class PhpCodeStyleChecker extends Command {
         $output->writeln("<info>Files about to get parsed: \n" . $process->getOutput() . "</info>");
     }
 
-    $process = new Process("git --no-pager diff --name-status {$targetBranch} | grep -v '^D' | awk '{print $2}'  | $phpcs");
+    if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
+      $output->writeln("<info>About to run: \n  $phpcs $(git --no-pager diff --name-status {$targetBranch} | grep -v '^D' | awk '{print $2}')</info>");
+    }
+
+    $process = new Process("$phpcs $(git --no-pager diff --name-status {$targetBranch} | grep -v '^D' | awk '{print $2}')");
     $process->run();
 
     if (!$process->isSuccessful()) {
