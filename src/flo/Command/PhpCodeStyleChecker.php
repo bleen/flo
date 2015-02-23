@@ -58,6 +58,7 @@ class PhpCodeStyleChecker extends Command {
     if (!$process->isSuccessful()) {
       $output->writeln("<error>There is a coding style error</error>");
       if (!empty($targetRef) && !empty($targetURL)) {
+        $output->writeln("<info>Posting to Github Status API.</info>");
         $github->api('repo')->statuses()->create(
           $this->getConfigParameter('organization'),
           $this->getConfigParameter('repository'),
@@ -66,6 +67,7 @@ class PhpCodeStyleChecker extends Command {
             'state' => 'failure',
             'target_url' => $targetURL,
             'description' => 'Flo: PHP Coding Style failure.',
+            'context' => "flo/phpcs",
           )
         );
       }
