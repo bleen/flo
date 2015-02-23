@@ -7,6 +7,7 @@
 namespace flo\Command;
 
 use Symfony\Component\Process\Process;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Github;
@@ -15,7 +16,13 @@ use Github;
 class PhpCodeStyleChecker extends Command {
   protected function configure() {
     $this->setName('check-php-cs')
-      ->setDescription('runs phpcs against the change files.');
+      ->setDescription('runs phpcs against the change files.')
+      ->addOption(
+        'comment',
+        null,
+        InputOption::VALUE_NONE,
+        'If set, the output will be posted to github as a comment on the relevant Pull Request'
+      );
   }
 
   /**
@@ -31,6 +38,7 @@ class PhpCodeStyleChecker extends Command {
     $targetBranch = getenv(self::GITHUB_PULL_REQUEST_TARGET_BRANCH);
     $targetRef = getenv(self::GITHUB_PULL_REQUEST_COMMIT);
     $targetURL = getenv(self::JENKINS_BUILD_URL);
+    $pullRequest = getenv(self::GITHUB_PULL_REQUEST_ID);
     $github = $this->getGithub();
 
     if (empty($targetBranch)) {
@@ -55,8 +63,11 @@ class PhpCodeStyleChecker extends Command {
     $process = new Process("$phpcs $(git --no-pager diff --name-status {$targetBranch} | grep -v '^D' | awk '{print $2}')");
     $process->run();
 
+    $processOutput = $process->getOutput();
     if (!$process->isSuccessful()) {
       $output->writeln("<error>There is a coding style error</error>");
+
+      // Decide if we're going to post to Github Status API.
       if (!empty($targetRef) && !empty($targetURL)) {
         $output->writeln("<info>Posting to Github Status API.</info>");
         $github->api('repo')->statuses()->create(
@@ -71,8 +82,20 @@ class PhpCodeStyleChecker extends Command {
           )
         );
       }
+
+      // Decide if we're going to post to Github Comment API.
+      if ($input->getOption('comment') && !empty($pullRequest)) {
+        $output->writeln("<info>Posting to Github Comment API.</info>");
+
+        $github->api('issue')->comments()->create(
+          $this->getConfigParameter('organization'),
+          $this->getConfigParameter('repository'),
+          $pullRequest,
+          array('body' => "flo/phpcs failure:\n ```" .  $processOutput . "```")
+        );
+      }
     }
 
-    $output->writeln($process->getOutput());
+    $output->writeln($processOutput);
   }
 }
