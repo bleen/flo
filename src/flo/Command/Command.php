@@ -64,11 +64,16 @@ class Command extends \Symfony\Component\Console\Command\Command {
   /**
    * @return Github\Client
    */
-  public function getGithub() {
+  public function getGithub($cache = TRUE) {
     if (null === $this->github) {
-      $this->github = new Github\Client(
-        new Github\HttpClient\CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache'))
-      );
+      if ($cache) {
+        $this->github = new Github\Client(
+          new Github\HttpClient\CachedHttpClient(array('cache_dir' => '/tmp/github-api-cache'))
+        );
+      }
+      else {
+        $this->github = new Github\Client();
+      }
       $this->github->authenticate($this->getConfigParameter('github_oauth_token'), NULL, Github\Client::AUTH_URL_TOKEN);
     }
     return $this->github;
@@ -101,7 +106,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
     }
-    $github = $this->getGithub();
+    $github = $this->getGithub(FALSE);
     $github->api('issue')->labels()->add(
       $this->getConfigParameter('organization'),
       $this->getConfigParameter('repository'),
@@ -127,7 +132,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
     }
-    $github = $this->getGithub();
+    $github = $this->getGithub(FALSE);
     $github->api('issue')->labels()->remove(
       $this->getConfigParameter('organization'),
       $this->getConfigParameter('repository'),
