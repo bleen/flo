@@ -35,6 +35,7 @@ class PhpSyntaxChecker extends Command {
    * If no branch is passed in the environment variable
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
+    $gh_status_post = FALSE;
     $parallelLink = './vendor/bin/parallel-lint -e module,php,inc,install,profile --stdin';
     $targetBranch = getenv(self::GITHUB_PULL_REQUEST_TARGET_BRANCH);
     $targetRef = getenv(self::GITHUB_PULL_REQUEST_COMMIT);
@@ -50,6 +51,12 @@ class PhpSyntaxChecker extends Command {
       $targetBranch = 'master';
     }
 
+    // Check if we're going to post to GH or not.
+    if (!empty($targetRef) && !empty($targetURL)) {
+      // Set the $gh_status_post variable to TRUE if we can post to GH.
+      $gh_status_post = TRUE;
+    }
+
     if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERBOSE) {
       // Get the list for verbose output.
       $process = new Process("git --no-pager diff --name-only {$targetBranch}");
@@ -62,33 +69,42 @@ class PhpSyntaxChecker extends Command {
     $processOutput = $process->getOutput();
 
     if (!$process->isSuccessful()) {
-      $output->writeln("<error>There is a syntax error</error>");
-      if (!empty($targetRef) && !empty($targetURL)) {
-        $output->writeln("<info>Posting to Github Status API.</info>");
-        $github->api('repo')->statuses()->create(
-          $this->getConfigParameter('organization'),
-          $this->getConfigParameter('repository'),
-          $targetRef,
-          array(
-            'state' => 'failure',
-            'target_url' => $targetURL,
-            'description' => 'Flo: PHP syntax failure.',
-            'context' => "flo/phpsyntax",
-          )
-        );
-      }
+      $output->writeln("<error>There is a syntax error.</error>");
+      $gh_status_state = 'failure';
+      $gh_statue_desc = 'Flo: PHP syntax failure.';
+    }
+    else {
+      $output->writeln("<info>No syntax error found.</info>");
+      $gh_status_state = 'success';
+      $gh_statue_desc = 'Flo: PHP syntax success.';
+    }
 
-      // Decide if we're going to post to Github Comment API.
-      if ($input->getOption('comment') && !empty($pullRequest)) {
-        $output->writeln("<info>Posting to Github Comment API.</info>");
 
-        $github->api('issue')->comments()->create(
-          $this->getConfigParameter('organization'),
-          $this->getConfigParameter('repository'),
-          $pullRequest,
-          array('body' => "flo/phpsyntax failure:\n ```\n" .  $processOutput . "```")
-        );
-      }
+    if ($gh_status_post) {
+      $output->writeln("<info>Posting to Github Status API.</info>");
+      $github->api('repo')->statuses()->create(
+        $this->getConfigParameter('organization'),
+        $this->getConfigParameter('repository'),
+        $targetRef,
+        array(
+          'state' => $gh_status_state,
+          'target_url' => $targetURL,
+          'description' => $gh_statue_desc,
+          'context' => "flo/phpsyntax",
+        )
+      );
+    }
+
+    // Decide if we're going to post to Github Comment API.
+    if ($input->getOption('comment') && !empty($pullRequest) && !$process->isSuccessful()) {
+      $output->writeln("<info>Posting to Github Comment API.</info>");
+
+      $github->api('issue')->comments()->create(
+        $this->getConfigParameter('organization'),
+        $this->getConfigParameter('repository'),
+        $pullRequest,
+        array('body' => "flo/phpsyntax failure:\n ```\n" .  $processOutput . "```")
+      );
     }
 
     $output->writeln($processOutput);
