@@ -34,6 +34,7 @@ class PhpCodeStyleChecker extends Command {
    * If no branch is passed in the environment variable
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
+    $gh_status_post = FALSE;
     $phpcs = './vendor/bin/phpcs --standard=./vendor/drupal/coder/coder_sniffer/Drupal --extensions=module,php,inc,install --ignore="*.features.*,*.context.inc,*.*_default.inc,*.default_permission_sets.inc,*.default_mps_tags.inc,*.field_group.inc,*.strongarm.inc,*.quicktabs.inc,*.tpl.php"';
     $targetBranch = getenv(self::GITHUB_PULL_REQUEST_TARGET_BRANCH);
     $targetRef = getenv(self::GITHUB_PULL_REQUEST_COMMIT);
@@ -47,6 +48,12 @@ class PhpCodeStyleChecker extends Command {
         // This checks againts the dev branch:
         // `ghprbTargetBranch=dev flo check-php`
         $targetBranch = 'master';
+    }
+
+    // Check if we're going to post to GH or not.
+    if (!empty($targetRef) && !empty($targetURL)) {
+      // Set the $gh_status_post variable to TRUE if we can post to GH.
+      $gh_status_post = TRUE;
     }
 
     if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERBOSE) {
@@ -64,36 +71,45 @@ class PhpCodeStyleChecker extends Command {
     $process->run();
 
     $processOutput = $process->getOutput();
+
+
     if (!$process->isSuccessful()) {
-      $output->writeln("<error>There is a coding style error</error>");
+      $output->writeln("<error>There is a coding style error.</error>");
+      $gh_status_state = 'failure';
+      $gh_statue_desc = 'Flo: PHP Coding Style failure.';
+    }
+    else {
+      $output->writeln("<info>No coding style errors.</info>");
+      $gh_status_state = 'success';
+      $gh_statue_desc = 'Flo: PHP Coding Style success.';
+    }
 
-      // Decide if we're going to post to Github Status API.
-      if (!empty($targetRef) && !empty($targetURL)) {
-        $output->writeln("<info>Posting to Github Status API.</info>");
-        $github->api('repo')->statuses()->create(
-          $this->getConfigParameter('organization'),
-          $this->getConfigParameter('repository'),
-          $targetRef,
-          array(
-            'state' => 'failure',
-            'target_url' => $targetURL,
-            'description' => 'Flo: PHP Coding Style failure.',
-            'context' => "flo/phpcs",
-          )
-        );
-      }
+    // Post to GH if we're allowed.
+    if ($gh_status_post) {
+      $output->writeln("<info>Posting to Github Status API.</info>");
+      $github->api('repo')->statuses()->create(
+        $this->getConfigParameter('organization'),
+        $this->getConfigParameter('repository'),
+        $targetRef,
+        array(
+          'state' => $gh_status_state,
+          'target_url' => $targetURL,
+          'description' => $gh_statue_desc,
+          'context' => "flo/phpcs",
+        )
+      );
+    }
 
-      // Decide if we're going to post to Github Comment API.
-      if ($input->getOption('comment') && !empty($pullRequest)) {
-        $output->writeln("<info>Posting to Github Comment API.</info>");
+    // Decide if we're going to post to Github Comment API.
+    if ($input->getOption('comment') && !empty($pullRequest) && !$process->isSuccessful()) {
+      $output->writeln("<info>Posting to Github Comment API.</info>");
 
-        $github->api('issue')->comments()->create(
-          $this->getConfigParameter('organization'),
-          $this->getConfigParameter('repository'),
-          $pullRequest,
-          array('body' => "flo/phpcs failure:\n ```" .  $processOutput . "```")
-        );
-      }
+      $github->api('issue')->comments()->create(
+        $this->getConfigParameter('organization'),
+        $this->getConfigParameter('repository'),
+        $pullRequest,
+        array('body' => "flo/phpcs failure:\n ```" .  $processOutput . "```")
+      );
     }
 
     $output->writeln($processOutput);
