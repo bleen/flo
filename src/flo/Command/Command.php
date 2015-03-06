@@ -2,15 +2,13 @@
 
 namespace flo\Command;
 
-use flo\Configuration;
 use flo\PHPGit\Repository;
 use Github;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 
 
 class Command extends \Symfony\Component\Console\Command\Command {
 
+  const DEFAULT_SITE_DIR = 'default';
   const GITHUB_LABEL_CERTIFIED = 'ci:certified';
   const GITHUB_LABEL_ERROR = 'ci:error';
   const GITHUB_LABEL_POSTPONED = 'ci:postponed';
@@ -20,20 +18,9 @@ class Command extends \Symfony\Component\Console\Command\Command {
   const GITHUB_PULL_REQUEST_TARGET_BRANCH = 'ghprbTargetBranch';
   const JENKINS_BUILD_URL = 'BUILD_URL';
 
-
-  const DEFAULT_SITE_DIR = 'default';
-
   private $config;
-  private $repository;
   private $github;
-
-  /**
-   * {@inheritdoc}
-   */
-  protected function initialize(InputInterface $input, OutputInterface $output) {
-    $configuration = new Configuration();
-    $this->config = $configuration->getConfig();
-  }
+  private $repository;
 
   /**
    * Get a config parameter.
@@ -43,6 +30,8 @@ class Command extends \Symfony\Component\Console\Command\Command {
    *
    * @return mixed|null
    *   The parameter value
+   *
+   * @throws \Exception
    */
   public function getConfigParameter($name) {
     $config = $this->getConfig();
@@ -58,6 +47,9 @@ class Command extends \Symfony\Component\Console\Command\Command {
    * @return array
    */
   public function getConfig() {
+    if (!isset($this->config)) {
+      $this->config = $this->getApplication()->getConfig();
+    }
     return $this->config;
   }
 

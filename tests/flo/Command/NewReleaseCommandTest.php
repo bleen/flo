@@ -96,7 +96,7 @@ class NewReleaseCommandTest extends \PHPUnit_Framework_TestCase {
     // Setup some project configs making sure that version file and version
     // constant are unique between tests.
     $project_config = "---\nvars:\n  version_file: $this->versionFile\n  version_constant: $this->versionConstant";
-    $fs->dumpFile($this->root . "/project-config.yml", $project_config);
+    $fs->dumpFile($this->root . "/flo.yml", $project_config);
 
     if (!empty($initial_version)) {
       $fs->dumpFile($version_file, $initial_content);

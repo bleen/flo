@@ -4,8 +4,12 @@ namespace flo\Console;
 
 use Symfony\Component\Process\Process;
 use flo\Command;
+use flo\Configuration;
+
 
 class Application extends \Symfony\Component\Console\Application {
+
+  private $config;
 
   /**
    * {@inheritdoc}
@@ -22,6 +26,7 @@ class Application extends \Symfony\Component\Console\Application {
       throw new \RuntimeException($process->getErrorOutput());
     }
 
+    // Add commands.
     $this->addCommands(array(
       new Command\AcquiaCloudHooksCommand(),
       new Command\ConfigDelCommand(),
@@ -43,4 +48,16 @@ class Application extends \Symfony\Component\Console\Application {
       new Command\UpdateCommand(),
     ));
   }
+
+  /**
+   * @return array
+   */
+  public function getConfig() {
+    if (!isset($this->config)) {
+      $configuration = new Configuration();
+      $this->config = $configuration->getConfig();
+    }
+    return $this->config;
+  }
+
 }
