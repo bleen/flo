@@ -9,10 +9,9 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
 
+
 class Configuration implements ConfigurationInterface {
 
-  private $flo_config_file = '';
-  private $project_config_file = 'project-config.yml';
   private $config;
 
   /**
@@ -21,21 +20,21 @@ class Configuration implements ConfigurationInterface {
   public function __construct() {
     $fs = new Filesystem();
 
-    $flo_config = array();
-    $this->flo_config_file = getenv("HOME") . '/.config/flo';
-    if ($fs->exists($this->flo_config_file)) {
-      $flo_config = Yaml::parse($this->flo_config_file);
+    $user_config = array();
+    $user_config_file = getenv("HOME") . '/.config/flo';
+    if ($fs->exists($user_config_file)) {
+      $user_config = Yaml::parse($user_config_file);
     }
 
     $project_config = array();
     $process = new Process('git rev-parse --show-toplevel');
     $process->run();
     if ($process->isSuccessful()) {
-      $this->project_config_file = trim($process->getOutput()) . '/' . $this->project_config_file;
-      if (!$fs->exists($this->project_config_file)) {
-        throw new \Exception("{$this->project_config_file} does not exists");
+      $project_config_file = trim($process->getOutput()) . '/flo.yml';
+      if (!$fs->exists($project_config_file)) {
+        throw new \Exception("{$project_config_file} must exist in the root of this project");
       }
-      $project_config = Yaml::parse($this->project_config_file);
+      $project_config = Yaml::parse($project_config_file);
     }
     else {
       throw new \Exception("Must run flo from within a flo project directory");
@@ -45,7 +44,7 @@ class Configuration implements ConfigurationInterface {
       $processor = new Processor();
       $this->config = $processor->processConfiguration(
         $this,
-        array($flo_config, $project_config)
+        array($user_config, $project_config)
       );
     }
     catch (\Exception $e) {
