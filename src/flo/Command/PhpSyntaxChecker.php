@@ -36,7 +36,15 @@ class PhpSyntaxChecker extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $gh_status_post = FALSE;
-    $parallelLink = './vendor/bin/parallel-lint -e module,php,inc,install,profile --stdin';
+    $extensions = array(
+      'module',
+      'php',
+      'inc',
+      'install',
+      'profile',
+    );
+    $parallel_lint_extensions = implode(',', $extensions);
+    $parallel_lint = "./vendor/bin/parallel-lint -e {$parallel_lint_extensions} --stdin";
     $targetBranch = getenv(self::GITHUB_PULL_REQUEST_TARGET_BRANCH);
     $targetRef = getenv(self::GITHUB_PULL_REQUEST_COMMIT);
     $targetURL = getenv(self::JENKINS_BUILD_URL);
@@ -57,14 +65,36 @@ class PhpSyntaxChecker extends Command {
       $gh_status_post = TRUE;
     }
 
-    if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERBOSE) {
-      // Get the list for verbose output.
-      $process = new Process("git --no-pager diff --name-only {$targetBranch}");
-      $process->run();
-      $output->writeln("<info>Files about to get parsed: \n" . $process->getOutput() . "</info>");
+    // Get list of files with $extensions to check by running git-diff and
+    // filtering by Added (A) and Modified (M).
+    $git_extensions = "'*." . implode("' '*.", $extensions) . "'";
+    $git_diff_command = "git diff --name-only --diff-filter=AM {$targetBranch} -- {$git_extensions}";
+
+    // Output some feedback based on verbosity.
+    if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+      $output->writeln("<info>About to run:\n{$git_diff_command}</info>");
     }
 
-    $process = new Process("git --no-pager diff --name-status {$targetBranch} | grep -v '^D' | awk '{print $2}'  | $parallelLink");
+    $process = new Process($git_diff_command);
+    $process->run();
+    $git_diff_output = $process->getOutput();
+
+    // Nothing to check!
+    if (empty($git_diff_output)) {
+      $output->writeln("<info>No files to check.</info>");
+      return;
+    }
+
+    // Output some feedback based on verbosity.
+    if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERBOSE) {
+      $output->writeln("<info>Files about to get parsed:\n{$git_diff_output}</info>");
+    }
+    elseif ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
+      $output->writeln("<info>About to run:\n{$parallel_lint} {$git_diff_output}</info>");
+    }
+
+    // Run parallel-lint.
+    $process = new Process("{$parallel_lint} {$git_diff_output}");
     $process->run();
     $processOutput = $process->getOutput();
 
@@ -78,7 +108,6 @@ class PhpSyntaxChecker extends Command {
       $gh_status_state = 'success';
       $gh_statue_desc = 'Flo: PHP syntax success.';
     }
-
 
     if ($gh_status_post) {
       $output->writeln("<info>Posting to Github Status API.</info>");
@@ -109,4 +138,5 @@ class PhpSyntaxChecker extends Command {
 
     $output->writeln($processOutput);
   }
+
 }
