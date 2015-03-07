@@ -9,9 +9,15 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Process\Process;
 use Symfony\Component\Yaml\Yaml;
 
-
+/**
+ * Class Configuration
+ * @package flo
+ */
 class Configuration implements ConfigurationInterface {
 
+  /**
+   * @var array
+   */
   private $config;
 
   /**
@@ -50,13 +56,6 @@ class Configuration implements ConfigurationInterface {
     catch (\Exception $e) {
       throw new \Exception("There is an error with your configuration: " . $e->getMessage());
     }
-  }
-
-  /**
-   * @return array
-   */
-  public function getConfig() {
-    return $this->config;
   }
 
   /**
@@ -120,4 +119,33 @@ class Configuration implements ConfigurationInterface {
       ->end();
     return $tree_builder;
   }
+
+  /**
+   * @return array
+   */
+  public function getConfig() {
+    return $this->config;
+  }
+
+  /**
+   * Get a config parameter.
+   *
+   * @param $name
+   *   The parameter name
+   *
+   * @return mixed|null
+   *   The parameter value
+   *
+   * @throws \Exception
+   */
+  public function getParameter($name) {
+    $config = $this->getConfig();
+    if (array_key_exists($name, $config)) {
+      return $config[$name];
+    }
+    else {
+      throw new \Exception("The config variable '{$name}' is not set. Run `flo config-set {$name} some-value` to set this value globally, or update your project's flo.yml.", 1);
+    }
+  }
+
 }

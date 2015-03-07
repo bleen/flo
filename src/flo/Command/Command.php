@@ -5,7 +5,10 @@ namespace flo\Command;
 use flo\PHPGit\Repository;
 use Github;
 
-
+/**
+ * Class Command
+ * @package flo\Command
+ */
 class Command extends \Symfony\Component\Console\Command\Command {
 
   const DEFAULT_SITE_DIR = 'default';
@@ -18,39 +21,20 @@ class Command extends \Symfony\Component\Console\Command\Command {
   const GITHUB_PULL_REQUEST_TARGET_BRANCH = 'ghprbTargetBranch';
   const JENKINS_BUILD_URL = 'BUILD_URL';
 
-  private $config;
   private $github;
   private $repository;
 
   /**
-   * Get a config parameter.
+   * Helper to get a config parameter.
    *
    * @param $name
    *   The parameter name
    *
    * @return mixed|null
    *   The parameter value
-   *
-   * @throws \Exception
    */
   public function getConfigParameter($name) {
-    $config = $this->getConfig();
-    if (array_key_exists($name, $config)) {
-      return $config[$name];
-    }
-    else {
-      throw new \Exception("The config variable '$name' is not set. Run `flo config-set $name some-value` to set this value.", 1);
-    }
-  }
-
-  /**
-   * @return array
-   */
-  public function getConfig() {
-    if (!isset($this->config)) {
-      $this->config = $this->getApplication()->getConfig();
-    }
-    return $this->config;
+    return $this->getApplication()->getConfiguration()->getParameter($name);
   }
 
   /**
