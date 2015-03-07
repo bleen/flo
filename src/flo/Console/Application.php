@@ -6,10 +6,16 @@ use Symfony\Component\Process\Process;
 use flo\Command;
 use flo\Configuration;
 
-
+/**
+ * Class Application
+ * @package flo\Console
+ */
 class Application extends \Symfony\Component\Console\Application {
 
-  private $config;
+  /**
+   * @var Configuration
+   */
+  private $configuration;
 
   /**
    * {@inheritdoc}
@@ -50,14 +56,13 @@ class Application extends \Symfony\Component\Console\Application {
   }
 
   /**
-   * @return array
+   * @return Configuration
    */
-  public function getConfig() {
-    if (!isset($this->config)) {
-      $configuration = new Configuration();
-      $this->config = $configuration->getConfig();
+  public function getConfiguration() {
+    if (!isset($this->configuration)) {
+      $this->configuration = new Configuration();
     }
-    return $this->config;
+    return $this->configuration;
   }
 
 }
