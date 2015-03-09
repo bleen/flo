@@ -16,6 +16,8 @@ use Symfony\Component\Yaml\Yaml;
 class Configuration implements ConfigurationInterface {
 
   /**
+   * An array of configuration values.
+   *
    * @var array
    */
   private $config;
@@ -37,13 +39,9 @@ class Configuration implements ConfigurationInterface {
     $process->run();
     if ($process->isSuccessful()) {
       $project_config_file = trim($process->getOutput()) . '/flo.yml';
-      if (!$fs->exists($project_config_file)) {
-        throw new \Exception("{$project_config_file} must exist in the root of this project");
+      if ($fs->exists($project_config_file)) {
+        $project_config = Yaml::parse($project_config_file);
       }
-      $project_config = Yaml::parse($project_config_file);
-    }
-    else {
-      throw new \Exception("Must run flo from within a flo project directory");
     }
 
     try {
@@ -121,7 +119,10 @@ class Configuration implements ConfigurationInterface {
   }
 
   /**
+   * Get an array of configuration values.
+   *
    * @return array
+   *   Array of combined user and project configuration.
    */
   public function getConfig() {
     return $this->config;
@@ -130,13 +131,14 @@ class Configuration implements ConfigurationInterface {
   /**
    * Get a config parameter.
    *
-   * @param $name
-   *   The parameter name
+   * @param string $name
+   *   The parameter name.
    *
    * @return mixed|null
    *   The parameter value
    *
    * @throws \Exception
+   *   If the desired parameter is not set.
    */
   public function getParameter($name) {
     $config = $this->getConfig();
