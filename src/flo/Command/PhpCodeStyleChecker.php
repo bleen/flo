@@ -35,7 +35,14 @@ class PhpCodeStyleChecker extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $gh_status_post = FALSE;
-    $phpcs = './vendor/bin/phpcs --standard=./vendor/drupal/coder/coder_sniffer/Drupal --extensions=module,php,inc,install --ignore="*.features.*,*.context.inc,*.*_default.inc,*.default_permission_sets.inc,*.default_mps_tags.inc,*.field_group.inc,*.strongarm.inc,*.quicktabs.inc,*.tpl.php"';
+    $extensions = array(
+      'module',
+      'php',
+      'inc',
+      'install',
+    );
+    $phpcs_extensions = implode(',', $extensions);
+    $phpcs = "./vendor/bin/phpcs --standard=./vendor/drupal/coder/coder_sniffer/Drupal --extensions={$phpcs_extensions} --ignore=\"*.features.*,*.context.inc,*.*_default.inc,*.default_permission_sets.inc,*.default_mps_tags.inc,*.field_group.inc,*.strongarm.inc,*.quicktabs.inc,*.tpl.php\"";
     $targetBranch = getenv(self::GITHUB_PULL_REQUEST_TARGET_BRANCH);
     $targetRef = getenv(self::GITHUB_PULL_REQUEST_COMMIT);
     $targetURL = getenv(self::JENKINS_BUILD_URL);
@@ -56,22 +63,38 @@ class PhpCodeStyleChecker extends Command {
       $gh_status_post = TRUE;
     }
 
-    if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERBOSE) {
-        // Get the list for verbose output.
-        $process = new Process("git --no-pager diff --name-only {$targetBranch}");
-        $process->run();
-        $output->writeln("<info>Files about to get parsed: \n" . $process->getOutput() . "</info>");
+    // Get list of files with $extensions to check by running git-diff and
+    // filtering by Added (A) and Modified (M).
+    $git_extensions = "'*." . implode("' '*.", $extensions) . "'";
+    $git_diff_command = "git diff --name-only --diff-filter=AM {$targetBranch} -- {$git_extensions}";
+
+    // Output some feedback based on verbosity.
+    if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+      $output->writeln("<info>About to run:\n{$git_diff_command}</info>");
     }
 
-    if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
-      $output->writeln("<info>About to run: \n  $phpcs $(git --no-pager diff --name-status {$targetBranch} | grep -v '^D' | awk '{print $2}')</info>");
-    }
-
-    $process = new Process("$phpcs $(git --no-pager diff --name-status {$targetBranch} | grep -v '^D' | awk '{print $2}')");
+    $process = new Process($git_diff_command);
     $process->run();
+    $git_diff_output = $process->getOutput();
 
+    // Nothing to check!
+    if (empty($git_diff_output)) {
+      $output->writeln("<info>No files to check.</info>");
+      return;
+    }
+
+    // Output some feedback based on verbosity.
+    if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERBOSE) {
+      $output->writeln("<info>Files about to get parsed:\n{$git_diff_output}</info>");
+    }
+    elseif ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
+      $output->writeln("<info>About to run:\n{$phpcs} {$git_diff_output}</info>");
+    }
+
+    // Run phpcs.
+    $process = new Process("{$phpcs} {$git_diff_output}");
+    $process->run();
     $processOutput = $process->getOutput();
-
 
     if (!$process->isSuccessful()) {
       $output->writeln("<error>There is a coding style error.</error>");
@@ -114,4 +137,5 @@ class PhpCodeStyleChecker extends Command {
 
     $output->writeln($processOutput);
   }
+
 }
