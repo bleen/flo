@@ -44,10 +44,17 @@ EOT
       $args = $input->getArgument('args');
       $script_args = empty($args) ? '' : implode(' ', $args);
       foreach ($scripts[$script_name] as $script) {
-        // TODO: This is "quick and dirty", make this more fool-proof.
+        // @todo This is "quick and dirty", make this more fool-proof.
         $process = new Process("sh {$script} {$script_args}");
         $process->run();
-        $output->write($process->getOutput());
+        if ($process->isSuccessful()) {
+          $output->write($process->getOutput());
+        }
+        else {
+          $output->writeln($process->getErrorOutput());
+          return $process->getExitCode();
+        }
+
       }
     }
     else {
