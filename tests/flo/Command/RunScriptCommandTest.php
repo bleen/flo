@@ -104,7 +104,7 @@ EOT;
     ));
 
     // Check the output of the command.
-    $this->assertEquals("scripts/pre-deploy.sh: line 2: asd: command not found", trim($command_tester->getDisplay()));
+    $this->assertContains("asd: command not found", trim($command_tester->getDisplay()));
   }
 
   /**
