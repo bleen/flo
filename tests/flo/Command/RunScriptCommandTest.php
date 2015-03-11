@@ -81,6 +81,33 @@ EOT;
   }
 
   /**
+   * Test running a script that fails.
+   */
+  public function testRunScriptFailure() {
+
+    $this->writeConfig();
+
+    // Create scripts/post-deploy.sh.
+    $post_deploy_script = <<<EOT
+#!/usr/bin/env bash
+asd
+EOT;
+    $this->fs->dumpFile($this->root . "/scripts/pre-deploy.sh", $post_deploy_script);
+
+    // Run the command.
+    $application = new Application();
+    $command_run_script = $application->find('run-script');
+    $command_tester = new CommandTester($command_run_script);
+    $command_tester->execute(array(
+      'command' => $command_run_script->getName(),
+      'script' => 'pre_deploy_cmd',
+    ));
+
+    // Check the output of the command.
+    $this->assertEquals("scripts/pre-deploy.sh: line 2: asd: command not found", trim($command_tester->getDisplay()));
+  }
+
+  /**
    * Test that attempting to run an undefined script throws an exception.
    *
    * @expectedException Exception
@@ -116,6 +143,8 @@ pull_request:
   domain: pr.publisher7.com
   prefix: flo-test
 scripts:
+  pre_deploy_cmd:
+  - scripts/pre-deploy.sh
   post_deploy_cmd:
   - scripts/post-deploy.sh
 EOT;
