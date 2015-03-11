@@ -112,8 +112,6 @@ class Configuration implements ConfigurationInterface {
             ->end()
             ->scalarNode('password')
             ->end()
-            ->scalarNode('subscription')
-            ->end()
           ->end()
         ->end()
         ->arrayNode('vars')

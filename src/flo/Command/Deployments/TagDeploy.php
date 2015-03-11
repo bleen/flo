@@ -39,21 +39,20 @@ class TagDeploy extends Command {
     $env = $input->getArgument('env');
     $tag = 'tags/' . $input->getArgument('tag');
     $acquia = $this->getConfigParameter('acquia');
-    if (empty($acquia['username']) || empty($acquia['username']) || empty($acquia['subscription'])) {
+    $subscription = $this->getConfigParameter('subscription');
+    if (empty($acquia['username']) || empty($acquia['username']) || empty($subscription)) {
       $output->writeln("<error>You must have your acquia username/password/subscription configured in your flo config to run deploys.</error>");
       return 1;
     }
 
-    $cloudapi = CloudApiClient::factory(array(
+    $cloud_api = CloudApiClient::factory(array(
       'username' => $acquia['username'],
       'password' => $acquia['password']
     ));
-
-    $acquia_environments = $cloudapi->environments($acquia['subscription']);
-
+    $acquia_environments = $cloud_api->environments($subscription);
 
     foreach ($acquia_environments as $acquia_env) {
-      if($acquia_env->name() == $env) {
+      if ($acquia_env->name() == $env) {
         $is_environment_available = TRUE;
         break;
       }
@@ -64,8 +63,7 @@ class TagDeploy extends Command {
       return 1;
     }
 
-    $task = $cloudapi->pushCode($acquia['subscription'], $env, $tag);
-
+    $task = $cloud_api->pushCode($subscription, $env, $tag);
     $progress = new ProgressBar($output, 100);
     $progress->start();
 
@@ -73,8 +71,9 @@ class TagDeploy extends Command {
       $progress->advance();
       // Lets not kill their api.
       sleep(2);
-      $task = $cloudapi->task($acquia['subscription'], $task);
+      $task = $cloud_api->task($subscription, $task);
     }
+
     $progress->finish();
     if ($task->state() == 'failed') {
       $output->writeln("\n<error>Task: {$task->id()} failed.</error>");
@@ -84,6 +83,5 @@ class TagDeploy extends Command {
 
     $output->writeln("\n<info>Tag: {$tag} deployed.</info>");
     $output->writeln($task->logs());
-
   }
 }
