@@ -53,6 +53,8 @@ class Application extends \Symfony\Component\Console\Application {
       new Command\PullRequest\UnRejectCommand(),
       new Command\Deployments\TagDeploy(),
       new Command\Deployments\TagPreRelease(),
+      new Command\RunScriptCommand(),
+      new Command\UpdateCommand(),
     ));
   }
 

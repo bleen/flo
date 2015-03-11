@@ -124,6 +124,11 @@ class Configuration implements ConfigurationInterface {
               ->end()
           ->end()
         ->end()
+        ->arrayNode('scripts')
+          ->prototype('array')
+            ->cannotBeEmpty()
+            ->prototype('scalar')->end()
+          ->end()
       ->end();
     return $tree_builder;
   }
