@@ -4,8 +4,135 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e009a47b89a15925020f15c5696d16bf",
+    "hash": "01a13fb2e6253dad8ea7d7d2cc98a654",
     "packages": [
+        {
+            "name": "acquia/acquia-sdk-php-cloud-api",
+            "version": "0.10.7",
+            "target-dir": "Acquia/Cloud/Api",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia-sdk-php-cloud-api.git",
+                "reference": "72d74a07f2702f929f7ef3759896087e21c61b9b"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia-sdk-php-cloud-api/zipball/72d74a07f2702f929f7ef3759896087e21c61b9b",
+                "reference": "72d74a07f2702f929f7ef3759896087e21c61b9b",
+                "shasum": ""
+            },
+            "require": {
+                "acquia/acquia-sdk-php-rest": "self.version",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Acquia\\Cloud\\Api": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "See contributors",
+                    "homepage": "https://github.com/acquia/acquia-sdk-php/graphs/contributors"
+                }
+            ],
+            "description": "Acquia Cloud API component for the Acquia SDK for PHP.",
+            "homepage": "https://github.com/acquia/acquia-sdk-php",
+            "keywords": [
+                "acquia"
+            ],
+            "time": "2015-03-10 14:41:58"
+        },
+        {
+            "name": "acquia/acquia-sdk-php-json",
+            "version": "0.10.7",
+            "target-dir": "Acquia/Json",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia-sdk-php-json.git",
+                "reference": "26e2c15578494e330d8b6779e584039bd7c071d2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia-sdk-php-json/zipball/26e2c15578494e330d8b6779e584039bd7c071d2",
+                "reference": "26e2c15578494e330d8b6779e584039bd7c071d2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Acquia\\Json": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "See contributors",
+                    "homepage": "https://github.com/acquia/acquia-sdk-php/graphs/contributors"
+                }
+            ],
+            "description": "JSON component for the Acquia SDK for PHP.",
+            "homepage": "https://github.com/acquia/acquia-sdk-php",
+            "keywords": [
+                "acquia"
+            ],
+            "time": "2014-04-02 19:45:47"
+        },
+        {
+            "name": "acquia/acquia-sdk-php-rest",
+            "version": "0.10.7",
+            "target-dir": "Acquia/Rest",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/acquia/acquia-sdk-php-rest.git",
+                "reference": "15b0855da8024fa3d0684dd74d141fc70a13b1f6"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/acquia/acquia-sdk-php-rest/zipball/15b0855da8024fa3d0684dd74d141fc70a13b1f6",
+                "reference": "15b0855da8024fa3d0684dd74d141fc70a13b1f6",
+                "shasum": ""
+            },
+            "require": {
+                "acquia/acquia-sdk-php-json": "self.version",
+                "guzzle/service": "~3.0",
+                "php": ">=5.3.0",
+                "symfony/filesystem": "~2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Acquia\\Rest": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "See contributors",
+                    "homepage": "https://github.com/acquia/acquia-sdk-php/graphs/contributors"
+                }
+            ],
+            "description": "REST components for the Acquia SDK for PHP.",
+            "homepage": "https://github.com/acquia/acquia-sdk-php",
+            "keywords": [
+                "acquia"
+            ],
+            "time": "2015-03-05 15:31:15"
+        },
         {
             "name": "doctrine/annotations",
             "version": "v1.2.3",
