@@ -18,7 +18,7 @@ class TagPreRelease extends Command {
       ->addArgument(
         'tag',
         InputArgument::REQUIRED,
-        'The Tag on GH to be marked as a "pre-release tag.'
+        'The tag on GitHub to be marked as a "pre-release" tag.'
       );
   }
 
@@ -49,7 +49,7 @@ class TagPreRelease extends Command {
       // If there is no release lets create one.
       if (empty($release['id'])) {
         $GitHub->api('repo')->releases()->create($this->getConfigParameter('organization'), $this->getConfigParameter('repository'),
-          array('tag_name' => $tag,'prerelease' => TRUE)
+          array('tag_name' => $tag, 'prerelease' => TRUE)
         );
         $output->writeln("<info>A release was created for {$tag} and marked as a pre-release.</info>");
       }
