@@ -9,7 +9,8 @@ namespace flo\Drupal;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
-use flo\Configuration;
+use flo\Factory;
+
 
 /**
  * Class DrupalSettings
@@ -32,8 +33,8 @@ class DrupalSettings {
    * @throws \Exception
    */
   static public function generateSettings($pr_number, $site_dir = 'default', $database = NULL) {
-    $configuration = new Configuration();
-    $config = $configuration->getConfig();
+    $flo = Factory::create();
+    $config = $flo->getConfig()->all();
 
     $fs = new Filesystem();
 

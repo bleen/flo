@@ -27,14 +27,14 @@ class Command extends \Symfony\Component\Console\Command\Command {
   /**
    * Helper to get a config parameter.
    *
-   * @param $name
-   *   The parameter name
+   * @param string $key
+   *   The parameter name.
    *
    * @return mixed|null
-   *   The parameter value
+   *   The parameter value.
    */
-  public function getConfigParameter($name) {
-    return $this->getApplication()->getConfiguration()->getParameter($name);
+  public function getConfigParameter($key) {
+    return $this->getApplication()->getFlo()->getConfig()->get($key);
   }
 
   /**
