@@ -4,52 +4,31 @@ namespace flo;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Config\Definition\Processor;
-use Symfony\Component\Process\Process;
-use Symfony\Component\Yaml\Yaml;
+
 
 /**
- * Class Configuration
+ * Class Config.
+ *
  * @package flo
  */
-class Configuration implements ConfigurationInterface {
+class Config implements ConfigurationInterface {
 
   /**
-   * An array of configuration values.
+   * Configuration values array.
    *
    * @var array
    */
-  private $config;
+  private $config = array();
 
   /**
    * {@inheritdoc}
    */
   public function __construct() {
-    $fs = new Filesystem();
-
-    $user_config = array();
-    $user_config_file = getenv("HOME") . '/.config/flo';
-    if ($fs->exists($user_config_file)) {
-      $user_config = Yaml::parse($user_config_file);
-    }
-
-    $project_config = array();
-    $process = new Process('git rev-parse --show-toplevel');
-    $process->run();
-    if ($process->isSuccessful()) {
-      $project_config_file = trim($process->getOutput()) . '/flo.yml';
-      if ($fs->exists($project_config_file)) {
-        $project_config = Yaml::parse($project_config_file);
-      }
-    }
-
     try {
       $processor = new Processor();
-      $this->config = $processor->processConfiguration(
-        $this,
-        array($user_config, $project_config)
-      );
+      $configs = func_get_args();
+      $this->config = $processor->processConfiguration($this, $configs);
     }
     catch (\Exception $e) {
       throw new \Exception("There is an error with your configuration: " . $e->getMessage());
@@ -66,44 +45,44 @@ class Configuration implements ConfigurationInterface {
       ->children()
         ->scalarNode('git')
           ->defaultValue('/usr/bin/git')
-          ->end()
+        ->end()
         ->scalarNode('github_oauth_token')
           ->cannotBeEmpty()
-          ->end()
+        ->end()
         ->scalarNode('github_username')
           ->cannotBeEmpty()
-          ->end()
+        ->end()
         ->scalarNode('pr_directories')
           ->cannotBeEmpty()
-          ->end()
+        ->end()
         ->scalarNode('shortname')
           ->cannotBeEmpty()
-          ->end()
+        ->end()
         ->scalarNode('github_git_uri')
           ->cannotBeEmpty()
-          ->end()
+        ->end()
         ->scalarNode('acquia_git_uri')
           ->cannotBeEmpty()
-          ->end()
+        ->end()
         ->scalarNode('organization')
           ->defaultValue('NBCUOTS')
-          ->end()
+        ->end()
         ->scalarNode('repository')
           ->cannotBeEmpty()
-          ->end()
+        ->end()
         ->scalarNode('subscription')
-          ->end()
+        ->end()
         ->arrayNode('pull_request')
           ->children()
             ->scalarNode('domain')
               ->defaultValue('pr.publisher7.com')
-              ->end()
+            ->end()
             ->scalarNode('sync_alias')
               ->defaultValue('')
-              ->end()
+            ->end()
             ->scalarNode('prefix')
               ->cannotBeEmpty()
-              ->end()
+            ->end()
           ->end()
         ->end()
         ->arrayNode('acquia')
@@ -118,51 +97,56 @@ class Configuration implements ConfigurationInterface {
           ->children()
             ->scalarNode('version_file')
               ->defaultValue('version.php')
-              ->end()
+            ->end()
             ->scalarNode('version_constant')
               ->defaultValue('PUBLISHER_VERSION')
-              ->end()
+            ->end()
           ->end()
         ->end()
         ->arrayNode('scripts')
           ->prototype('array')
-            ->cannotBeEmpty()
-            ->prototype('scalar')->end()
+            ->prototype('scalar')
+            ->end()
           ->end()
+        ->end()
       ->end();
     return $tree_builder;
   }
 
   /**
-   * Get an array of configuration values.
+   * Check if config param is present.
    *
-   * @return array
-   *   Array of combined user and project configuration.
+   * @param string $key
+   *   Key of the param to check.
+   *
+   * @return bool
+   *   TRUE if key exists.
    */
-  public function getConfig() {
-    return $this->config;
+  public function has($key) {
+    return array_key_exists($key, $this->config);
   }
 
   /**
-   * Get a config parameter.
+   * Get a config param value.
    *
-   * @param string $name
-   *   The parameter name.
+   * @param string $key
+   *   Key of the param to get.
    *
    * @return mixed|null
-   *   The parameter value
-   *
-   * @throws \Exception
-   *   If the desired parameter is not set.
+   *   Value of the config param, or NULL if not present.
    */
-  public function getParameter($name) {
-    $config = $this->getConfig();
-    if (array_key_exists($name, $config)) {
-      return $config[$name];
-    }
-    else {
-      throw new \Exception("The config variable '{$name}' is not set. Run `flo config-set {$name} some-value` to set this value globally, or update your project's flo.yml.", 1);
-    }
+  public function get($key) {
+    return $this->has($key) ? $this->config[$key] : NULL;
+  }
+
+  /**
+   * Get all config values.
+   *
+   * @return array
+   *   All config galues.
+   */
+  public function all() {
+    return $this->config;
   }
 
 }

@@ -39,12 +39,14 @@
     "phpunit/phpunit": "4.3.5",
     "mikey179/vfsStream": "1.4.0"
   },
-  "bin": [
-    "bin/flo"
-  ],
   "autoload": {
-    "psr-0": {
-      "flo": "src"
-    }
+    "psr-0": { "flo": "src/" }
+  },
+  "autoload-dev": {
+    "psr-0": { "flo\\Test": "tests/" }
+  },
+  "bin": ["bin/flo"],
+  "scripts": {
+    "test": "phpunit"
   }
 }
