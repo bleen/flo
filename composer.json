@@ -1,13 +1,28 @@
 {
   "name": "nbcuots/flo",
-  "description": "CLI app for Publisher7",
+  "description": "CLI app for GitHub projects",
   "type": "library",
   "license": "MIT",
   "authors": [
     {
       "name": "Eric J. Duran",
-      "email": "eric.duran@nbcuni.com",
-      "role": "lead"
+      "email": "eric.duran7@gmail.com",
+      "role": "Project Lead"
+    },
+    {
+      "name": "Conor McNamara",
+      "email": "conortm@gmail.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Alex Ross",
+      "email": "github.119x@bleen.net",
+      "role": "Developer"
+    },
+    {
+      "name": "Rachel Fairbanks",
+      "email": "rfairbanks.1102@gmail.com",
+      "role": "Business Analyst"
     }
   ],
   "support": {
