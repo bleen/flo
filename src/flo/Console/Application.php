@@ -49,7 +49,6 @@ class Application extends BaseApplication {
    */
   protected function getDefaultCommands() {
     $commands = parent::getDefaultCommands();
-    $commands[] = new Command\AcquiaCloudHooksCommand();
     $commands[] = new Command\ConfigDelCommand();
     $commands[] = new Command\ConfigGetCommand();
     $commands[] = new Command\ConfigSetCommand();
