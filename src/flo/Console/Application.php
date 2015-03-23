@@ -49,9 +49,9 @@ class Application extends BaseApplication {
    */
   protected function getDefaultCommands() {
     $commands = parent::getDefaultCommands();
-    $commands[] = new Command\ConfigDelCommand();
-    $commands[] = new Command\ConfigGetCommand();
-    $commands[] = new Command\ConfigSetCommand();
+    $commands[] = new Command\Config\ConfigDelCommand();
+    $commands[] = new Command\Config\ConfigGetCommand();
+    $commands[] = new Command\Config\ConfigSetCommand();
     $commands[] = new Command\GitInitCommand();
     $commands[] = new Command\NewReleaseCommand();
     $commands[] = new Command\NewRelicDeployCommand();

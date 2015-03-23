@@ -1,11 +1,12 @@
 <?php
 
-namespace flo\Command;
+namespace flo\Command\Config;
 
+use flo\Command\Command;
+use flo\SymfonyOverwrite\Filesystem;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use flo\SymfonyOverwrite\Filesystem;
 use Symfony\Component\Yaml\Yaml;
 use Symfony\Component\Yaml\Dumper;
 
