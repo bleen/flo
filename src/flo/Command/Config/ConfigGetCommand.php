@@ -1,7 +1,8 @@
 <?php
 
-namespace flo\Command;
+namespace flo\Command\Config;
 
+use flo\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -61,7 +62,16 @@ class ConfigGetCommand extends Command {
     else {
       // Otherwise lets just pretty print all the options.
       foreach ($flo_config as $key => $value) {
-        $output->writeln("<info>{$key}: {$value}</info>");
+        if (is_string($value)) {
+          $output->writeln("<info>{$key}: {$value}</info>");
+        }
+
+        if (is_array($value)) {
+          $output->writeln("<info>{$key}:</info>");
+          foreach ($value as $k => $v) {
+            $output->writeln("  <info>{$k}: {$v}</info>");
+          }
+        }
       }
     }
   }
