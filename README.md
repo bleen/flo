@@ -1,5 +1,7 @@
 # ![](logo.png)
 
+
+[![Test Results](https://img.shields.io/badge/build-passing-brightgreen.svg)](http://ci.publisher7.com/job/flo/job/Flo-Analysis/lastCompletedBuild/testReport/)
 [![Code Coverage](https://img.shields.io/badge/coverage-48.7-yellow.svg)](http://ci.publisher7.com/job/flo/job/Flo-Analysis/)
 
 A php CLI application for managing publisher projects
