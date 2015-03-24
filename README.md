@@ -1,5 +1,6 @@
 # ![](logo.png)
 
+![http://ci.publisher7.com/job/flo/job/Flo-Analysis/](https://img.shields.io/badge/Code%20Coverage-48.7%25-green.svg)
 
 A php CLI application for managing publisher projects
 
