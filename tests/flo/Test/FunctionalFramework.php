@@ -53,6 +53,29 @@ class FunctionalFramework extends \PHPUnit_Framework_TestCase {
   }
 
   /**
+   * Helper function to write configuration file.
+   */
+  protected function writeConfig() {
+    // Create a sample flo.yml file.
+    $project_config = <<<EOT
+---
+organization: NBCUOTS
+repository: Publisher7_nbcuflo
+shortname: Publisher7_nbcuflo
+github_git_uri: git@github.com:NBCUOTS/Publisher7_nbcuflo.git
+pull_request:
+  domain: pr.publisher7.com
+  prefix: flo-test
+scripts:
+  pre_deploy_cmd:
+  - scripts/pre-deploy.sh
+  post_deploy_cmd:
+  - scripts/post-deploy.sh
+EOT;
+    $this->fs->dumpFile($this->root . "/flo.yml", $project_config);
+  }
+
+  /**
    * Remove the files and directories created for this test.
    */
   public function tearDown() {

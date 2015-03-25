@@ -21,7 +21,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
   const GITHUB_PULL_REQUEST_TARGET_BRANCH = 'ghprbTargetBranch';
   const JENKINS_BUILD_URL = 'BUILD_URL';
 
-  private $github;
+  public $github;
   private $repository;
 
   /**
@@ -40,7 +40,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
   /**
    * @return Github\Client
    */
-  public function getGithub($cache = TRUE) {
+  public function getGithub($cache = TRUE, $api = NULL) {
     if (null === $this->github) {
       if ($cache) {
         $this->github = new Github\Client(
@@ -51,7 +51,12 @@ class Command extends \Symfony\Component\Console\Command\Command {
         $this->github = new Github\Client();
       }
       $this->github->authenticate($this->getConfigParameter('github_oauth_token'), NULL, Github\Client::AUTH_URL_TOKEN);
+
+      if ($api !== NULL) {
+        return $this->github->api($api);
+      }
     }
+
     return $this->github;
   }
 
@@ -82,8 +87,9 @@ class Command extends \Symfony\Component\Console\Command\Command {
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
     }
-    $github = $this->getGithub(FALSE);
-    $github->api('issue')->labels()->add(
+
+    $github = $this->getGithub(FALSE, 'issue');
+    $github->labels()->add(
       $this->getConfigParameter('organization'),
       $this->getConfigParameter('repository'),
       $pr_number,
