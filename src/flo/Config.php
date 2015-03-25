@@ -140,6 +140,21 @@ class Config implements ConfigurationInterface {
   }
 
   /**
+   * Set a config param value.
+   *
+   * @param string $key
+   *   Key of the param to get.
+   *
+   * @param mixed $val
+   *   Value of the param to set.
+   *
+   * @return bool
+   */
+  public function set($key, $val) {
+    return $this->config[$key] = $val;
+  }
+
+  /**
    * Get all config values.
    *
    * @return array
