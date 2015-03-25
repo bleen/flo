@@ -42,7 +42,7 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
 
 
   /**
-   * Test Succesful doRun.
+   * Test Successful doRun.
    */
   function testExistingHubApplication() {
     // Create a Mock Process Object.
