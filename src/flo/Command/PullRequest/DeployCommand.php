@@ -170,8 +170,11 @@ class DeployCommand extends Command {
       $process = new Process("cd {$pr_directories}{$path}/docroot && drush sql-create --yes && drush psi --yes --account-pass=pa55word");
     }
 
-    // The installation process has a 7 minute timeout anything greater gets cutoff.
-    $process->setTimeout(60 * 60 * 7);
+    // The installation process has a 20 minute timeout anything greater gets cutoff.
+    if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
+      $output->writeln("<info>Process: {$process->getCommandLine()}");
+    }
+    $process->setTimeout(60 * 20);
     $process->run();
     if (!$process->isSuccessful()) {
       throw new \RuntimeException($process->getErrorOutput());
@@ -193,7 +196,7 @@ class DeployCommand extends Command {
         )
       );
 
-      $github->api('deployment')->update(
+      $github->api('deployment')->updateStatus(
         $this->getConfigParameter('organization'),
         $this->getConfigParameter('repository'),
         $deployment['id'],
