@@ -20,7 +20,7 @@ class FunctionalFramework extends \PHPUnit_Framework_TestCase {
    *
    * @var Filesystem
    */
-  private $fs;
+  protected $fs;
 
   /**
    * Set up test environment filesystem.
