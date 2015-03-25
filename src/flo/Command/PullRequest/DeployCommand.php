@@ -119,10 +119,6 @@ class DeployCommand extends Command {
       throw new \Exception("You must run pr-deploy from the git root.");
     }
 
-    if ($git_root->getOutput() !== $current_dir->getOutput()) {
-      throw new \Exception("You must run pr-deploy from the git root.");
-    }
-
     // Lets rsync this workspace now.
     $pull_request = $this->getConfigParameter('pull_request');
     $path = "{$pull_request['prefix']}-{$pr_number}.{$pull_request['domain']}";
