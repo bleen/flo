@@ -51,20 +51,26 @@ Options:
   --no-interaction -n Do not ask any interactive question.
 
 Available commands:
-  acquia-init         Set up Acquia Cloud hooks for API Calls.
-  composer-validate   Validate a projects composer file for publisher & flo
-  config-del          Delete configurations key for flo command
-  config-get          Get configurations for flo command
-  config-set          Set configurations for flo command
-  git-init            Initialized proper git remotes NBCUOTS & Acquia
-  help                Displays help for a command
-  list                Lists commands
-  new-relic           Deploy a tag to new-relic.
-  new-release         Tag a new release.
-  pr-certify          Certify a specific pull-request.
-  pr-deploy           Deploy a specific pull-request to a solo environment.
-  pr-ignore           Ignore a specific pull-request.
-  pr-integration      Pull all valid PRs into the acquia integration branch.
-  pr-postpone         Postpone a specific pull-request.
-  pr-reject           Reject a specific pull-request.
+ check-php         runs parallel-lint against the change files.
+ check-php-cs      runs phpcs against the change files.
+ config-del        Delete configurations key for flo command
+ config-get        Get configurations for flo command
+ config-set        Set configurations for flo command
+ git-init          Initialized proper git remotes NBCUOTS & Acquia
+ help              Displays help for a command
+ list              Lists commands
+ new-release       Updates a version file (e.g. version.php), commits that change and tags the commit for release.
+ new-relic         Deploy a tag to new-relic.
+ pr-certify        Certify a specific pull-request.
+ pr-deploy         Deploy a specific pull-request to a solo environment.
+ pr-destroy        Destroy pull-request environment(s), removing its web root and database.
+ pr-integration    Pull all valid PRs into the acquia integration branch.
+ pr-postpone       Postpone a specific pull-request.
+ pr-reject         Reject a specific pull-request.
+ pr-unpostpone     Un-postpone a specific pull-request.
+ pr-unreject       Un-reject a specific pull-request.
+ run-script        Runs project-specific script for a particular event.
+ self-update       Updates flo.phar to the latest version
+ tag-deploy        Deploy a Tag on Acquia.
+ tag-pre-release   Marks a Tag on GitHub as a non-production tag.
 ```
