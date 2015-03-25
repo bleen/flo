@@ -39,4 +39,30 @@ class ApplicationTest extends \PHPUnit_Framework_TestCase {
     $appTester->run(array('command' => 'help'));
     $this->assertEquals(0, $appTester->getStatusCode());
   }
+
+
+  /**
+   * Test Succesful doRun.
+   */
+  function testExistingHubApplication() {
+    // Create a Mock Process Object.
+    $process = $this->getMockBuilder('Symfony\Component\Process\Process')
+      ->disableOriginalConstructor()
+      ->getMock();
+
+    // Make sure the isSuccessful method return FALSE so flo throws an exception.
+    $process->method('isSuccessful')->willReturn(TRUE);
+
+    $app = new Console\Application();
+    // Set autoExit to false when testing & do not let it catch exceptions.
+    $app->setAutoExit(FALSE);
+
+    // Overwrite Symfony\Component\Process\Process with our mock Process.
+    $app->setProcess($process);
+
+    // Run a command and wait for the exception.
+    $appTester = new ApplicationTester($app);
+    $appTester->run(array('command' => 'help'));
+    $this->assertEquals(0, $appTester->getStatusCode());
+  }
 }

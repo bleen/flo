@@ -75,7 +75,10 @@ class Application extends BaseApplication {
    */
   public function getProcess($commandline, $cwd = null, array $env = null, $input = null, $timeout = 60, array $options = array()) {
     if ($this->process === NULL) {
+      // @codeCoverageIgnoreStart
+      // We ignore this since we mock it.
       return new Process($commandline, $cwd, $env, $input, $timeout, $options);
+      // @codeCoverageIgnoreEnd
     }
 
     return $this->process;
