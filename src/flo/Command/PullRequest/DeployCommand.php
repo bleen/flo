@@ -128,8 +128,13 @@ class DeployCommand extends Command {
     $path = "{$pull_request['prefix']}-{$pr_number}.{$pull_request['domain']}";
     $url = "http://{$path}";
     $pr_directories = $this->getConfigParameter('pr_directories');
+    if (empty($pr_directories)) {
+      throw new \Exception("You must have a pr_directory set in your flo config.");
+    }
+
     $command = "rsync -qrltoD --delete --exclude='.git/*' . {$pr_directories}{$path}";
-    if (OutputInterface::VERBOSITY_NORMAL <= $output->getVerbosity()) {
+    if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
+      $output->writeln("<info>rsync: {$command}");
       $output->writeln("<info>verbose: Syncing current directory into pr env.</info>");
     }
     $process = new Process($command);
