@@ -3,9 +3,7 @@
 namespace flo\Test;
 
 use flo\Console;
-use Symfony\Component\Process\Process;
 use Symfony\Component\Console\Tester\ApplicationTester;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class ApplicationTest extends \PHPUnit_Framework_TestCase {
 

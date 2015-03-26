@@ -79,5 +79,13 @@ class ConfigGetSetDelCommandTest extends \PHPUnit_Framework_TestCase {
     $commandTester->execute(array('command' => $command_get->getName()));
     $this->assertContains('test2: test2', $commandTester->getDisplay());
 
+    // Now lets test with an array of options.
+    file_put_contents($_ENV['HOME'] . '/.config/flo', "acquia: { username: eric.duran@nbcuni.com, password: TESTING }");
+    $commandTester = new CommandTester($command_get);
+    $commandTester->execute(array('command' => $command_get->getName()));
+    $expected = "acquia:
+  username: eric.duran@nbcuni.com
+  password: TESTING";
+    $this->assertContains($expected, $commandTester->getDisplay());
   }
 }
