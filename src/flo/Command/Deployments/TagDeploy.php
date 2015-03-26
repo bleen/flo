@@ -46,12 +46,11 @@ class TagDeploy extends Command {
         return 1;
       }
 
-      // If the release is already marked "prerelease". faile
+      // If the release is already marked "prerelease" fail.
       if (!empty($release['prerelease']) && $release['prerelease'] == 1) {
         $output->writeln("<error>Tag: {$tag} is marked as pre-release. Please certify before deploying</error>");
+        return 1;
       }
-
-      return 1;
     }
 
 
