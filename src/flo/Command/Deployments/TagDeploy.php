@@ -7,6 +7,7 @@ use flo\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 
@@ -19,23 +20,42 @@ class TagDeploy extends Command {
   protected function configure() {
     $this->setName('tag-deploy')
       ->setDescription('Deploy a Tag on Acquia.')
-      ->addArgument(
-        'env',
-        InputArgument::REQUIRED,
-        'The environment on Acquia to deploy this tag.'
-      )
-      ->addArgument(
-        'tag',
-        InputArgument::REQUIRED,
-        'The tag on GitHub to be marked as a "pre-release" tag.'
-      );
+      ->addOption('pre-release', null, InputOption::VALUE_NONE, 'Allow deployment of pre-release tag.')
+      ->addArgument('env', InputArgument::REQUIRED,  'The environment on Acquia to deploy this tag.')
+      ->addArgument('tag', InputArgument::REQUIRED, 'The tag on GitHub to be marked as a "pre-release" tag.');
   }
 
   /**
    * {@inheritdoc}
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
+    $tag = $input->getArgument('tag');
+    $GitHub = $this->getGithub(FALSE);
     $is_environment_available = FALSE;
+
+    if (!$input->getOption('pre-release')) {
+      try {
+        $release = $GitHub->api('repo')->releases()->showTag(
+          $this->getConfigParameter('organization'),
+          $this->getConfigParameter('repository'),
+          $tag
+        );
+      }
+      catch (\Exception $e) {
+        $output->writeln("<error>Tag: {$tag} does not exists.</error>");
+        return 1;
+      }
+
+      // If the release is already marked "prerelease". faile
+      if (!empty($release['prerelease']) && $release['prerelease'] == 1) {
+        $output->writeln("<error>Tag: {$tag} is marked as pre-release. Please certify before deploying</error>");
+      }
+
+      return 1;
+    }
+
+
+
     $env = $input->getArgument('env');
     $tag = 'tags/' . $input->getArgument('tag');
     $acquia = $this->getConfigParameter('acquia');
