@@ -105,6 +105,7 @@ class Application extends BaseApplication {
     $commands[] = new Command\PullRequest\RejectCommand();
     $commands[] = new Command\PullRequest\UnPostPoneCommand();
     $commands[] = new Command\PullRequest\UnRejectCommand();
+    $commands[] = new Command\Deployments\TagCertify();
     $commands[] = new Command\Deployments\TagDeploy();
     $commands[] = new Command\Deployments\TagPreRelease();
     $commands[] = new Command\RunScriptCommand();
