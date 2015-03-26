@@ -39,13 +39,13 @@ EOT
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $scripts = $this->getConfigParameter('scripts');
+    $application = $this->getApplication();
     $script_name = $input->getArgument('script');
     if (isset($scripts[$script_name])) {
       $args = $input->getArgument('args');
       $script_args = empty($args) ? '' : implode(' ', $args);
       foreach ($scripts[$script_name] as $script) {
-        // @todo This is "quick and dirty", make this more fool-proof.
-        $process = new Process("sh {$script} {$script_args}");
+        $process = $application->getProcess("sh {$script} {$script_args}");
         $process->run();
         if ($process->isSuccessful()) {
           $output->write($process->getOutput());
