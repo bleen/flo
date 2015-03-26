@@ -114,8 +114,8 @@ class Command extends \Symfony\Component\Console\Command\Command {
     if (!is_numeric($pr_number)) {
       throw new \Exception("PR must be a number.");
     }
-    $github = $this->getGithub(FALSE);
-    $github->api('issue')->labels()->remove(
+    $github = $this->getGithub(FALSE, 'issue');
+    $github->labels()->remove(
       $this->getConfigParameter('organization'),
       $this->getConfigParameter('repository'),
       $pr_number,
