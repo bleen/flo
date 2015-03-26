@@ -102,6 +102,50 @@ EOT;
   }
 
   /**
+   * Test run-script sh process failing.
+   */
+  public function testSHScripException() {
+
+    $this->writeConfig();
+
+    // Create scripts/post-deploy.sh.
+    $post_deploy_script = <<<EOT
+#!/usr/bin/env bash
+echo "hello $1"
+EOT;
+    $this->fs->dumpFile($this->root . "/scripts/post-deploy.sh", $post_deploy_script);
+
+    // Create a Mock Process Object.
+    $process = $this->getMockBuilder('Symfony\Component\Process\Process')
+      ->disableOriginalConstructor()
+      ->getMock();
+
+    // Make sure the isSuccessful method return FALSE so flo throws an exception.
+    $process->method('isSuccessful')->willReturn(FALSE);
+    $process->method('getErrorOutput')->willReturn('sh failed');
+
+    // Run the command.
+    $app = new Application();
+    // Set autoExit to false when testing & do not let it catch exceptions.
+    $app->setAutoExit(TRUE);
+    $app->setCatchExceptions(FALSE);
+
+
+    $app->setProcess($process);
+    $command_run_script = $app->find('run-script');
+    $command_tester = new CommandTester($command_run_script);
+    $command_tester->execute(array(
+      'command' => $command_run_script->getName(),
+      'script' => 'post_deploy_cmd',
+      'args' => array('world'),
+    ));
+
+    // Check the output of the command.
+    $this->assertEquals("sh failed", trim($command_tester->getDisplay()));
+
+  }
+
+  /**
    * Helper function to write configuration file.
    */
   private function writeConfig() {
