@@ -133,6 +133,24 @@ class DeployCommand extends Command {
       $output->writeln("<info>rsync: {$command}");
       $output->writeln("<info>verbose: Syncing current directory into pr env.</info>");
     }
+
+    // If they have an env set then we also tag it on github.
+    if (!empty($input->getOption('env')) && !empty($input->getOption('ref'))) {
+      $ref = $input->getOption('ref');
+      $environment = $input->getOption('env');
+
+      $deployment = $github->api('deployment')->create(
+        $this->getConfigParameter('organization'),
+        $this->getConfigParameter('repository'),
+        array(
+          'ref' => $ref,
+          'environment' => $environment,
+          'description' => 'flo:pr-deploy',
+          'auto_merge' => FALSE
+        )
+      );
+    }
+
     $process = new Process($command);
     $process->run();
     if (!$process->isSuccessful()) {
@@ -177,6 +195,22 @@ class DeployCommand extends Command {
     $process->setTimeout(60 * 20);
     $process->run();
     if (!$process->isSuccessful()) {
+      if (!empty($input->getOption('env')) && !empty($input->getOption('ref'))) {
+        $ref = $input->getOption('ref');
+        $environment = $input->getOption('env');
+
+        $github->api('deployment')->updateStatus(
+          $this->getConfigParameter('organization'),
+          $this->getConfigParameter('repository'),
+          $deployment['id'],
+          array(
+            'state' => 'error',
+            'target_url' => $url,
+            'description' => 'Failed PR Deployment'
+          )
+        );
+      }
+
       throw new \RuntimeException($process->getErrorOutput());
     }
 
@@ -185,17 +219,6 @@ class DeployCommand extends Command {
       $ref = $input->getOption('ref');
       $environment = $input->getOption('env');
 
-      $deployment = $github->api('deployment')->create(
-        $this->getConfigParameter('organization'),
-        $this->getConfigParameter('repository'),
-        array(
-          'ref' => $ref,
-          'environment' => $environment,
-          'description' => 'flo:pr-deploy',
-          'auto_merge' => FALSE
-        )
-      );
-
       $github->api('deployment')->updateStatus(
         $this->getConfigParameter('organization'),
         $this->getConfigParameter('repository'),
@@ -203,7 +226,7 @@ class DeployCommand extends Command {
         array(
           'state' => 'success',
           'target_url' => $url,
-          'description' => 'Completed Test Deployment'
+          'description' => 'Completed PR Deployment'
         )
       );
     }

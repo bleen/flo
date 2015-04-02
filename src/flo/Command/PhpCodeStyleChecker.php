@@ -49,6 +49,13 @@ class PhpCodeStyleChecker extends Command {
     $pullRequest = getenv(self::GITHUB_PULL_REQUEST_ID);
     $github = $this->getGithub();
 
+    if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+      $output->writeln("<info>target branch:{$targetBranch}</info>");
+      $output->writeln("<info>target ref: {$targetRef}</info>");
+      $output->writeln("<info>target URL: {$targetURL}</info>");
+      $output->writeln("<info> pull request: {$pullRequest}</info>");
+    }
+
     if (empty($targetBranch)) {
         // Default to master if there is no target branch.
         // You can also change the branch to check against.
