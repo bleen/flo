@@ -51,6 +51,11 @@ class PhpSyntaxChecker extends Command {
     $pullRequest = getenv(self::GITHUB_PULL_REQUEST_ID);
     $github = $this->getGithub();
 
+
+    if (OutputInterface::VERBOSITY_NORMAL <= $output->getVerbosity()) {
+      $output->writeln("<info>verbose: Generating settings.local.php.</info>");
+    }
+
     if (empty($targetBranch)) {
       // Default to master if there is no target branch.
       // You can also change the branch to check against.
