@@ -56,7 +56,7 @@ Available commands:
  config-del        Delete configurations key for flo command
  config-get        Get configurations for flo command
  config-set        Set configurations for flo command
- git-init          Initialized proper git remotes NBCUOTS & Acquia
+ git-init          Initializes proper git remotes for projects hosted on Acquia
  help              Displays help for a command
  list              Lists commands
  new-release       Updates a version file (e.g. version.php), commits that change and tags the commit for release.
