@@ -10,7 +10,7 @@ class GitInitCommand extends Command {
 
   protected function configure() {
     $this->setName('git-init')
-      ->setDescription('Initialized proper git remotes NBCUOTS & Acquia');
+      ->setDescription('Initializes proper git remotes for procts hosted on Acquia');
     }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
