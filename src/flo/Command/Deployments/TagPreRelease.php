@@ -27,10 +27,9 @@ class TagPreRelease extends Command {
    */
   protected function execute(InputInterface $input, OutputInterface $output) {
     $tag = $input->getArgument('tag');
-    $GitHub = $this->getGithub(FALSE);
-
+    $GitHub = $this->getGithub(FALSE, 'repo');
     try {
-      $release = $GitHub->api('repo')->releases()->showTag(
+      $release = $GitHub->releases()->showTag(
         $this->getConfigParameter('organization'),
         $this->getConfigParameter('repository'),
         $tag
@@ -48,14 +47,14 @@ class TagPreRelease extends Command {
     else {
       // If there is no release lets create one.
       if (empty($release['id'])) {
-        $GitHub->api('repo')->releases()->create($this->getConfigParameter('organization'), $this->getConfigParameter('repository'),
+        $GitHub->releases()->create($this->getConfigParameter('organization'), $this->getConfigParameter('repository'),
           array('tag_name' => $tag, 'prerelease' => TRUE)
         );
         $output->writeln("<info>A release was created for {$tag} and marked as a pre-release.</info>");
       }
       else {
         // If there is already a release lets just mark it pre-release.
-        $GitHub->api('repo')->releases()->edit($this->getConfigParameter('organization'), $this->getConfigParameter('repository'), $release['id'],
+        $GitHub->releases()->edit($this->getConfigParameter('organization'), $this->getConfigParameter('repository'), $release['id'],
           array('prerelease' => TRUE)
         );
         $output->writeln("<info>Tag: {$tag} was marked as a pre-release.</info>");
