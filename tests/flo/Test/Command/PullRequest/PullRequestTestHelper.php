@@ -58,4 +58,74 @@ class PullRequestTestHelper extends Test\FunctionalFramework {
 
     return $IssueMock;
   }
+
+  protected function getMockReleaseslApi($expected = '', $method = 'post') {
+    $httpClientMock = $this->getMock('Guzzle\Http\Client', array('send'));
+    $httpClientMock
+      ->expects($this->any())
+      ->method('send');
+
+    $mock = $this->getMock('Github\HttpClient\HttpClient', array(), array(array(), $httpClientMock));
+    $client = new Github\Client($mock);
+    $client->setHttpClient($mock);
+
+    // Mock the Issue API.
+    $repoMock = $this->getMockBuilder('Github\Api\Repo')
+      ->setMethods(array('releases'))
+      ->setConstructorArgs(array($client))
+      ->getMock();
+
+    // Mock the label API.
+    $releasesMock = $this->getMockBuilder('Github\Api\Repository\Releases')
+      ->setMethods(array('all', 'show', 'showTag', 'create', 'edit', 'remove', 'assets'))
+      ->setConstructorArgs(array($client))
+      ->getMock();
+
+    // This actually runs an assert and makes sure our API call actually returns that :-O.
+    $releasesMock->method($method)
+      ->will($this->returnValue($expected));
+
+    // Set up the Issue API to return the Label api.
+    $repoMock->method('releases')
+      ->willReturn($releasesMock);
+
+    return $repoMock;
+  }
+
+  protected function getMockBadReleaseslApi($method = 'post') {
+    $httpClientMock = $this->getMock('Guzzle\Http\Client', array('send'));
+    $httpClientMock
+      ->expects($this->any())
+      ->method('send');
+
+    $mock = $this->getMock('Github\HttpClient\HttpClient', array(), array(array(), $httpClientMock));
+    $client = new Github\Client($mock);
+    $client->setHttpClient($mock);
+
+    // Mock the Issue API.
+    $repoMock = $this->getMockBuilder('Github\Api\Repo')
+      ->setMethods(array('releases'))
+      ->setConstructorArgs(array($client))
+      ->getMock();
+
+    // Mock the label API.
+    $releasesMock = $this->getMockBuilder('Github\Api\Repository\Releases')
+      ->setMethods(array('all', 'show', 'showTag', 'create', 'edit', 'remove', 'assets'))
+      ->setConstructorArgs(array($client))
+      ->getMock();
+
+    $releasesMock->method('showTag')
+      ->will($this->throwException(new \Exception));
+
+    // This actually runs an assert and makes sure our API call actually returns that :-O.
+    $repoMock->method($method)
+      ->will($this->returnValue('Success'));
+
+    // Set up the Issue API to return the Label api.
+    $repoMock->expects($this->exactly(1))
+      ->method('releases')
+      ->willReturn($releasesMock);
+
+    return $repoMock;
+  }
 }
