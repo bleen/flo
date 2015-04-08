@@ -2,7 +2,7 @@
 
 
 [![Test Results](https://img.shields.io/badge/build-passing-brightgreen.svg)](http://ci.publisher7.com/job/flo/job/Flo-Analysis/lastCompletedBuild/testReport/)
-[![Code Coverage](https://img.shields.io/badge/coverage-55.7-yellow.svg)](http://ci.publisher7.com/job/flo/job/Flo-Analysis/)
+[![Code Coverage](https://img.shields.io/badge/coverage-56.7-yellow.svg)](http://ci.publisher7.com/job/flo/job/Flo-Analysis/)
 
 A php CLI application for managing PHP projects
 
