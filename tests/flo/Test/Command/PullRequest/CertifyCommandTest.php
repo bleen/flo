@@ -3,7 +3,6 @@
 namespace flo\Test\Command\PullRequest;
 
 use flo\Test;
-use flo\Console\Application;
 use Github;
 use Symfony\Component\Console\Tester\CommandTester;
 
