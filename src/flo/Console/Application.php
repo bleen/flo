@@ -94,7 +94,6 @@ class Application extends BaseApplication {
     $commands[] = new Command\Config\ConfigSetCommand();
     $commands[] = new Command\GitInitCommand();
     $commands[] = new Command\NewReleaseCommand();
-    $commands[] = new Command\NewRelicDeployCommand();
     $commands[] = new Command\PhpSyntaxChecker();
     $commands[] = new Command\PhpCodeStyleChecker();
     $commands[] = new Command\PullRequest\CertifyCommand();
