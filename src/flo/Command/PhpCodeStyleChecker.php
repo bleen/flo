@@ -95,11 +95,11 @@ class PhpCodeStyleChecker extends Command {
       $output->writeln("<info>Files about to get parsed:\n{$git_diff_output}</info>");
     }
     elseif ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
-      $output->writeln("<info>About to run:\n{$phpcs} {$git_diff_output}</info>");
+      $output->writeln("<info>About to run:\n{$phpcs} $({$git_diff_command})</info>");
     }
 
     // Run phpcs.
-    $process = new Process("{$phpcs} {$git_diff_output}");
+    $process = new Process("{$phpcs} $($git_diff_command)");
     $process->run();
     $processOutput = $process->getOutput();
 
