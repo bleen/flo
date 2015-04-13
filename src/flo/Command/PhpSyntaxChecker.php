@@ -51,11 +51,6 @@ class PhpSyntaxChecker extends Command {
     $pullRequest = getenv(self::GITHUB_PULL_REQUEST_ID);
     $github = $this->getGithub();
 
-
-    if (OutputInterface::VERBOSITY_NORMAL <= $output->getVerbosity()) {
-      $output->writeln("<info>verbose: Generating settings.local.php.</info>");
-    }
-
     if (empty($targetBranch)) {
       // Default to master if there is no target branch.
       // You can also change the branch to check against.
@@ -75,11 +70,6 @@ class PhpSyntaxChecker extends Command {
     $git_extensions = "'*." . implode("' '*.", $extensions) . "'";
     $git_diff_command = "git diff --name-only --diff-filter=AM {$targetBranch} -- {$git_extensions}";
 
-    // Output some feedback based on verbosity.
-    if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
-      $output->writeln("<info>About to run:\n{$git_diff_command}</info>");
-    }
-
     $process = new Process($git_diff_command);
     $process->run();
     $git_diff_output = $process->getOutput();
@@ -95,11 +85,11 @@ class PhpSyntaxChecker extends Command {
       $output->writeln("<info>Files about to get parsed:\n{$git_diff_output}</info>");
     }
     elseif ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
-      $output->writeln("<info>About to run:\n{$parallel_lint} {$git_diff_output}</info>");
+      $output->writeln("<info>About to run:\n{$parallel_lint} | {$git_diff_command}</info>");
     }
 
     // Run parallel-lint.
-    $process = new Process("{$parallel_lint} {$git_diff_output}");
+    $process = new Process("{$git_diff_command} | {$parallel_lint}");
     $process->run();
     $processOutput = $process->getOutput();
 
