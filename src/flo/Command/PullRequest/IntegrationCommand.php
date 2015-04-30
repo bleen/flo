@@ -120,11 +120,10 @@ class IntegrationCommand extends Command {
         $output->writeln("<error>Failed to applied PR# {$pr['number']}: {$url}.</error>");
         $output->writeln($process->getOutput());
         if (!$input->getOption('no-label')) {
-          $labels = $github->api('issue')->labels()->add(
-            $this->getConfigParameter('organization'),
-            $this->getConfigParameter('repository'),
-            $pr['number'],
-            self::GITHUB_LABEL_MERGE_FAILED
+          $this->addGithubLabel($pr['number'], self::GITHUB_LABEL_MERGE_FAILED);
+          $this->addGithubComment($pr['number'],
+            'I was unable to merge your Pull requests with other open Pull requests.\n' .
+            'Perhaps the following log will help…'
           );
         }
 
