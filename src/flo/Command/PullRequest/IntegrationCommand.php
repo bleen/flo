@@ -15,6 +15,7 @@ class IntegrationCommand extends Command {
 
   private $invalid_labels = array(
     self::GITHUB_LABEL_ERROR,
+    self::GITHUB_LABEL_MERGE_FAILED,
     self::GITHUB_LABEL_POSTPONED,
     self::GITHUB_LABEL_REJECTED,
   );
@@ -50,7 +51,7 @@ class IntegrationCommand extends Command {
    *
    *  - Get all the Issues (We need issues since they have labels).
    *  - Figure our if they're a Pull Request or Not.
-   *  - Ignore all Pull Request with ci:error based labels.
+   *  - Ignore all Pull Request with GITHUB_LABEL_MERGE_FAILED based labels.
    *  - Apply each Pull Request locally to "integration" branch.
    *  - Deploy integration branch to acquia (DEV set up to track it)
    */
@@ -115,7 +116,7 @@ class IntegrationCommand extends Command {
       $process = new Process($command);
       $process->run();
       if (!$process->isSuccessful()) {
-        // We reset the failed AM & we marked the PR as ci:error.
+        // We reset the failed AM & mark the PR as GITHUB_LABEL_MERGE_FAILED.
         $output->writeln("<error>Failed to applied PR# {$pr['number']}: {$url}.</error>");
         $output->writeln($process->getOutput());
         if (!$input->getOption('no-label')) {
@@ -123,7 +124,7 @@ class IntegrationCommand extends Command {
             $this->getConfigParameter('organization'),
             $this->getConfigParameter('repository'),
             $pr['number'],
-            self::GITHUB_LABEL_ERROR
+            self::GITHUB_LABEL_MERGE_FAILED
           );
         }
 

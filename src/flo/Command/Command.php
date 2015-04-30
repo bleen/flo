@@ -13,7 +13,9 @@ class Command extends \Symfony\Component\Console\Command\Command {
 
   const DEFAULT_SITE_DIR = 'default';
   const GITHUB_LABEL_CERTIFIED = 'ci:certified';
+  // @deprecated GITHUB_LABEL_ERROR: make a specific error label.
   const GITHUB_LABEL_ERROR = 'ci:error';
+  const GITHUB_LABEL_MERGE_FAILED = 'ci:merge-failed';
   const GITHUB_LABEL_POSTPONED = 'ci:postponed';
   const GITHUB_LABEL_REJECTED = 'ci:rejected';
   const GITHUB_PULL_REQUEST_ID = 'ghprbPullId';
