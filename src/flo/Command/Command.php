@@ -126,7 +126,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
   }
 
   /**
-   * Helper function to add a Github label.
+   * Helper function to add a Github comment.
    *
    * This adds the $comment to the PR (aka issue) on Github.
    * GH API: POST /repos/:owner/:repo/issues/:number/comments {"body": "Me too"}
@@ -134,7 +134,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
    * @param int $pr_number
    *   The Github Issue or Pull Request number
    * @param string $comment
-   *   The label to apply
+   *   The comment to apply
    *
    * @throws \Exception
    */
