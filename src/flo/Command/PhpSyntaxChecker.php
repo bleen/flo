@@ -37,10 +37,10 @@ class PhpSyntaxChecker extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $gh_status_post = FALSE;
     $extensions = array(
-      'module',
-      'php',
       'inc',
       'install',
+      'module',
+      'php',
       'profile',
     );
     $parallel_lint_extensions = implode(',', $extensions);
@@ -50,6 +50,13 @@ class PhpSyntaxChecker extends Command {
     $targetURL = getenv(self::JENKINS_BUILD_URL);
     $pullRequest = getenv(self::GITHUB_PULL_REQUEST_ID);
     $github = $this->getGithub();
+
+    if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
+      $output->writeln("<info>target branch:{$targetBranch}</info>");
+      $output->writeln("<info>target ref: {$targetRef}</info>");
+      $output->writeln("<info>target URL: {$targetURL}</info>");
+      $output->writeln("<info>pull request: {$pullRequest}</info>");
+    }
 
     if (empty($targetBranch)) {
       // Default to master if there is no target branch.
@@ -68,7 +75,7 @@ class PhpSyntaxChecker extends Command {
     // Get list of files with $extensions to check by running git-diff and
     // filtering by Added (A) and Modified (M).
     $git_extensions = "'*." . implode("' '*.", $extensions) . "'";
-    $git_diff_command = "git diff --name-only --diff-filter=AM {$targetBranch} -- {$git_extensions}";
+    $git_diff_command = "git diff --name-only --no-renames --diff-filter=AM {$targetBranch} -- {$git_extensions}";
 
     $process = new Process($git_diff_command);
     $process->run();

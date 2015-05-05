@@ -36,13 +36,27 @@ class PhpCodeStyleChecker extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $gh_status_post = FALSE;
     $extensions = array(
-      'module',
-      'php',
       'inc',
       'install',
+      'module',
+      'php',
+      'profile',
     );
     $phpcs_extensions = implode(',', $extensions);
-    $phpcs = "./vendor/bin/phpcs --standard=./vendor/drupal/coder/coder_sniffer/Drupal --extensions={$phpcs_extensions} --ignore=\"*.features.*,*.context.inc,*.*_default.inc,*.default_permission_sets.inc,*.default_mps_tags.inc,*.field_group.inc,*.strongarm.inc,*.quicktabs.inc,*.tpl.php\"";
+    $ignore = array(
+      '*.features.*',
+      '*.context.inc',
+      '*.*_default.inc',
+      '*.default_permission_sets.inc',
+      '*.default_mps_tags.inc',
+      '*.field_group.inc',
+      '*.strongarm.inc',
+      '*.quicktabs.inc',
+      '*.tpl.php',
+    );
+    $phpcs_ignore = implode(',', $ignore);
+    $phpcs_standard = "./vendor/drupal/coder/coder_sniffer/Drupal";
+    $phpcs = "./vendor/bin/phpcs --standard={$phpcs_standard} --extensions={$phpcs_extensions} --ignore=\"{$phpcs_ignore}\"";
     $targetBranch = getenv(self::GITHUB_PULL_REQUEST_TARGET_BRANCH);
     $targetRef = getenv(self::GITHUB_PULL_REQUEST_COMMIT);
     $targetURL = getenv(self::JENKINS_BUILD_URL);
@@ -53,7 +67,7 @@ class PhpCodeStyleChecker extends Command {
       $output->writeln("<info>target branch:{$targetBranch}</info>");
       $output->writeln("<info>target ref: {$targetRef}</info>");
       $output->writeln("<info>target URL: {$targetURL}</info>");
-      $output->writeln("<info> pull request: {$pullRequest}</info>");
+      $output->writeln("<info>pull request: {$pullRequest}</info>");
     }
 
     if (empty($targetBranch)) {
@@ -73,7 +87,7 @@ class PhpCodeStyleChecker extends Command {
     // Get list of files with $extensions to check by running git-diff and
     // filtering by Added (A) and Modified (M).
     $git_extensions = "'*." . implode("' '*.", $extensions) . "'";
-    $git_diff_command = "git diff --name-only --diff-filter=AM {$targetBranch} -- {$git_extensions}";
+    $git_diff_command = "git diff --name-only --no-renames --diff-filter=AM {$targetBranch} -- {$git_extensions}";
 
     // Output some feedback based on verbosity.
     if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
@@ -82,24 +96,37 @@ class PhpCodeStyleChecker extends Command {
 
     $process = new Process($git_diff_command);
     $process->run();
-    $git_diff_output = $process->getOutput();
+    $git_diff_output = trim($process->getOutput());
+
+    // Build string of files to check by filtering git-diff result
+    $files_to_check = "";
+
+    if (!empty($git_diff_output)) {
+      // Filter only the files we care about
+      $git_diff_files = array_filter(explode("\n", $git_diff_output), function($filename) {
+        // Match files in docroot/profiles/publisher or docroot/sites that are NOT
+        // in a "contrib" directory.
+        return preg_match("@^docroot/(?:profiles/publisher|sites)(?!.*/contrib/).*$@", $filename);
+      });
+      $files_to_check = implode(" ", $git_diff_files);
+    }
 
     // Nothing to check!
-    if (empty($git_diff_output)) {
+    if (empty($files_to_check)) {
       $output->writeln("<info>No files to check.</info>");
       return;
     }
 
     // Output some feedback based on verbosity.
     if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERBOSE) {
-      $output->writeln("<info>Files about to get parsed:\n{$git_diff_output}</info>");
+      $output->writeln("<info>Files about to get parsed:\n{$files_to_check}</info>");
     }
     elseif ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
-      $output->writeln("<info>About to run:\n{$phpcs} $({$git_diff_command})</info>");
+      $output->writeln("<info>About to run:\n{$phpcs} {$files_to_check}</info>");
     }
 
     // Run phpcs.
-    $process = new Process("{$phpcs} $($git_diff_command)");
+    $process = new Process("{$phpcs} {$files_to_check}");
     $process->run();
     $processOutput = $process->getOutput();
 
