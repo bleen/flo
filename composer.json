@@ -36,6 +36,7 @@
   ],
   "require": {
     "php": ">=5.5.9",
+    "drupal/coder": "7.2.4",
     "guzzlehttp/guzzle": "4.*",
     "herrera-io/phar-update": "~2.0",
     "symfony/config": "2.6.4",
