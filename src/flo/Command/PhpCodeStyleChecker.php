@@ -96,24 +96,37 @@ class PhpCodeStyleChecker extends Command {
 
     $process = new Process($git_diff_command);
     $process->run();
-    $git_diff_output = $process->getOutput();
+    $git_diff_output = trim($process->getOutput());
+
+    // Build string of files to check by filtering git-diff result
+    $files_to_check = "";
+
+    if (!empty($git_diff_output)) {
+      // Filter only the files we care about
+      $git_diff_files = array_filter(explode("\n", $git_diff_output), function($filename) {
+        // Match files in docroot/profiles/publisher or docroot/sites that are NOT
+        // in a "contrib" directory.
+        return preg_match("@^docroot/(?:profiles/publisher|sites)(?!.*/contrib/).*$@", $filename);
+      });
+      $files_to_check = implode(" ", $git_diff_files);
+    }
 
     // Nothing to check!
-    if (empty($git_diff_output)) {
+    if (empty($files_to_check)) {
       $output->writeln("<info>No files to check.</info>");
       return;
     }
 
     // Output some feedback based on verbosity.
     if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERBOSE) {
-      $output->writeln("<info>Files about to get parsed:\n{$git_diff_output}</info>");
+      $output->writeln("<info>Files about to get parsed:\n{$files_to_check}</info>");
     }
     elseif ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
-      $output->writeln("<info>About to run:\n{$phpcs} $({$git_diff_command})</info>");
+      $output->writeln("<info>About to run:\n{$phpcs} {$files_to_check}</info>");
     }
 
     // Run phpcs.
-    $process = new Process("{$phpcs} $($git_diff_command)");
+    $process = new Process("{$phpcs} {$files_to_check}");
     $process->run();
     $processOutput = $process->getOutput();
 
