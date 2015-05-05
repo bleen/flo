@@ -67,7 +67,7 @@ class PhpCodeStyleChecker extends Command {
       $output->writeln("<info>target branch:{$targetBranch}</info>");
       $output->writeln("<info>target ref: {$targetRef}</info>");
       $output->writeln("<info>target URL: {$targetURL}</info>");
-      $output->writeln("<info> pull request: {$pullRequest}</info>");
+      $output->writeln("<info>pull request: {$pullRequest}</info>");
     }
 
     if (empty($targetBranch)) {
