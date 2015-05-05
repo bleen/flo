@@ -13,7 +13,9 @@ class Command extends \Symfony\Component\Console\Command\Command {
 
   const DEFAULT_SITE_DIR = 'default';
   const GITHUB_LABEL_CERTIFIED = 'ci:certified';
+  // @deprecated GITHUB_LABEL_ERROR: make a specific error label.
   const GITHUB_LABEL_ERROR = 'ci:error';
+  const GITHUB_LABEL_MERGE_FAILED = 'ci:merge-failed';
   const GITHUB_LABEL_POSTPONED = 'ci:postponed';
   const GITHUB_LABEL_REJECTED = 'ci:rejected';
   const GITHUB_PULL_REQUEST_ID = 'ghprbPullId';
@@ -76,9 +78,9 @@ class Command extends \Symfony\Component\Console\Command\Command {
    * This adds the $label to the PR (aka issue) on Github.
    * GH API: POST /repos/:owner/:repo/issues/:number/labels ["Label1", "Label2"]
    *
-   * @param $pr_number
+   * @param int $pr_number
    *   The Github Issue or Pull Request number
-   * @param $label
+   * @param string $label
    *   The label to apply
    *
    * @throws \Exception
@@ -103,9 +105,9 @@ class Command extends \Symfony\Component\Console\Command\Command {
    * This removes the $label to the PR (aka issue) on Github.
    * GH API: DELETE /repos/:owner/:repo/issues/:number/labels/:name
    *
-   * @param $pr_number
+   * @param int $pr_number
    *   The Github Issue or Pull Request number
-   * @param $label
+   * @param string $label
    *   The label to apply
    *
    * @throws \Exception
@@ -120,6 +122,32 @@ class Command extends \Symfony\Component\Console\Command\Command {
       $this->getConfigParameter('repository'),
       $pr_number,
       $label
+    );
+  }
+
+  /**
+   * Helper function to add a Github comment.
+   *
+   * This adds the $comment to the PR (aka issue) on Github.
+   * GH API: POST /repos/:owner/:repo/issues/:number/comments {"body": "Me too"}
+   *
+   * @param int $pr_number
+   *   The Github Issue or Pull Request number
+   * @param string $comment
+   *   The comment to apply
+   *
+   * @throws \Exception
+   */
+  public function addGithubComment($pr_number, $comment) {
+    if (!is_numeric($pr_number)) {
+      throw new \Exception("PR must be a number.");
+    }
+    $github = $this->getGithub(FALSE, 'issue');
+    $github->comments()->create(
+      $this->getConfigParameter('organization'),
+      $this->getConfigParameter('repository'),
+      $pr_number,
+      array('body' => $comment)
     );
   }
 
