@@ -36,13 +36,27 @@ class PhpCodeStyleChecker extends Command {
   protected function execute(InputInterface $input, OutputInterface $output) {
     $gh_status_post = FALSE;
     $extensions = array(
-      'module',
-      'php',
       'inc',
       'install',
+      'module',
+      'php',
+      'profile',
     );
     $phpcs_extensions = implode(',', $extensions);
-    $phpcs = "./vendor/bin/phpcs --standard=./vendor/drupal/coder/coder_sniffer/Drupal --extensions={$phpcs_extensions} --ignore=\"*.features.*,*.context.inc,*.*_default.inc,*.default_permission_sets.inc,*.default_mps_tags.inc,*.field_group.inc,*.strongarm.inc,*.quicktabs.inc,*.tpl.php\"";
+    $ignore = array(
+      '*.features.*',
+      '*.context.inc',
+      '*.*_default.inc',
+      '*.default_permission_sets.inc',
+      '*.default_mps_tags.inc',
+      '*.field_group.inc',
+      '*.strongarm.inc',
+      '*.quicktabs.inc',
+      '*.tpl.php',
+    );
+    $phpcs_ignore = implode(',', $ignore);
+    $phpcs_standard = "./vendor/drupal/coder/coder_sniffer/Drupal";
+    $phpcs = "./vendor/bin/phpcs --standard={$phpcs_standard} --extensions={$phpcs_extensions} --ignore=\"{$phpcs_ignore}\"";
     $targetBranch = getenv(self::GITHUB_PULL_REQUEST_TARGET_BRANCH);
     $targetRef = getenv(self::GITHUB_PULL_REQUEST_COMMIT);
     $targetURL = getenv(self::JENKINS_BUILD_URL);
@@ -73,7 +87,7 @@ class PhpCodeStyleChecker extends Command {
     // Get list of files with $extensions to check by running git-diff and
     // filtering by Added (A) and Modified (M).
     $git_extensions = "'*." . implode("' '*.", $extensions) . "'";
-    $git_diff_command = "git diff --name-only --diff-filter=AM {$targetBranch} -- {$git_extensions}";
+    $git_diff_command = "git diff --name-only --no-renames --diff-filter=AM {$targetBranch} -- {$git_extensions}";
 
     // Output some feedback based on verbosity.
     if ($output->getVerbosity() >= OutputInterface::VERBOSITY_VERBOSE) {
