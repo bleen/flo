@@ -89,6 +89,7 @@ class Application extends BaseApplication {
    */
   protected function getDefaultCommands() {
     $commands = parent::getDefaultCommands();
+    $commands[] = new Command\ProjectSetup();
     $commands[] = new Command\Config\ConfigDelCommand();
     $commands[] = new Command\Config\ConfigGetCommand();
     $commands[] = new Command\Config\ConfigSetCommand();
