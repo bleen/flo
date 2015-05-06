@@ -4,6 +4,7 @@ namespace flo\Command;
 
 use flo\PHPGit\Repository;
 use Github;
+use Symfony\Component\Process\Process;
 
 /**
  * Class Command
@@ -169,5 +170,29 @@ class Command extends \Symfony\Component\Console\Command\Command {
     }
 
     return $home_directory;
+  }
+
+  /**
+   * Helper to check if we're in the git root.
+   *
+   * @throws \Exception
+   */
+  protected function checkGitRoot() {
+    // We always run from the top git directory.
+    $git_root = new Process('git rev-parse --show-toplevel');
+    $git_root->run();
+    if (!$git_root->isSuccessful()) {
+      throw new \RuntimeException($git_root->getErrorOutput());
+    }
+
+    $current_dir = new Process('pwd');
+    $current_dir->run();
+    if (!$current_dir->isSuccessful()) {
+      throw new \RuntimeException($current_dir->getErrorOutput());
+    }
+
+    if ($git_root->getOutput() !== $current_dir->getOutput()) {
+      throw new \Exception("You must run {$this->getName()} from the git root.");
+    }
   }
 }
