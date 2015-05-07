@@ -17,7 +17,7 @@ use Github;
 class PhpUnitChecker extends Command {
   protected function configure() {
     $this->setName('check-phpunit')
-      ->setDescription('runs phpuni and report to GH PR Status.')
+      ->setDescription('runs phpunit and report to GH PR Status.')
       ->addOption(
         'comment',
         null,
