@@ -36,21 +36,21 @@ class ProjectSetup extends Command {
       throw new \Exception("flo.yml already exists.");
     }
 
-      // Questions.
+    // Questions.
     $org_question = new Question('Please enter the name of the GitHub organization: ', 'NBCUOTS');
     $repo_question = new Question('Please enter the name github repository: ');
     $shortname_question = new Question('Please enter the Publisher short name: ');
     $github_question = new Question('Please enter the GitHub git url: ');
     $acquia_question = new Question('Please enter the Acquia git url: ');
-    $pull_request_question = new Question('Please enter the pull-request url: ');
-    $pull_request_prefix_question = new Question('Please enter the pull-request prefix(ex p7): ');
+    $pull_request_question = new Question('Please enter the pull-request domain: ');
+    $pull_request_prefix_question = new Question('Please enter the pull-request prefix (ex: p7): ');
 
     // Prompts.
     $organization = $helper->ask($input, $output, $org_question);
     $repository = $helper->ask($input, $output, $repo_question);
     $shortname = $helper->ask($input, $output, $shortname_question);
     $github_git_url = $helper->ask($input, $output, $github_question);
-    $acqui_git_url = $helper->ask($input, $output, $acquia_question);
+    $acquia_git_url = $helper->ask($input, $output, $acquia_question);
     $pull_request_domain = $helper->ask($input, $output, $pull_request_question);
     $pull_request_prefix = $helper->ask($input, $output, $pull_request_prefix_question);
 
@@ -61,7 +61,7 @@ class ProjectSetup extends Command {
       'repository' => $repository,
       'shortname' => $shortname,
       'github_git_uri' => $github_git_url,
-      'acquia_git_uri' => $acqui_git_url,
+      'acquia_git_uri' => $acquia_git_url,
       'pull_request' => array(
         'domain' => $pull_request_domain,
         'prefix' => $pull_request_prefix,
