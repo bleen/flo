@@ -192,7 +192,7 @@ class DeployCommand extends Command {
     if ($output->getVerbosity() == OutputInterface::VERBOSITY_VERY_VERBOSE) {
       $output->writeln("<info>Process: {$process->getCommandLine()}");
     }
-    $process->setTimeout(60 * 20);
+    $process->setTimeout(60 * 60);
     $process->run();
     if (!$process->isSuccessful()) {
       if (!empty($input->getOption('env')) && !empty($input->getOption('ref'))) {
