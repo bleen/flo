@@ -92,7 +92,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
     }
 
     $github = $this->getGithub(FALSE, 'issue');
-    $github->labels()->add(
+    $github->api('issue')->labels()->add(
       $this->getConfigParameter('organization'),
       $this->getConfigParameter('repository'),
       $pr_number,
@@ -118,7 +118,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
       throw new \Exception("PR must be a number.");
     }
     $github = $this->getGithub(FALSE, 'issue');
-    $github->labels()->remove(
+    $github->api('issue')->labels()->remove(
       $this->getConfigParameter('organization'),
       $this->getConfigParameter('repository'),
       $pr_number,
